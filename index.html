@@ -1,543 +1,398 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rumah Pangkas Asser</title>
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <meta
-        name="description"
-        content="Personal website MKF_FIKKK"
-    >
-
-    <title>MKF_FIKKK | Personal Website</title>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link
-        rel="preconnect"
-        href="https://fonts.gstatic.com"
-        crossorigin
-    >
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap"
-        rel="stylesheet"
-    >
-
-    <link rel="stylesheet" href="style.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial;background:#f3f6fa;color:#17232e}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:240px;background:#17232e;color:white;padding:20px;flex-shrink:0}
+.sidebar h2{color:#ff7417;font-size:21px}
+.sidebar p{font-size:12px;color:#aaa}
+.sidebar button{display:block;width:100%;margin:8px 0;text-align:left;background:transparent;color:white;border:0;padding:13px;border-radius:8px;cursor:pointer}
+.sidebar button:hover,.sidebar button.active{background:#ff7417}
+.main{flex:1;padding:25px;min-width:0}
+.card{background:white;padding:20px;border-radius:12px;margin-bottom:16px;box-shadow:0 3px 12px #0000000a}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}
+.stat h2{color:#ff7417;font-size:23px}
+input,select{width:100%;padding:12px;margin:8px 0 15px;border:1px solid #ddd;border-radius:8px}
+button{cursor:pointer;border:0;border-radius:8px;padding:11px;font-weight:bold}
+.primary{background:#ff7417;color:white}
+.page{display:none}.page.active{display:block}
+table{width:100%;border-collapse:collapse;min-width:550px}
+th,td{padding:12px;text-align:left;border-bottom:1px solid #eee;font-size:13px}
+th{background:#f5f7fa}
+.table-wrap{overflow:auto}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+.green{color:#138653}.red{color:#c0392b}
+label{font-size:13px;font-weight:bold}
+@media(max-width:900px){
+.layout{display:block}
+.sidebar{width:100%}
+.sidebar button{display:inline-block;width:auto}
+.stats{grid-template-columns:repeat(2,1fr)}
+.grid2{grid-template-columns:1fr}
+.main{padding:15px}
+}
+</style>
 </head>
 
 <body>
-
-    <div class="noise"></div>
-
-    <!-- NAVBAR -->
-    <header class="navbar">
-
-        <a href="#home" class="logo">
-            MKF<span>_FIKKK</span>
-        </a>
-
-        <nav class="menu">
-
-            <a href="#about">
-                Tentang
-            </a>
-
-            <a href="#music">
-                Musik
-            </a>
-
-            <a href="#social">
-                Instagram
-            </a>
-
-        </nav>
-
-        <a
-            href="https://instagram.com/mkf_fikkk"
-            target="_blank"
-            class="ig-small"
-        >
-            IG ↗
-        </a>
-
-    </header>
-
-
-    <!-- HERO -->
-    <section class="hero" id="home">
-
-        <div class="hero-content">
-
-            <div class="badge">
-                <span></span>
-                PERSONAL WEBSITE
-            </div>
-
-            <p class="welcome">
-                WELCOME TO MY SPACE
-            </p>
-
-            <h1>
-                MKF
-                <br>
-                <span>FIKKK</span>
-            </h1>
-
-            <p class="description">
-                Welcome to my personal space.
-                Tempat buat ngenalin diri,
-                berbagi sedikit cerita,
-                dan ngumpulin lagu-lagu
-                yang punya tempat sendiri.
-            </p>
-
-            <div class="buttons">
-
-                <a
-                    href="https://instagram.com/mkf_fikkk"
-                    target="_blank"
-                    class="btn primary"
-                >
-                    Instagram ↗
-                </a>
-
-                <a
-                    href="#music"
-                    class="btn secondary"
-                >
-                    Lihat Playlist ↓
-                </a>
-
-            </div>
-
-            <div class="mini-info">
-
-                <span>01 — PERSONAL</span>
-
-                <span>02 — MUSIC</span>
-
-                <span>03 — VIBES</span>
-
-            </div>
-
-        </div>
-
-
-        <!-- FOTO -->
-        <div class="hero-photo">
-
-            <div class="circle circle-1"></div>
-
-            <div class="circle circle-2"></div>
-
-            <div class="photo-card">
-
-                <div class="photo">
-
-                    <img
-                        src="foto.jpg"
-                        alt="Foto MKF_FIKKK"
-                        onerror="this.style.display='none';document.getElementById('photoPlaceholder').style.display='flex';"
-                    >
-
-                    <div
-                        class="photo-placeholder"
-                        id="photoPlaceholder"
-                    >
-
-                        <strong>
-                            MKF
-                        </strong>
-
-                        <small>
-                            Masukkan foto.jpg
-                        </small>
-
-                    </div>
-
-                </div>
-
-                <div class="photo-bottom">
-
-                    <div>
-
-                        <small>
-                            INSTAGRAM
-                        </small>
-
-                        <strong>
-                            @mkf_fikkk
-                        </strong>
-
-                    </div>
-
-                    <div class="online">
-                        ● online
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- MARQUEE -->
-    <div class="marquee">
-
-        <div>
-            MKF_FIKKK • MUSIC • PERSONAL SPACE •
-            ROCK • POP • VIBES • MKF_FIKKK •
-            MUSIC • PERSONAL SPACE •
-        </div>
-
-    </div>
-
-
-    <!-- ABOUT -->
-    <section class="section about" id="about">
-
-        <div class="section-number">
-            01 / ABOUT ME
-        </div>
-
-        <div class="about-content">
-
-            <h2>
-                Simple person.
-                <br>
-                <span>Big energy.</span>
-            </h2>
-
-            <p>
-                Ini adalah halaman personal gue.
-                Dibuat simple, dark, clean,
-                dan sedikit cinematic.
-                Isinya tentang diri gue,
-                musik favorit,
-                dan social media.
-            </p>
-
-            <div class="facts">
-
-                <div class="fact">
-
-                    <small>
-                        USERNAME
-                    </small>
-
-                    <strong>
-                        mkf_fikkk
-                    </strong>
-
-                </div>
-
-                <div class="fact">
-
-                    <small>
-                        VIBE
-                    </small>
-
-                    <strong>
-                        Rock • Pop • Chill
-                    </strong>
-
-                </div>
-
-                <div class="fact">
-
-                    <small>
-                        WEBSITE
-                    </small>
-
-                    <strong>
-                        Personal
-                    </strong>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- MUSIC -->
-    <section class="section music" id="music">
-
-        <div class="music-header">
-
-            <div>
-
-                <div class="section-number">
-                    02 / MY SOUNDTRACK
-                </div>
-
-                <h2>
-                    Lagu yang
-                    <br>
-                    <span>nemenin gue.</span>
-                </h2>
-
-            </div>
-
-            <p>
-                Klik tombol play untuk
-                membuka lagu di YouTube.
-            </p>
-
-        </div>
-
-
-        <div class="songs">
-
-
-            <!-- SONG 1 -->
-            <article class="song">
-
-                <div class="song-number">
-                    01
-                </div>
-
-                <div class="cover cover-gnr">
-                    GNR
-                </div>
-
-                <div class="song-info">
-
-                    <small>
-                        GUNS N' ROSES
-                    </small>
-
-                    <h3>
-                        Sweet Child O' Mine
-                    </h3>
-
-                </div>
-
-                <a
-                    href="https://www.youtube.com/results?search_query=Guns+N+Roses+Sweet+Child+O+Mine"
-                    target="_blank"
-                    class="play"
-                >
-                    ▶ PLAY
-                </a>
-
-            </article>
-
-
-            <!-- SONG 2 -->
-            <article class="song">
-
-                <div class="song-number">
-                    02
-                </div>
-
-                <div class="cover cover-muse">
-                    MUSE
-                </div>
-
-                <div class="song-info">
-
-                    <small>
-                        MUSE
-                    </small>
-
-                    <h3>
-                        Stockholm Syndrome
-                    </h3>
-
-                </div>
-
-                <a
-                    href="https://www.youtube.com/results?search_query=Muse+Stockholm+Syndrome"
-                    target="_blank"
-                    class="play"
-                >
-                    ▶ PLAY
-                </a>
-
-            </article>
-
-
-            <!-- SONG 3 -->
-            <article class="song">
-
-                <div class="song-number">
-                    03
-                </div>
-
-                <div class="cover cover-dewa">
-                    DEWA 19
-                </div>
-
-                <div class="song-info">
-
-                    <small>
-                        DEWA 19
-                    </small>
-
-                    <h3>
-                        Pangeran Cinta
-                    </h3>
-
-                </div>
-
-                <a
-                    href="https://www.youtube.com/results?search_query=Dewa+19+Pangeran+Cinta"
-                    target="_blank"
-                    class="play"
-                >
-                    ▶ PLAY
-                </a>
-
-            </article>
-
-
-            <!-- SONG 4 -->
-            <article class="song">
-
-                <div class="song-number">
-                    04
-                </div>
-
-                <div class="cover cover-bonjovi">
-                    BON JOVI
-                </div>
-
-                <div class="song-info">
-
-                    <small>
-                        BON JOVI
-                    </small>
-
-                    <h3>
-                        Always
-                    </h3>
-
-                </div>
-
-                <a
-                    href="https://www.youtube.com/results?search_query=Bon+Jovi+Always"
-                    target="_blank"
-                    class="play"
-                >
-                    ▶ PLAY
-                </a>
-
-            </article>
-
-        </div>
-
-    </section>
-
-
-    <!-- INSTAGRAM -->
-    <section class="section social" id="social">
-
-        <div class="social-box">
-
-            <div>
-
-                <div class="section-number">
-                    03 / SOCIAL
-                </div>
-
-                <h2>
-                    Follow me
-                    <br>
-                    <span>on Instagram.</span>
-                </h2>
-
-                <p>
-                    @mkf_fikkk
-                </p>
-
-            </div>
-
-
-            <a
-                href="https://instagram.com/mkf_fikkk"
-                target="_blank"
-                class="instagram-button"
-            >
-
-                <span>
-                    Instagram
-                </span>
-
-                <strong>
-                    ↗
-                </strong>
-
-            </a>
-
-        </div>
-
-    </section>
-
-
-    <!-- FOOTER -->
-    <footer>
-
-        <span>
-            © <span id="year"></span>
-            MKF_FIKKK
-        </span>
-
-        <span>
-            PERSONAL WEBSITE
-        </span>
-
-    </footer>
-
-
-    <script>
-
-        document.getElementById("year").textContent =
-            new Date().getFullYear();
-
-
-        const observer =
-            new IntersectionObserver(
-                function(entries){
-
-                    entries.forEach(
-                        function(entry){
-
-                            if(entry.isIntersecting){
-
-                                entry.target.classList.add(
-                                    "show"
-                                );
-
-                            }
-
-                        }
-                    );
-
-                },
-                {
-                    threshold: 0.1
-                }
-            );
-
-
-        document
-            .querySelectorAll(".reveal")
-            .forEach(
-                element => observer.observe(element)
-            );
-
-    </script>
-
+<div class="layout">
+
+<aside class="sidebar">
+<h2>✂ RUMAH PANGKAS ASSER</h2>
+<p>Potong Rambut, Potong Masalah</p>
+<hr>
+<button class="active" onclick="page('dashboard',this)">▦ Dashboard</button>
+<button onclick="page('kasir',this)">▣ Kasir</button>
+<button onclick="page('booking',this)">▤ Booking</button>
+<button onclick="page('customer',this)">♟ Customer</button>
+<button onclick="page('biaya',this)">💰 Pengeluaran</button>
+<button onclick="page('laporan',this)">📊 Laporan</button>
+</aside>
+
+<main class="main">
+
+<!-- DASHBOARD -->
+<section id="dashboard" class="page active">
+<h1>Dashboard Management</h1>
+<p>Ringkasan keuangan Rumah Pangkas Asser</p>
+
+<div class="stats">
+<div class="card stat">
+<small>Pemasukan Hari Ini</small>
+<h2 id="incomeToday">Rp0</h2>
+</div>
+<div class="card stat">
+<small>Pengeluaran Hari Ini</small>
+<h2 id="expenseToday">Rp0</h2>
+</div>
+<div class="card stat">
+<small>Keuntungan Hari Ini</small>
+<h2 id="profitToday">Rp0</h2>
+</div>
+<div class="card stat">
+<small>Customer Hari Ini</small>
+<h2 id="countToday">0</h2>
+</div>
+</div>
+
+<div class="grid2">
+<div class="card">
+<h3>Ringkasan Seluruh Usaha</h3>
+<p>Total Pemasukan: <b id="allIncome">Rp0</b></p>
+<p>Total Pengeluaran: <b id="allExpense">Rp0</b></p>
+<hr>
+<h3 class="green">Laba Bersih: <span id="allProfit">Rp0</span></h3>
+</div>
+<div class="card">
+<h3>Informasi Sistem</h3>
+<p>Seluruh transaksi kasir akan otomatis masuk ke laporan.</p>
+<p>Biaya operasional akan mengurangi laba bersih.</p>
+<p>Booking dicatat terpisah dan belum dihitung sebagai pemasukan.</p>
+</div>
+</div>
+</section>
+
+<!-- KASIR -->
+<section id="kasir" class="page">
+<h1>Sistem Kasir</h1>
+<div class="card">
+<label>Nama Customer</label>
+<input id="nama" placeholder="Contoh: Andi">
+
+<label>Pilih Layanan</label>
+<select id="layanan" onchange="hitung()">
+<option value="0">Pilih layanan</option>
+<option value="25000">Haircut - Rp25.000</option>
+<option value="35000">Haircut + Keramas - Rp35.000</option>
+<option value="40000">Haircut + Styling - Rp40.000</option>
+<option value="15000">Cukur Jenggot - Rp15.000</option>
+<option value="50000">Premium Haircut - Rp50.000</option>
+</select>
+
+<label>Jumlah Order</label>
+<input type="number" id="jumlah" value="1" min="1" oninput="hitung()">
+
+<h2>Total: <span id="tagihan">Rp0</span></h2>
+
+<label>Uang Diterima</label>
+<input type="number" id="bayar" min="0" oninput="hitung()">
+
+<h3>Kembalian: <span id="kembali">Rp0</span></h3>
+<button class="primary" onclick="simpanTransaksi()">SIMPAN TRANSAKSI</button>
+</div>
+</section>
+
+<!-- BOOKING -->
+<section id="booking" class="page">
+<h1>Booking Customer</h1>
+<div class="card">
+<label>Nama Customer</label>
+<input id="bookingNama">
+<label>Layanan</label>
+<select id="bookingLayanan">
+<option>Haircut</option>
+<option>Haircut + Keramas</option>
+<option>Haircut + Styling</option>
+<option>Cukur Jenggot</option>
+<option>Premium Haircut</option>
+</select>
+<label>Tanggal</label>
+<input type="date" id="bookingTanggal">
+<label>Jam</label>
+<input type="time" id="bookingJam">
+<button class="primary" onclick="simpanBooking()">SIMPAN BOOKING</button>
+</div>
+<div class="card">
+<h3>Daftar Booking</h3>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Nama</th><th>Layanan</th><th>Tanggal</th><th>Jam</th></tr></thead>
+<tbody id="bookingTable"></tbody>
+</table>
+</div>
+</div>
+</section>
+
+<!-- CUSTOMER -->
+<section id="customer" class="page">
+<h1>Daftar Customer & Order</h1>
+<div class="card">
+<div class="table-wrap">
+<table>
+<thead><tr><th>No</th><th>Nama</th><th>Order</th><th>Jumlah</th><th>Total</th><th>Tanggal</th></tr></thead>
+<tbody id="customerTable"></tbody>
+</table>
+</div>
+</div>
+</section>
+
+<!-- PENGELUARAN -->
+<section id="biaya" class="page">
+<h1>Biaya Operasional</h1>
+<div class="card">
+<label>Kategori</label>
+<select id="kategori">
+<option>Listrik</option>
+<option>Air</option>
+<option>Gaji Karyawan</option>
+<option>Sewa Tempat</option>
+<option>Perlengkapan</option>
+<option>Lainnya</option>
+</select>
+<label>Keterangan</label>
+<input id="keterangan" placeholder="Contoh: Beli gunting">
+<label>Nominal</label>
+<input type="number" id="nominal" min="1">
+<button class="primary" onclick="simpanBiaya()">SIMPAN PENGELUARAN</button>
+</div>
+<div class="card">
+<h3>Riwayat Pengeluaran</h3>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Tanggal</th><th>Kategori</th><th>Keterangan</th><th>Nominal</th></tr></thead>
+<tbody id="biayaTable"></tbody>
+</table>
+</div>
+</div>
+</section>
+
+<!-- LAPORAN -->
+<section id="laporan" class="page">
+<h1>Laporan Keuangan</h1>
+<div class="card">
+<label>Pilih Periode</label>
+<select id="periode" onchange="renderLaporan()">
+<option value="harian">Harian</option>
+<option value="mingguan">Mingguan</option>
+<option value="bulanan">Bulanan</option>
+<option value="tahunan">Tahunan</option>
+</select>
+<label>Tanggal Acuan</label>
+<input type="date" id="tanggalLaporan" onchange="renderLaporan()">
+<hr>
+<h3>Pemasukan: <span class="green" id="lapIncome">Rp0</span></h3>
+<h3>Pengeluaran: <span class="red" id="lapExpense">Rp0</span></h3>
+<h2>Laba Bersih: <span id="lapProfit">Rp0</span></h2>
+<p>Jumlah Transaksi: <b id="lapCount">0</b></p>
+</div>
+</section>
+
+</main>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const rupiah = n => "Rp" + Number(n).toLocaleString("id-ID");
+
+let transaksi = JSON.parse(localStorage.getItem("asser_transaksi") || "[]");
+let pengeluaran = JSON.parse(localStorage.getItem("asser_pengeluaran") || "[]");
+let bookings = JSON.parse(localStorage.getItem("asser_booking") || "[]");
+
+function tanggal(d = new Date()) {
+return d.getFullYear() + "-" +
+String(d.getMonth()+1).padStart(2,"0") + "-" +
+String(d.getDate()).padStart(2,"0");
+}
+
+function aman(s) {
+return String(s).replace(/[&<>"']/g,c=>({
+"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+}[c]));
+}
+
+function page(id,btn) {
+document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
+$(id).classList.add("active");
+document.querySelectorAll(".sidebar button").forEach(x=>x.classList.remove("active"));
+btn.classList.add("active");
+render();
+}
+
+function hitung() {
+let harga=Number($("layanan").value);
+let qty=Number($("jumlah").value);
+let total=harga*qty;
+let bayar=Number($("bayar").value);
+$("tagihan").textContent=rupiah(total);
+$("kembali").textContent=rupiah(Math.max(0,bayar-total));
+}
+
+function simpanTransaksi() {
+let nama=$("nama").value.trim();
+let harga=Number($("layanan").value);
+let qty=Number($("jumlah").value);
+let bayar=Number($("bayar").value);
+let total=harga*qty;
+
+if(!nama || harga<=0 || !Number.isInteger(qty) || qty<=0) {
+alert("Lengkapi data transaksi!");
+return;
+}
+if(!Number.isFinite(bayar) || bayar<total) {
+alert("Uang tidak cukup!");
+return;
+}
+
+transaksi.push({
+nama,
+layanan:$("layanan").selectedOptions[0].text,
+jumlah:qty,total,bayar,tanggal:tanggal()
+});
+localStorage.setItem("asser_transaksi",JSON.stringify(transaksi));
+alert("Transaksi berhasil! Kembalian: "+rupiah(bayar-total));
+$("nama").value="";
+$("layanan").value="0";
+$("jumlah").value=1;
+$("bayar").value="";
+hitung();
+render();
+}
+
+function simpanBooking() {
+let nama=$("bookingNama").value.trim();
+let layanan=$("bookingLayanan").value;
+let t=$("bookingTanggal").value;
+let jam=$("bookingJam").value;
+if(!nama || !t || !jam || t<tanggal()){
+alert("Isi booking dengan tanggal yang valid!");
+return;
+}
+bookings.push({nama,layanan,tanggal:t,jam});
+localStorage.setItem("asser_booking",JSON.stringify(bookings));
+alert("Booking tersimpan!");
+$("bookingNama").value="";
+$("bookingTanggal").value="";
+$("bookingJam").value="";
+render();
+}
+
+function simpanBiaya() {
+let kategori=$("kategori").value;
+let keterangan=$("keterangan").value.trim();
+let nominal=Number($("nominal").value);
+if(!keterangan || !Number.isFinite(nominal) || nominal<=0){
+alert("Isi pengeluaran dengan benar!");
+return;
+}
+pengeluaran.push({kategori,keterangan,nominal,tanggal:tanggal()});
+localStorage.setItem("asser_pengeluaran",JSON.stringify(pengeluaran));
+$("keterangan").value="";
+$("nominal").value="";
+alert("Pengeluaran berhasil dicatat!");
+render();
+}
+
+function total(arr,key) {
+return arr.reduce((a,b)=>a+Number(b[key]||0),0);
+}
+
+function renderLaporan() {
+let p=$("periode").value;
+let acuan=$("tanggalLaporan").value;
+if(!acuan)return;
+let d=new Date(acuan+"T12:00:00");
+
+function cocok(t){
+let x=new Date(t+"T12:00:00");
+if(p==="harian")return t===acuan;
+if(p==="bulanan")return x.getMonth()===d.getMonth()&&x.getFullYear()===d.getFullYear();
+if(p==="tahunan")return x.getFullYear()===d.getFullYear();
+let awal=new Date(d);
+awal.setDate(d.getDate()-(d.getDay()+6)%7);
+let akhir=new Date(awal);
+akhir.setDate(awal.getDate()+6);
+return x>=awal&&x<=akhir;
+}
+
+let tr=transaksi.filter(x=>cocok(x.tanggal));
+let ex=pengeluaran.filter(x=>cocok(x.tanggal));
+let masuk=total(tr,"total");
+let keluar=total(ex,"nominal");
+$("lapIncome").textContent=rupiah(masuk);
+$("lapExpense").textContent=rupiah(keluar);
+$("lapProfit").textContent=rupiah(masuk-keluar);
+$("lapCount").textContent=tr.length;
+}
+
+function render() {
+let hari=tanggal();
+let tr=transaksi.filter(x=>x.tanggal===hari);
+let ex=pengeluaran.filter(x=>x.tanggal===hari);
+let masuk=total(tr,"total");
+let keluar=total(ex,"nominal");
+
+$("incomeToday").textContent=rupiah(masuk);
+$("expenseToday").textContent=rupiah(keluar);
+$("profitToday").textContent=rupiah(masuk-keluar);
+$("countToday").textContent=tr.length;
+$("allIncome").textContent=rupiah(total(transaksi,"total"));
+$("allExpense").textContent=rupiah(total(pengeluaran,"nominal"));
+$("allProfit").textContent=rupiah(total(transaksi,"total")-total(pengeluaran,"nominal"));
+
+$("customerTable").innerHTML=transaksi.map((x,i)=>`
+<tr><td>${i+1}</td><td>${aman(x.nama)}</td><td>${aman(x.layanan)}</td>
+<td>${x.jumlah}</td><td>${rupiah(x.total)}</td><td>${x.tanggal}</td></tr>`).join("");
+
+$("bookingTable").innerHTML=bookings.map(x=>`
+<tr><td>${aman(x.nama)}</td><td>${aman(x.layanan)}</td>
+<td>${x.tanggal}</td><td>${x.jam}</td></tr>`).join("");
+
+$("biayaTable").innerHTML=pengeluaran.map(x=>`
+<tr><td>${x.tanggal}</td><td>${aman(x.kategori)}</td>
+<td>${aman(x.keterangan)}</td><td>${rupiah(x.nominal)}</td></tr>`).join("");
+
+renderLaporan();
+}
+
+$("tanggalLaporan").value=tanggal();
+$("bookingTanggal").min=tanggal();
+render();
+</script>
 </body>
 </html>
