@@ -1,546 +1,1874 @@
 <!DOCTYPE html>
-<html lang="id">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rumah Pangkas Asser</title>
 
+<html lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Rumah Pangkas Asser — Modern Barber Management</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;family=Playfair+Display:ital,wght@0,600;1,600&amp;display=swap" rel="stylesheet"/>
 <style>
 :root {
-  --bg: #101820;
-  --panel: #1b2732;
-  --line: #344451;
-  --text: #f5f6f8;
-  --muted: #b7c2cb;
-  --accent: #ff9b35;
-  --good: #67d5a0;
-  --bad: #ff8b88;
+  /* Soft Warm Light Mode Palette */
+  --bg-main: #f8fafc;
+  --bg-sidebar: #ffffff;
+  --bg-card: #ffffff;
+  --bg-card-hover: #ffffff;
+  --bg-card-subtle: #f8fafc;
+  --bg-input: #ffffff;
+  --topbar-bg: rgba(255, 255, 255, 0.88);
+  --border: #e2e8f0;
+  --border-light: #edf2f7;
+  --border-focus: rgba(217, 119, 6, 0.45);
+  
+  /* Kalem & Premium Barber Palette */
+  --accent: #d97706;          /* Warm golden amber / honey caramel */
+  --accent-dark: #b45309;     /* Deep refined amber */
+  --accent-light: #fef3c7;    /* Soft warm cream amber */
+  --accent-glow: rgba(217, 119, 6, 0.16);
+  --accent-subtle: rgba(217, 119, 6, 0.08);
+
+  --text-main: #0f172a;       /* Charcoal Slate deep */
+  --text-muted: #64748b;      /* Elegant soft gray-slate */
+  --text-dim: #94a3b8;        /* Subtle slate */
+  
+  --good: #16a34a;            /* Fresh clean green */
+  --good-bg: rgba(22, 163, 74, 0.1);
+  --bad: #dc2626;             /* Soft red */
+  --bad-bg: rgba(220, 38, 38, 0.08);
+  --info: #0284c7;
+
+  --badge-product-bg: #e0f2fe;
+  --badge-product-txt: #0369a1;
+  --badge-product-border: #bae6fd;
+
+  --shortcut-hover-bg: #ffffff;
+  --bill-card-bg: linear-gradient(145deg, #ffffff, #fafaf9);
+  --preset-hover-bg: #fffbeb;
+  --toast-bg: #ffffff;
+  --status-pill-bg: #f8fafc;
+  --th-bg: #f8fafc;
+  --tr-hover: #f8fafc;
+  --tr-border: #f1f5f9;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.04), 0 4px 12px rgba(15, 23, 42, 0.03);
+  --shadow-hover: 0 6px 20px -4px rgba(217, 119, 6, 0.12), 0 2px 8px rgba(0, 0, 0, 0.04);
+  --transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-* { box-sizing: border-box; }
+/* Dark Mode Palette */
+[data-theme="dark"] {
+  --bg-main: #0b0f15;
+  --bg-sidebar: #101720;
+  --bg-card: #16202c;
+  --bg-card-hover: #1c2837;
+  --bg-card-subtle: #121b26;
+  --bg-input: #121c27;
+  --topbar-bg: rgba(16, 23, 32, 0.88);
+  --border: #233142;
+  --border-light: #1b2634;
+  --border-focus: rgba(245, 158, 11, 0.5);
+
+  --accent: #f59e0b;
+  --accent-dark: #fbbf24;
+  --accent-light: #2b2210;
+  --accent-glow: rgba(245, 158, 11, 0.22);
+  --accent-subtle: rgba(245, 158, 11, 0.12);
+
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --text-dim: #64748b;
+
+  --good: #22c55e;
+  --good-bg: rgba(34, 197, 94, 0.14);
+  --bad: #ef4444;
+  --bad-bg: rgba(239, 68, 68, 0.14);
+  --info: #38bdf8;
+
+  --badge-product-bg: #0c2d48;
+  --badge-product-txt: #38bdf8;
+  --badge-product-border: #154c79;
+
+  --shortcut-hover-bg: #1c2837;
+  --bill-card-bg: linear-gradient(145deg, #16202c, #131b25);
+  --preset-hover-bg: #231e13;
+  --toast-bg: #16202c;
+  --status-pill-bg: #101720;
+  --th-bg: #121b26;
+  --tr-hover: #1a2533;
+  --tr-border: #1e2c3d;
+
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.28), 0 1px 2px rgba(0, 0, 0, 0.2);
+  --shadow-hover: 0 8px 24px -4px rgba(245, 158, 11, 0.2), 0 2px 10px rgba(0, 0, 0, 0.35);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  transition: background-color 0.28s ease, border-color 0.28s ease, color 0.28s ease, box-shadow 0.28s ease;
+}
 
 body {
-  margin: 0;
-  background: var(--bg);
-  color: var(--text);
-  font: 15px/1.5 system-ui, Arial, sans-serif;
+  background-color: var(--bg-main);
+  background-image: 
+    radial-gradient(at 10% 10%, rgba(217, 119, 6, 0.035) 0px, transparent 50%),
+    radial-gradient(at 90% 90%, rgba(2, 132, 199, 0.03) 0px, transparent 50%);
+  background-attachment: fixed;
+  color: var(--text-main);
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
 }
 
-.layout {
+/* App Shell Layout */
+.app-layout {
   display: flex;
   min-height: 100vh;
 }
 
+/* Sidebar */
 .sidebar {
-  width: 245px;
-  background: #15212b;
-  padding: 22px;
+  width: 280px;
+  background: var(--bg-sidebar);
+  border-right: 1px solid var(--border);
+  padding: 28px 20px;
+  display: flex;
+  flex-direction: column;
   flex-shrink: 0;
-  border-right: 1px solid var(--line);
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  box-sizing: border-box;
+  z-index: 100;
+  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.02);
 }
 
-.sidebar h2 {
-  color: var(--accent);
-  font-size: 21px;
-  margin: 0;
+.brand-wrapper {
+  padding-bottom: 24px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 14px;
 }
 
-.sidebar p, .muted {
-  color: var(--muted);
+.brand-logo-badge {
+  width: 44px;
+  height: 44px;
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  box-shadow: 0 4px 12px rgba(217, 119, 6, 0.25);
+  color: #ffffff;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.sidebar p { font-size: 12px; }
-
-.sidebar button {
-  display: block;
-  width: 100%;
-  text-align: left;
-  background: none;
-  color: var(--text);
-  margin: 6px 0;
-  padding: 12px;
-  border: 0;
-  border-radius: 9px;
+.brand-wrapper:hover .brand-logo-badge {
+  transform: rotate(-6deg) scale(1.05);
+  box-shadow: 0 6px 18px rgba(217, 119, 6, 0.35);
 }
 
-.sidebar button.active,
-.sidebar button:hover {
-  background: #a95c15;
-  color: white;
+.brand-info h2 {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  color: var(--text-main);
+  text-transform: uppercase;
 }
 
-.main {
+.brand-info p {
+  font-size: 11px;
+  color: var(--accent-dark);
+  letter-spacing: 0.2px;
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+.nav-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.1px;
+  color: var(--text-dim);
+  padding: 0 12px 10px;
+}
+
+.nav-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
   flex: 1;
-  padding: 28px;
+  overflow-y: auto;
+}
+
+.nav-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 11px 14px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  text-align: left;
+}
+
+.nav-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%) scaleY(0);
+  width: 3.5px;
+  height: 20px;
+  background: var(--accent);
+  border-radius: 0 4px 4px 0;
+  box-shadow: 0 0 8px rgba(217, 119, 6, 0.4);
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.22s ease;
+  opacity: 0;
+}
+
+.nav-item svg {
+  width: 18px;
+  height: 18px;
+  stroke-width: 1.9;
+  opacity: 0.75;
+  transition: var(--transition);
+}
+
+.nav-item:hover {
+  background: var(--bg-card-subtle);
+  color: var(--text-main);
+  transform: translateX(3px);
+}
+
+.nav-item:hover svg {
+  opacity: 1;
+  stroke: var(--accent);
+}
+
+.nav-item:active {
+  transform: scale(0.98);
+}
+
+.nav-item.active {
+  background: var(--accent-subtle);
+  color: var(--accent-dark);
+  border-color: rgba(217, 119, 6, 0.25);
+  font-weight: 600;
+}
+
+.nav-item.active::before {
+  transform: translateY(-50%) scaleY(1);
+  opacity: 1;
+}
+
+.nav-item.active svg {
+  opacity: 1;
+  stroke: var(--accent);
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+}
+
+.status-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--text-muted);
+  padding: 8px 12px;
+  background: var(--status-pill-bg);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+  transition: border-color 0.25s ease;
+}
+
+.status-pill:hover {
+  border-color: rgba(22, 163, 74, 0.3);
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--good);
+  border-radius: 50%;
+  box-shadow: 0 0 6px rgba(22, 163, 74, 0.5);
+  animation: pulseDot 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulseDot {
+  0% { transform: scale(0.9); opacity: 0.8; box-shadow: 0 0 4px var(--good); }
+  50% { transform: scale(1.15); opacity: 1; box-shadow: 0 0 10px rgba(22, 163, 74, 0.6); }
+  100% { transform: scale(0.9); opacity: 0.8; box-shadow: 0 0 4px var(--good); }
+}
+
+/* Main Content Area */
+.main-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
   min-width: 0;
-  max-width: 1500px;
+  overflow-y: auto;
 }
 
-.card {
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  padding: 20px;
-  margin: 16px 0;
+.top-bar {
+  padding: 18px 36px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  backdrop-filter: blur(12px);
+  background: var(--topbar-bg);
+  position: sticky;
+  top: 0;
+  z-index: 90;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02);
 }
 
-.stats {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+.page-title h1 {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  color: var(--text-main);
+}
+
+.page-title p {
+  font-size: 12.5px;
+  color: var(--text-muted);
+}
+
+.top-actions {
+  display: flex;
+  align-items: center;
   gap: 12px;
 }
 
-.stats .card { margin: 0; }
-
-.stat strong {
-  display: block;
-  font-size: clamp(19px, 2vw, 26px);
-  color: var(--accent);
-  overflow-wrap: anywhere;
+.date-badge {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: var(--bg-card-subtle);
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: var(--transition);
 }
 
-.grid2 {
+.date-badge:hover {
+  border-color: rgba(217, 119, 6, 0.3);
+  color: var(--accent-dark);
+}
+
+/* Modern Dual Theme Toggle Switch Pill */
+.theme-switch-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-card-subtle);
+  border: 1px solid var(--border);
+  border-radius: 30px;
+  padding: 4px 6px;
+  cursor: pointer;
+  user-select: none;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.theme-switch-btn:hover {
+  border-color: var(--accent);
+  color: var(--text-main);
+  box-shadow: 0 2px 8px var(--accent-glow);
+}
+
+.theme-pill-track {
+  position: relative;
+  width: 48px;
+  height: 24px;
+  background: #e2e8f0;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  padding: 2px;
+  transition: background-color 0.25s ease;
+}
+
+[data-theme="dark"] .theme-pill-track {
+  background: #2a384b;
+}
+
+.theme-pill-slider {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+  transform: translateX(0);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.25s ease;
+  color: #d97706;
+}
+
+[data-theme="dark"] .theme-pill-slider {
+  transform: translateX(24px);
+  background: #f59e0b;
+  color: #0b0f15;
+}
+
+.theme-pill-slider svg {
+  width: 13px;
+  height: 13px;
+  stroke-width: 2.2;
+}
+
+.theme-label-text {
+  padding: 0 6px 0 2px;
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.main-content {
+  padding: 32px 36px 60px;
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+/* Page Section Animations */
+.page-view {
+  display: none;
+}
+
+.page-view.active {
+  display: block;
+  animation: pageSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes pageSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Cards */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-card);
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), 
+              border-color 0.22s ease, 
+              box-shadow 0.22s ease;
+  position: relative;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(217, 119, 6, 0.3);
+  box-shadow: var(--shadow-hover);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.card-header h3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.card-header h3 svg {
+  color: var(--accent);
+}
+
+/* Stats Metric Cards */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-bottom: 28px;
+}
+
+.stat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 22px;
+  box-shadow: var(--shadow-card);
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), 
+              border-color 0.22s ease, 
+              box-shadow 0.22s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 90px;
+  height: 90px;
+  background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+  border-color: rgba(217, 119, 6, 0.28);
+}
+
+.stat-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.stat-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.stat-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-card-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+  border: 1px solid var(--border);
+  transition: var(--transition);
+}
+
+.stat-card:hover .stat-icon {
+  transform: scale(1.06);
+  border-color: rgba(217, 119, 6, 0.35);
+  background: var(--accent-light);
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: var(--text-main);
+  margin-bottom: 4px;
+  transition: color 0.2s ease, transform 0.2s ease;
+  display: inline-block;
+}
+
+.stat-value.accent {
+  color: var(--accent-dark);
+}
+
+/* Value Flash update animation */
+.value-flash {
+  animation: numberPulse 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes numberPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.04); color: var(--accent); }
+  100% { transform: scale(1); }
+}
+
+.stat-sub {
+  font-size: 11.5px;
+  color: var(--text-dim);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Grid Layouts */
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 22px;
+  margin-bottom: 28px;
+}
+
+.grid-equal {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px;
+  gap: 22px;
 }
 
-.page { display: none; }
-.page.active { display: block; }
+/* Financial Breakdown List */
+.summary-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.summary-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: var(--bg-card-subtle);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  transition: var(--transition);
+}
+
+.summary-item:hover {
+  background: var(--bg-card);
+  transform: translateX(3px);
+  border-color: var(--border-focus);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.summary-item .item-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--text-main);
+}
+
+.summary-item .item-value {
+  font-weight: 700;
+  font-size: 14.5px;
+  color: var(--text-main);
+}
+
+.highlight-box {
+  background: linear-gradient(135deg, rgba(217, 119, 6, 0.08) 0%, rgba(22, 163, 74, 0.06) 100%);
+  border: 1px solid rgba(217, 119, 6, 0.25);
+  border-radius: var(--radius-md);
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 14px;
+  transition: var(--transition);
+}
+
+.highlight-box:hover {
+  border-color: rgba(217, 119, 6, 0.45);
+  box-shadow: 0 3px 12px rgba(217, 119, 6, 0.12);
+}
+
+.highlight-box .title {
+  font-size: 13px;
+  color: var(--text-main);
+  font-weight: 600;
+}
+
+.highlight-box .val {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--good);
+}
+
+/* Forms & Inputs */
+.form-group {
+  margin-bottom: 18px;
+}
 
 label {
   display: block;
-  font-weight: 650;
-  font-size: 13px;
-  margin-top: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 7px;
+  letter-spacing: 0.2px;
+  transition: color 0.2s ease;
 }
 
-input, select {
+.form-group:focus-within label {
+  color: var(--accent-dark);
+}
+
+input, select, textarea {
   width: 100%;
-  padding: 12px;
-  margin-top: 5px;
-  background: #111b23;
-  color: white;
-  border: 1px solid #566574;
-  border-radius: 8px;
-  font: inherit;
-}
-
-input:focus,
-select:focus,
-button:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-}
-
-button {
-  cursor: pointer;
-  border: 0;
-  border-radius: 8px;
   padding: 11px 15px;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  color: var(--text-main);
+  font-family: inherit;
+  font-size: 13.5px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+  outline: none;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3.5px var(--accent-glow);
+  background: var(--bg-card);
+}
+
+/* Quick Select Buttons */
+.service-presets {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.preset-chip {
+  padding: 12px 14px;
+  background: var(--bg-card-subtle);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  text-align: left;
+  transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), 
+              border-color 0.18s ease, 
+              background 0.18s ease, 
+              box-shadow 0.18s ease;
+  position: relative;
+  user-select: none;
+}
+
+.preset-chip:hover {
+  border-color: var(--accent);
+  background: var(--preset-hover-bg);
+  transform: translateY(-2px);
+}
+
+.preset-chip:active {
+  transform: scale(0.98);
+}
+
+.preset-chip.selected {
+  border-color: var(--accent);
+  background: var(--preset-hover-bg);
+  box-shadow: 0 0 0 1px var(--accent), 0 3px 10px rgba(217, 119, 6, 0.15);
+}
+
+.preset-chip .title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-main);
+  display: block;
+  margin-bottom: 2px;
+}
+
+.preset-chip .price {
+  font-size: 12px;
+  color: var(--accent-dark);
   font-weight: 700;
 }
 
-.primary {
-  background: var(--accent);
-  color: #201407;
+/* Bill Calculator Preview */
+.bill-summary-card {
+  background: var(--bill-card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-card);
+  transition: var(--transition);
 }
 
-.danger {
-  background: #9d3434;
-  color: white;
+.bill-summary-card:hover {
+  border-color: rgba(217, 119, 6, 0.3);
+  box-shadow: var(--shadow-hover);
 }
 
-.secondary {
-  background: #3a4b59;
-  color: white;
-}
-
-.actions {
+.bill-row {
   display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 15px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  font-size: 13.5px;
+  color: var(--text-muted);
+  border-bottom: 1px dashed var(--border);
 }
 
-.table-wrap { overflow-x: auto; }
+.bill-row.total-row {
+  border-top: 1.5px solid var(--border);
+  border-bottom: none;
+  padding-top: 16px;
+  margin-top: 8px;
+}
+
+.bill-row.total-row .val {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--accent-dark);
+}
+
+.bill-row.change-row .val {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--good);
+}
+
+/* Buttons */
+button {
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: var(--radius-md);
+  border: none;
+  padding: 11px 20px;
+  transition: transform 0.16s cubic-bezier(0.16, 1, 0.3, 1), 
+              background 0.2s ease, 
+              border-color 0.2s ease, 
+              box-shadow 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  user-select: none;
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(217, 119, 6, 0.25);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  box-shadow: 0 4px 14px rgba(217, 119, 6, 0.32);
+  transform: translateY(-1.5px);
+}
+
+.btn-secondary {
+  background: var(--bg-card-subtle);
+  color: var(--text-main);
+  border: 1px solid var(--border);
+}
+
+.btn-secondary:hover {
+  background: var(--bg-card);
+  border-color: var(--accent);
+  color: var(--accent-dark);
+  transform: translateY(-1.5px);
+}
+
+.btn-danger {
+  background: var(--bad-bg);
+  color: var(--bad);
+  border: 1px solid rgba(220, 38, 38, 0.3);
+}
+
+.btn-danger:hover {
+  background: #ef4444;
+  color: #ffffff;
+  border-color: #ef4444;
+  transform: translateY(-1.5px);
+  box-shadow: 0 3px 10px rgba(239, 68, 68, 0.25);
+}
+
+.btn-full {
+  width: 100%;
+}
+
+/* Quick shortcut action list buttons */
+.shortcut-btn {
+  width: 100%;
+  padding: 13px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  background: var(--bg-card-subtle);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  color: var(--text-main);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.shortcut-btn:hover {
+  background: var(--shortcut-hover-bg);
+  border-color: var(--accent);
+  transform: translateX(4px);
+  color: var(--accent-dark);
+  box-shadow: 0 2px 8px var(--accent-glow);
+}
+
+/* Tables */
+.table-container {
+  overflow-x: auto;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+}
 
 table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 550px;
-}
-
-th, td {
-  padding: 11px;
   text-align: left;
-  border-bottom: 1px solid var(--line);
-  font-size: 13px;
 }
 
-th { color: var(--accent); }
-.green { color: var(--good); }
-.red { color: var(--bad); }
-
-.note {
-  font-size: 13px;
-  color: var(--muted);
+thead th {
+  background: var(--th-bg);
+  color: var(--text-muted);
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  padding: 13px 18px;
+  border-bottom: 1px solid var(--border);
 }
 
-.empty {
+tbody tr {
+  border-bottom: 1px solid var(--tr-border);
+  transition: background-color 0.15s ease;
+}
+
+tbody tr:last-child {
+  border-bottom: none;
+}
+
+tbody tr:hover {
+  background: var(--tr-hover);
+}
+
+tbody td {
+  padding: 13px 18px;
+  font-size: 13px;
+  color: var(--text-main);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  transition: transform 0.2s ease;
+}
+
+.badge-barber {
+  background: var(--accent-light);
+  color: var(--accent-dark);
+  border: 1px solid rgba(217, 119, 6, 0.3);
+}
+
+.badge-product {
+  background: var(--badge-product-bg);
+  color: var(--badge-product-txt);
+  border: 1px solid var(--badge-product-border);
+}
+
+.empty-state {
   text-align: center;
-  color: var(--muted);
+  padding: 48px 20px;
+  color: var(--text-dim);
 }
 
-@media(max-width:900px) {
-  .layout { display: block; }
-  .sidebar { width: 100%; padding: 15px; }
-  .sidebar nav {
-    display: flex;
-    gap: 5px;
+.empty-state svg {
+  width: 44px;
+  height: 44px;
+  stroke: var(--text-dim);
+  opacity: 0.6;
+  margin-bottom: 12px;
+}
+
+.empty-state p {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+/* Floating Interactive Toast Notification (Top-Right) */
+.toast-container {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  z-index: 1000;
+  pointer-events: none;
+}
+
+.toast {
+  min-width: 320px;
+  max-width: 420px;
+  padding: 14px 18px;
+  background: var(--toast-bg);
+  border: 1px solid var(--border);
+  border-left: 4.5px solid var(--accent);
+  border-radius: var(--radius-md);
+  box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.2), 0 4px 10px rgba(0, 0, 0, 0.08);
+  color: var(--text-main);
+  font-size: 13.5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  transform: translateX(120%) scale(0.96);
+  opacity: 0;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), 
+              opacity 0.25s ease;
+}
+
+.toast.show {
+  transform: translateX(0) scale(1);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.toast-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+}
+
+.toast-icon-circle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--good-bg);
+  color: var(--good);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.toast.warning .toast-icon-circle {
+  background: var(--accent-light);
+  color: var(--accent-dark);
+}
+
+.toast.warning {
+  border-left-color: var(--accent);
+}
+
+.toast-close-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  font-size: 16px;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  line-height: 1;
+}
+
+.toast-close-btn:hover {
+  background: var(--bg-card-subtle);
+  color: var(--text-main);
+}
+
+/* Accessibility: Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .grid-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .app-layout {
+    flex-direction: column;
+  }
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+    padding: 16px;
+  }
+  .nav-menu {
+    flex-direction: row;
     overflow-x: auto;
+    padding-bottom: 8px;
   }
-  .sidebar button {
+  .nav-item {
     white-space: nowrap;
-    width: auto;
+    padding: 9px 12px;
+    font-size: 12.5px;
   }
-  .main { padding: 15px; }
-  .stats {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .main-content {
+    padding: 20px 16px;
   }
-  .grid2 { grid-template-columns: 1fr; }
-}
-
-@media(max-width:430px) {
-  .stats { grid-template-columns: 1fr 1fr; }
-  .card { padding: 14px; }
-  .stat strong { font-size: 19px; }
+  .top-bar {
+    padding: 14px 16px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .top-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .grid-equal {
+    grid-template-columns: 1fr;
+  }
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+  .toast-container {
+    top: auto;
+    bottom: 20px;
+    right: 16px;
+    left: 16px;
+  }
+  .toast {
+    min-width: 0;
+    width: 100%;
+    transform: translateY(120%);
+  }
+  .toast.show {
+    transform: translateY(0);
+  }
 }
 </style>
 </head>
-
 <body>
-<div class="layout">
-
+<div class="app-layout">
+<!-- SIDEBAR NAVIGATION -->
 <aside class="sidebar">
-  <h2>✂ RUMAH PANGKAS ASSER</h2>
-  <p>Potong Rambut, Potong Masalah</p>
-
-  <nav aria-label="Menu utama">
-    <button class="active" data-page="dashboard">▦ Dashboard</button>
-    <button data-page="kasir">▣ Kasir Jasa & Produk</button>
-    <button data-page="booking">▤ Booking</button>
-    <button data-page="customer">♟ Customer</button>
-    <button data-page="showcase">🏷 Showcase Produk</button>
-    <button data-page="biaya">💰 Pengeluaran</button>
-    <button data-page="laporan">📊 Laporan</button>
-    <button data-page="pengaturan">⚙ Pengaturan</button>
-  </nav>
+<div class="brand-wrapper">
+<div class="brand-logo-badge">
+        ✂
+      </div>
+<div class="brand-info">
+<h2>Asser Barber</h2>
+<p>Potong Rambut, Potong Masalah</p>
+</div>
+</div>
+<div class="nav-label">Navigasi Utama</div>
+<nav aria-label="Menu Utama" class="nav-menu">
+<button class="nav-item active" data-page="dashboard">
+<svg fill="none" stroke="currentColor" viewbox="0 0 24 24"><rect height="7" rx="1.5" width="7" x="3" y="3"></rect><rect height="7" rx="1.5" width="7" x="14" y="3"></rect><rect height="7" rx="1.5" width="7" x="14" y="14"></rect><rect height="7" rx="1.5" width="7" x="3" y="14"></rect></svg>
+<span>Dashboard</span>
+</button>
+<button class="nav-item" data-page="kasir">
+<svg fill="none" stroke="currentColor" viewbox="0 0 24 24"><rect height="16" rx="2" width="20" x="2" y="4"></rect><line x1="2" x2="22" y1="10" y2="10"></line></svg>
+<span>Kasir &amp; Transaksi</span>
+</button>
+<button class="nav-item" data-page="booking">
+<svg fill="none" stroke="currentColor" viewbox="0 0 24 24"><rect height="18" rx="2" width="18" x="3" y="4"></rect><line x1="16" x2="16" y1="2" y2="6"></line><line x1="8" x2="8" y1="2" y2="6"></line><line x1="3" x2="21" y1="10" y2="10"></line></svg>
+<span>Booking Antrean</span>
+</button>
+<button class="nav-item" data-page="customer">
+<svg fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+<span>Riwayat Customer</span>
+</button>
+<button class="nav-item" data-page="showcase">
+<svg fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" x2="7.01" y1="7" y2="7"></line></svg>
+<span>Showcase Produk</span>
+</button>
+<button class="nav-item" data-page="biaya">
+<svg fill="none" stroke="currentColor" viewbox="0 0 24 24"><line x1="12" x2="12" y1="1" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+<span>Biaya Operasional</span>
+</button>
+<button class="nav-item" data-page="laporan">
+<svg fill="none" stroke="currentColor" viewbox="0 0 24 24"><line x1="18" x2="18" y1="20" y2="10"></line><line x1="12" x2="12" y1="20" y2="4"></line><line x1="6" x2="6" y1="20" y2="14"></line></svg>
+<span>Laporan Keuangan</span>
+</button>
+<button class="nav-item" data-page="pengaturan">
+<svg fill="none" stroke="currentColor" viewbox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+<span>Pengaturan &amp; Cadangan</span>
+</button>
+</nav>
+<div class="sidebar-footer">
+<div class="status-pill">
+<span class="status-dot"></span>
+<span>Sistem Offline &amp; Aktif</span>
+</div>
+</div>
 </aside>
-
-<main class="main">
-
-<!-- DASHBOARD -->
-<section class="page active" id="dashboard">
-  <h1>Dashboard Management</h1>
-  <p class="muted">Ringkasan keuangan Rumah Pangkas Asser</p>
-
-  <div class="stats">
-    <div class="card stat">
-      <small>Pemasukan Hari Ini</small>
-      <strong id="incomeToday">Rp0</strong>
-    </div>
-    <div class="card stat">
-      <small>Pengeluaran Hari Ini</small>
-      <strong id="expenseToday">Rp0</strong>
-    </div>
-    <div class="card stat">
-      <small>Laba Hari Ini</small>
-      <strong id="profitToday">Rp0</strong>
-    </div>
-    <div class="card stat">
-      <small>Transaksi Hari Ini</small>
-      <strong id="countToday">0</strong>
-    </div>
-  </div>
-
-  <div class="grid2">
-    <div class="card">
-      <h3>Ringkasan Seluruh Usaha</h3>
-      <p>Pendapatan Jasa Barber: <b id="allBarberIncome">Rp0</b></p>
-      <p>Pendapatan Produk/Showcase: <b id="allProductIncome">Rp0</b></p>
-      <hr>
-      <p>Total Pemasukan: <b id="allIncome">Rp0</b></p>
-      <p>Total Pengeluaran: <b id="allExpense">Rp0</b></p>
-      <hr>
-      <h3 class="green">
-        Laba Bersih: <span id="allProfit">Rp0</span>
-      </h3>
-    </div>
-
-    <div class="card">
-      <h3>Informasi Sistem</h3>
-      <p>Transaksi kasir otomatis masuk laporan.</p>
-      <p>Pemasukan dipisah antara Barber & Produk.</p>
-      <p class="note">
-        Data tersimpan hanya di browser/perangkat ini.
-        Ekspor backup secara berkala.
-      </p>
-    </div>
-  </div>
+<!-- MAIN WRAPPER -->
+<div class="main-wrapper">
+<!-- TOP HEADER BAR -->
+<header class="top-bar">
+<div class="page-title">
+<h1 id="topBarHeading">Ringkasan Dashboard</h1>
+<p id="topBarSub">Kelola operasional dan performa harian barbershop</p>
+</div>
+<div class="top-actions">
+<!-- TOGGLE SWITCH DARK/LIGHT MODE -->
+<button aria-label="Ganti Tema Gelap / Terang" class="theme-switch-btn" id="themeToggleBtn" type="button">
+<div class="theme-pill-track">
+<div class="theme-pill-slider" id="themeSlider">
+<svg fill="none" id="themeIconSun" stroke="currentColor" style="display: block;" viewbox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" x2="12" y1="1" y2="3"></line><line x1="12" x2="12" y1="21" y2="23"></line><line x1="4.22" x2="5.64" y1="4.22" y2="5.64"></line><line x1="18.36" x2="19.78" y1="18.36" y2="19.78"></line><line x1="1" x2="3" y1="12" y2="12"></line><line x1="21" x2="23" y1="12" y2="12"></line><line x1="4.22" x2="5.64" y1="19.78" y2="18.36"></line><line x1="18.36" x2="19.78" y1="5.64" y2="4.22"></line></svg>
+<svg fill="none" id="themeIconMoon" stroke="currentColor" style="display: none;" viewbox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+</div>
+</div>
+<span class="theme-label-text" id="themeLabelText">Mode Terang</span>
+</button>
+<div class="date-badge">
+<svg fill="none" height="14" stroke="currentColor" viewbox="0 0 24 24" width="14"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+<span id="liveClock">--:-- WIB</span>
+</div>
+</div>
+</header>
+<main class="main-content">
+<!-- SECTION: DASHBOARD -->
+<section class="page-view active" id="dashboard">
+<!-- STATS CARDS -->
+<div class="stats-grid">
+<div class="stat-card">
+<div class="stat-top">
+<span class="stat-label">Pemasukan Hari Ini</span>
+<div class="stat-icon">
+<svg fill="none" height="16" stroke="currentColor" viewbox="0 0 24 24" width="16"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+</div>
+</div>
+<div class="stat-value accent" id="incomeToday">Rp0</div>
+<div class="stat-sub">
+<span>Berdasarkan transaksi hari ini</span>
+</div>
+</div>
+<div class="stat-card">
+<div class="stat-top">
+<span class="stat-label">Pengeluaran Hari Ini</span>
+<div class="stat-icon" style="color: var(--bad); background: var(--bad-bg);">
+<svg fill="none" height="16" stroke="currentColor" viewbox="0 0 24 24" width="16"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline><polyline points="17 18 23 18 23 12"></polyline></svg>
+</div>
+</div>
+<div class="stat-value" id="expenseToday">Rp0</div>
+<div class="stat-sub">Biaya operasional harian</div>
+</div>
+<div class="stat-card">
+<div class="stat-top">
+<span class="stat-label">Laba Bersih Hari Ini</span>
+<div class="stat-icon" style="color: var(--good); background: var(--good-bg);">
+<svg fill="none" height="16" stroke="currentColor" viewbox="0 0 24 24" width="16"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+</div>
+</div>
+<div class="stat-value" id="profitToday" style="color: var(--good);">Rp0</div>
+<div class="stat-sub">Pemasukan dikurangi beban</div>
+</div>
+<div class="stat-card">
+<div class="stat-top">
+<span class="stat-label">Customer Hari Ini</span>
+<div class="stat-icon">
+<svg fill="none" height="16" stroke="currentColor" viewbox="0 0 24 24" width="16"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+</div>
+</div>
+<div class="stat-value" id="countToday">0</div>
+<div class="stat-sub">Order &amp; booking selesai</div>
+</div>
+</div>
+<!-- DASHBOARD DETAILS GRID -->
+<div class="grid-2">
+<!-- RINGKASAN AKUMULATIF -->
+<div class="card">
+<div class="card-header">
+<h3>
+<svg fill="none" height="18" stroke="currentColor" viewbox="0 0 24 24" width="18"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path><path d="M22 12A10 10 0 0 0 12 2v10z"></path></svg>
+                Performa Akumulatif Usaha
+              </h3>
+</div>
+<div class="summary-list">
+<div class="summary-item">
+<div class="item-info">
+<span style="color: var(--accent);">✂</span>
+<span>Pendapatan Jasa Pangkas Rambut</span>
+</div>
+<div class="item-value" id="allBarberIncome">Rp0</div>
+</div>
+<div class="summary-item">
+<div class="item-info">
+<span style="color: var(--info);">🏷</span>
+<span>Pendapatan Produk Showcase</span>
+</div>
+<div class="item-value" id="allProductIncome">Rp0</div>
+</div>
+<div class="summary-item">
+<div class="item-info">
+<span>💰</span>
+<span>Total Seluruh Pemasukan</span>
+</div>
+<div class="item-value" id="allIncome">Rp0</div>
+</div>
+<div class="summary-item">
+<div class="item-info">
+<span style="color: var(--bad);">📉</span>
+<span>Total Seluruh Pengeluaran</span>
+</div>
+<div class="item-value" id="allExpense" style="color: var(--bad);">Rp0</div>
+</div>
+</div>
+<div class="highlight-box">
+<div>
+<div class="title">Total Laba Bersih Keseluruhan</div>
+<small style="color: var(--text-dim); font-size: 11px;">Akumulasi profit bersih tersimpan</small>
+</div>
+<div class="val" id="allProfit">Rp0</div>
+</div>
+</div>
+<!-- PINTASAN & INFO CEPAT -->
+<div class="card">
+<div class="card-header">
+<h3>
+<svg fill="none" height="18" stroke="currentColor" viewbox="0 0 24 24" width="18"><circle cx="12" cy="12" r="10"></circle><line x1="12" x2="12" y1="16" y2="12"></line><line x1="12" x2="12.01" y1="8" y2="8"></line></svg>
+                Panduan Pintasan Kasir
+              </h3>
+</div>
+<p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">
+              Gunakan menu kasir untuk melayani walk-in customer dengan cepat menggunakan preset sekali klik.
+            </p>
+<div style="display: flex; flex-direction: column; gap: 10px;">
+<button class="shortcut-btn" onclick="navigateTo('kasir')">
+<span style="color: var(--accent); font-size: 15px;">⚡</span>
+<span style="font-weight: 600;">Mulai Transaksi Kasir Baru</span>
+</button>
+<button class="shortcut-btn" onclick="navigateTo('booking')">
+<span style="color: var(--info); font-size: 15px;">📅</span>
+<span style="font-weight: 600;">Tambah Jadwal Booking</span>
+</button>
+<button class="shortcut-btn" onclick="navigateTo('showcase')">
+<span style="color: var(--good); font-size: 15px;">🏷</span>
+<span style="font-weight: 600;">Tambah Stok Produk</span>
+</button>
+</div>
+<div style="margin-top: 24px; padding: 14px; background: var(--bg-card-subtle); border-radius: var(--radius-sm); border: 1px solid var(--border); transition: border-color 0.2s ease;">
+<small style="color: var(--text-muted); font-size: 11.5px; display: block; line-height: 1.6;">
+                🔒 <strong>Privasi Data:</strong> Data tersimpan aman di penyimpanan lokal peramban Anda. Lakukan ekspor cadangan rutin di menu <em>Pengaturan</em>.
+              </small>
+</div>
+</div>
+</div>
 </section>
-
-<!-- KASIR -->
-<section class="page" id="kasir">
-  <h1>Sistem Kasir Jasa & Produk</h1>
-
-  <form class="card" id="formKasir">
-    <label for="nama">Nama Customer</label>
-    <input id="nama" maxlength="80" required placeholder="Contoh: Andi">
-
-    <label for="tipeTransaksi">Jenis Transaksi</label>
-    <select id="tipeTransaksi" required>
-      <option value="barber">Jasa Barber (Potong/Paket)</option>
-      <option value="produk">Produk / Showcase (Perawatan & Minuman)</option>
-    </select>
-
-    <label for="layanan">Pilih Item / Layanan</label>
-    <select id="layanan" required>
-      <!-- Diisi dinamis via JS -->
-    </select>
-
-    <label for="jumlah">Jumlah Order</label>
-    <input type="number" id="jumlah" value="1" min="1" max="1000" step="1" required>
-
-    <h2>Total: <span id="tagihan">Rp0</span></h2>
-
-    <label for="bayar">Uang Diterima (Rp)</label>
-    <input type="number" id="bayar" min="0" max="1000000000" step="1" required>
-
-    <h3>Kembalian: <span id="kembali">Rp0</span></h3>
-
-    <button class="primary" type="submit">SIMPAN TRANSAKSI</button>
-  </form>
+<!-- SECTION: KASIR -->
+<section class="page-view" id="kasir">
+<div class="grid-2">
+<!-- FORM KASIR -->
+<div class="card">
+<div class="card-header">
+<h3>
+<svg fill="none" height="18" stroke="currentColor" viewbox="0 0 24 24" width="18"><rect height="16" rx="2" width="20" x="2" y="4"></rect><line x1="2" x2="22" y1="10" y2="10"></line></svg>
+                Input Transaksi Baru
+              </h3>
+</div>
+<!-- PRESET POPULER -->
+<label>Pilihan Cepat Layanan Barber</label>
+<div class="service-presets" id="quickBarberPresets">
+<!-- Render via JS -->
+</div>
+<form id="formKasir">
+<div class="form-group">
+<label for="nama">Nama Pelanggan</label>
+<input id="nama" maxlength="80" placeholder="Masukkan nama pelanggan..." required=""/>
+</div>
+<div class="grid-equal">
+<div class="form-group">
+<label for="tipeTransaksi">Kategori Transaksi</label>
+<select id="tipeTransaksi" required="">
+<option value="barber">Jasa Barber (Potong &amp; Paket)</option>
+<option value="produk">Produk Showcase (Hair Care &amp; Minuman)</option>
+</select>
+</div>
+<div class="form-group">
+<label for="jumlah">Jumlah Order</label>
+<input id="jumlah" max="1000" min="1" required="" step="1" type="number" value="1"/>
+</div>
+</div>
+<div class="form-group">
+<label for="layanan">Pilih Item / Layanan</label>
+<select id="layanan" required=""></select>
+</div>
+<div class="form-group">
+<label for="bayar">Nominal Uang Diterima (Rp)</label>
+<input id="bayar" max="1000000000" min="0" placeholder="Masukkan jumlah bayar..." required="" step="1" type="number"/>
+</div>
+<!-- Quick money presets -->
+<div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px;">
+<button class="btn-secondary" onclick="setExactPay()" style="padding: 6px 12px; font-size: 11.5px;" type="button">Uang Pas</button>
+<button class="btn-secondary" onclick="addCash(20000)" style="padding: 6px 12px; font-size: 11.5px;" type="button">+20rb</button>
+<button class="btn-secondary" onclick="addCash(50000)" style="padding: 6px 12px; font-size: 11.5px;" type="button">+50rb</button>
+<button class="btn-secondary" onclick="addCash(100000)" style="padding: 6px 12px; font-size: 11.5px;" type="button">+100rb</button>
+</div>
+<button class="btn-primary btn-full" type="submit">
+<svg fill="none" height="16" stroke="currentColor" viewbox="0 0 24 24" width="16"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                Proses &amp; Simpan Transaksi
+              </button>
+</form>
+</div>
+<!-- KALKULASI TAGIHAN -->
+<div>
+<div class="bill-summary-card">
+<div class="card-header" style="margin-bottom: 12px;">
+<h3 style="font-size: 14px; color: var(--text-muted);">Detail Pembayaran</h3>
+<span class="badge badge-barber" id="billBadge">Walk-in</span>
+</div>
+<div class="bill-row">
+<span>Item Terpilih</span>
+<span id="billItemName" style="color: var(--text-main); font-weight: 600;">-</span>
+</div>
+<div class="bill-row">
+<span>Harga Satuan</span>
+<span id="billItemPrice">Rp0</span>
+</div>
+<div class="bill-row">
+<span>Qty</span>
+<span id="billQty">1x</span>
+</div>
+<div class="bill-row total-row">
+<span>Total Tagihan</span>
+<span class="val" id="tagihan">Rp0</span>
+</div>
+<div class="bill-row change-row" style="border-bottom: none; padding-top: 10px;">
+<span>Kembalian</span>
+<span class="val" id="kembali">Rp0</span>
+</div>
+</div>
+<!-- Petunjuk Cepat -->
+<div class="card" style="margin-top: 20px;">
+<h4 style="font-size: 13px; font-weight: 700; color: var(--accent-dark); margin-bottom: 6px;">Catatan Kasir</h4>
+<p style="font-size: 12.5px; color: var(--text-muted); line-height: 1.6;">
+                Semua transaksi berhasil otomatis masuk ke Laporan Keuangan dan memperbarui grafik pendapatan hari ini.
+              </p>
+</div>
+</div>
+</div>
 </section>
-
-<!-- BOOKING -->
-<section class="page" id="booking">
-  <h1>Booking Customer</h1>
-
-  <form class="card" id="formBooking">
-    <label for="bookingNama">Nama Customer</label>
-    <input id="bookingNama" maxlength="80" required>
-
-    <label for="bookingLayanan">Layanan</label>
-    <select id="bookingLayanan" required>
-      <option value="dewasa">Potong Rambut Dewasa — Rp20.000</option>
-      <option value="paketDewasa">Paket Dewasa — Rp30.000</option>
-      <option value="anak">Potong Rambut Anak — Rp15.000</option>
-      <option value="paketAnak">Paket Rambut Anak — Rp10.000</option>
-    </select>
-
-    <label for="bookingTanggal">Tanggal</label>
-    <input type="date" id="bookingTanggal" required>
-
-    <label for="bookingJam">Jam</label>
-    <input type="time" id="bookingJam" required>
-
-    <button class="primary" type="submit">SIMPAN BOOKING</button>
-  </form>
-
-  <div class="card">
-    <h3>Daftar Booking</h3>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Nama</th>
-            <th>Layanan</th>
-            <th>Tanggal</th>
-            <th>Jam</th>
-          </tr>
-        </thead>
-        <tbody id="bookingTable"></tbody>
-      </table>
-    </div>
-  </div>
+<!-- SECTION: BOOKING -->
+<section class="page-view" id="booking">
+<div class="grid-2">
+<!-- FORM BOOKING -->
+<div class="card">
+<div class="card-header">
+<h3>
+<svg fill="none" height="18" stroke="currentColor" viewbox="0 0 24 24" width="18"><rect height="18" rx="2" width="18" x="3" y="4"></rect><line x1="16" x2="16" y1="2" y2="6"></line><line x1="8" x2="8" y1="2" y2="6"></line><line x1="3" x2="21" y1="10" y2="10"></line></svg>
+                Buat Janji Temu / Booking
+              </h3>
+</div>
+<form id="formBooking">
+<div class="form-group">
+<label for="bookingNama">Nama Customer</label>
+<input id="bookingNama" maxlength="80" placeholder="Contoh: Budi Santoso" required=""/>
+</div>
+<div class="form-group">
+<label for="bookingLayanan">Pilihan Layanan</label>
+<select id="bookingLayanan" required="">
+<option value="dewasa">Potong Rambut Dewasa — Rp20.000</option>
+<option value="paketDewasa">Paket Dewasa (Cuci + Pomade) — Rp30.000</option>
+<option value="anak">Potong Rambut Anak — Rp15.000</option>
+<option value="paketAnak">Paket Rambut Anak — Rp10.000</option>
+</select>
+</div>
+<div class="grid-equal">
+<div class="form-group">
+<label for="bookingTanggal">Tanggal</label>
+<input id="bookingTanggal" required="" type="date"/>
+</div>
+<div class="form-group">
+<label for="bookingJam">Jam</label>
+<input id="bookingJam" required="" type="time"/>
+</div>
+</div>
+<button class="btn-primary btn-full" style="margin-top: 10px;" type="submit">
+                Simpan Jadwal Booking
+              </button>
+</form>
+</div>
+<!-- DAFTAR BOOKING -->
+<div class="card">
+<div class="card-header">
+<h3>
+<svg fill="none" height="18" stroke="currentColor" viewbox="0 0 24 24" width="18"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" x2="8" y1="13" y2="13"></line><line x1="16" x2="8" y1="17" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                Jadwal Antrean Terdaftar
+              </h3>
+</div>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Pelanggan</th>
+<th>Layanan</th>
+<th>Tanggal</th>
+<th>Jam</th>
+</tr>
+</thead>
+<tbody id="bookingTable"></tbody>
+</table>
+</div>
+</div>
+</div>
 </section>
-
-<!-- CUSTOMER -->
-<section class="page" id="customer">
-  <h1>Daftar Customer & Order</h1>
-
-  <div class="card table-wrap">
-    <table>
-      <thead>
-        <tr>
-          <th>No</th>
-          <th>Nama</th>
-          <th>Kategori</th>
-          <th>Item / Layanan</th>
-          <th>Jumlah</th>
-          <th>Total</th>
-          <th>Tanggal</th>
-        </tr>
-      </thead>
-      <tbody id="customerTable"></tbody>
-    </table>
-  </div>
+<!-- SECTION: CUSTOMER -->
+<section class="page-view" id="customer">
+<div class="card">
+<div class="card-header">
+<div>
+<h3>Riwayat Transaksi Pelanggan</h3>
+<p style="font-size: 12.5px; color: var(--text-muted); margin-top: 2px;">Daftar seluruh aktivitas belanja jasa dan produk showcase</p>
+</div>
+</div>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>No</th>
+<th>Nama Customer</th>
+<th>Kategori</th>
+<th>Item / Layanan</th>
+<th>Qty</th>
+<th>Total</th>
+<th>Tanggal</th>
+</tr>
+</thead>
+<tbody id="customerTable"></tbody>
+</table>
+</div>
+</div>
 </section>
-
-<!-- SHOWCASE -->
-<section class="page" id="showcase">
-  <h1>Manajemen Showcase Produk & Perawatan</h1>
-  <p class="muted">Tambah dan kelola produk perawatan rambut, minuman, dan item fleksibel lainnya.</p>
-
-  <form class="card" id="formShowcase">
-    <label for="prodNama">Nama Produk / Item</label>
-    <input id="prodNama" maxlength="100" required placeholder="Contoh: Pomade Barberking / Es Teh Manis">
-
-    <label for="prodKategori">Kategori</label>
-    <select id="prodKategori" required>
-      <option value="Hair Styling">Hair Styling</option>
-      <option value="Hair Tonic">Hair Tonic</option>
-      <option value="Shampo">Shampo</option>
-      <option value="Conditioner">Conditioner</option>
-      <option value="Minyak Rambut">Minyak Rambut</option>
-      <option value="Sisir Rambut">Sisir Rambut</option>
-      <option value="Minuman">Minuman</option>
-      <option value="Lainnya">Lainnya (Fleksibel)</option>
-    </select>
-
-    <label for="prodHarga">Harga Jual (Rp)</label>
-    <input type="number" id="prodHarga" min="1" max="1000000000" step="1" required>
-
-    <button class="primary" type="submit">TAMBAH PRODUK SHOWCASE</button>
-  </form>
-
-  <div class="card">
-    <h3>Daftar Produk Showcase</h3>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>No</th>
-            <th>Nama Produk</th>
-            <th>Kategori</th>
-            <th>Harga</th>
-            <th>Aksi</th>
-          </tr>
-        </thead>
-        <tbody id="showcaseTable"></tbody>
-      </table>
-    </div>
-  </div>
+<!-- SECTION: SHOWCASE -->
+<section class="page-view" id="showcase">
+<div class="grid-2">
+<!-- FORM SHOWCASE -->
+<div class="card">
+<div class="card-header">
+<h3>
+<svg fill="none" height="18" stroke="currentColor" viewbox="0 0 24 24" width="18"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" x2="7.01" y1="7" y2="7"></line></svg>
+                Tambah Produk Showcase
+              </h3>
+</div>
+<form id="formShowcase">
+<div class="form-group">
+<label for="prodNama">Nama Produk / Item</label>
+<input id="prodNama" maxlength="100" placeholder="Contoh: Pomade Clay Matte / Kopi Susu Dingin" required=""/>
+</div>
+<div class="form-group">
+<label for="prodKategori">Kategori</label>
+<select id="prodKategori" required="">
+<option value="Hair Styling">Hair Styling (Pomade/Clay/Wax)</option>
+<option value="Hair Tonic">Hair Tonic &amp; Serum</option>
+<option value="Shampo">Shampo Khusus Barber</option>
+<option value="Conditioner">Conditioner Rambut</option>
+<option value="Minyak Rambut">Minyak Rambut Tradisional</option>
+<option value="Sisir Rambut">Sisir &amp; Peralatan</option>
+<option value="Minuman">Minuman Dingin / Hangat</option>
+<option value="Lainnya">Lainnya (Fleksibel)</option>
+</select>
+</div>
+<div class="form-group">
+<label for="prodHarga">Harga Jual (Rp)</label>
+<input id="prodHarga" max="1000000000" min="1" placeholder="Contoh: 45000" required="" step="1" type="number"/>
+</div>
+<button class="btn-primary btn-full" style="margin-top: 10px;" type="submit">
+                Tambahkan ke Katalog Showcase
+              </button>
+</form>
+</div>
+<!-- DAFTAR SHOWCASE -->
+<div class="card">
+<div class="card-header">
+<h3>Katalog Produk Aktif</h3>
+</div>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>No</th>
+<th>Nama Produk</th>
+<th>Kategori</th>
+<th>Harga</th>
+<th style="text-align: right;">Aksi</th>
+</tr>
+</thead>
+<tbody id="showcaseTable"></tbody>
+</table>
+</div>
+</div>
+</div>
 </section>
-
-<!-- PENGELUARAN -->
-<section class="page" id="biaya">
-  <h1>Biaya Operasional</h1>
-
-  <form class="card" id="formBiaya">
-    <label for="kategori">Kategori</label>
-    <select id="kategori">
-      <option>Listrik</option>
-      <option>Air</option>
-      <option>Gaji Karyawan</option>
-      <option>Sewa Tempat</option>
-      <option>Perlengkapan</option>
-      <option>Stok Produk Showcase</option>
-      <option>Lainnya</option>
-    </select>
-
-    <label for="keterangan">Keterangan</label>
-    <input id="keterangan" maxlength="160" required placeholder="Contoh: Beli gunting">
-
-    <label for="nominal">Nominal (Rp)</label>
-    <input type="number" id="nominal" min="1" max="1000000000" step="1" required>
-
-    <button class="primary" type="submit">SIMPAN PENGELUARAN</button>
-  </form>
-
-  <div class="card">
-    <h3>Riwayat Pengeluaran</h3>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Tanggal</th>
-            <th>Kategori</th>
-            <th>Keterangan</th>
-            <th>Nominal</th>
-          </tr>
-        </thead>
-        <tbody id="biayaTable"></tbody>
-      </table>
-    </div>
-  </div>
+<!-- SECTION: BIAYA OPERASIONAL -->
+<section class="page-view" id="biaya">
+<div class="grid-2">
+<!-- FORM PENGELUARAN -->
+<div class="card">
+<div class="card-header">
+<h3>
+<svg fill="none" height="18" stroke="currentColor" viewbox="0 0 24 24" width="18"><line x1="12" x2="12" y1="1" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                Catat Pengeluaran Baru
+              </h3>
+</div>
+<form id="formBiaya">
+<div class="form-group">
+<label for="kategori">Kategori Pengeluaran</label>
+<select id="kategori">
+<option>Listrik &amp; PLN</option>
+<option>Air / PAM</option>
+<option>Gaji Karyawan / Barberman</option>
+<option>Sewa Tempat</option>
+<option>Perlengkapan (Pisau, Handuk, Cape)</option>
+<option>Stok Produk Showcase</option>
+<option>Lainnya</option>
+</select>
+</div>
+<div class="form-group">
+<label for="keterangan">Keterangan Pengeluaran</label>
+<input id="keterangan" maxlength="160" placeholder="Contoh: Beli silet cukur 1 box" required=""/>
+</div>
+<div class="form-group">
+<label for="nominal">Nominal Beban (Rp)</label>
+<input id="nominal" max="1000000000" min="1" placeholder="Masukkan jumlah pengeluaran..." required="" step="1" type="number"/>
+</div>
+<button class="btn-primary btn-full" style="margin-top: 10px;" type="submit">
+                Simpan Catatan Pengeluaran
+              </button>
+</form>
+</div>
+<!-- RIWAYAT PENGELUARAN -->
+<div class="card">
+<div class="card-header">
+<h3>Riwayat Pengeluaran Operasional</h3>
+</div>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Tanggal</th>
+<th>Kategori</th>
+<th>Keterangan</th>
+<th>Nominal</th>
+</tr>
+</thead>
+<tbody id="biayaTable"></tbody>
+</table>
+</div>
+</div>
+</div>
 </section>
-
-<!-- LAPORAN -->
-<section class="page" id="laporan">
-  <h1>Laporan Keuangan</h1>
-
-  <div class="card">
-    <label for="periode">Pilih Periode</label>
-    <select id="periode">
-      <option value="harian">Harian</option>
-      <option value="mingguan">Mingguan</option>
-      <option value="bulanan">Bulanan</option>
-      <option value="tahunan">Tahunan</option>
-    </select>
-
-    <label for="tanggalLaporan">Tanggal Acuan</label>
-    <input type="date" id="tanggalLaporan">
-
-    <hr>
-
-    <h3>Pendapatan Jasa Barber: <span class="green" id="lapBarber">Rp0</span></h3>
-    <h3>Pendapatan Produk: <span class="green" id="lapProduct">Rp0</span></h3>
-    <h3>Total Pemasukan: <span class="green" id="lapIncome">Rp0</span></h3>
-    <h3>Pengeluaran: <span class="red" id="lapExpense">Rp0</span></h3>
-    <h2>Laba Bersih: <span id="lapProfit">Rp0</span></h2>
-    <p>Jumlah Transaksi: <b id="lapCount">0</b></p>
-  </div>
+<!-- SECTION: LAPORAN KEUANGAN -->
+<section class="page-view" id="laporan">
+<div class="card" style="max-width: 800px; margin: 0 auto;">
+<div class="card-header">
+<div>
+<h3>Laporan Rekapitulasi Keuangan</h3>
+<p style="font-size: 12.5px; color: var(--text-muted); margin-top: 2px;">Filter dan pantau arus kas masuk, keluar, dan margin profit</p>
+</div>
+</div>
+<div class="grid-equal" style="margin-bottom: 24px;">
+<div class="form-group">
+<label for="periode">Pilihan Periode</label>
+<select id="periode">
+<option value="harian">Harian (Sesuai Tanggal Acuan)</option>
+<option value="mingguan">Mingguan (7 Hari)</option>
+<option value="bulanan">Bulanan</option>
+<option value="tahunan">Tahunan</option>
+</select>
+</div>
+<div class="form-group">
+<label for="tanggalLaporan">Tanggal Acuan</label>
+<input id="tanggalLaporan" type="date"/>
+</div>
+</div>
+<div class="summary-list">
+<div class="summary-item">
+<div class="item-info">
+<span>✂</span>
+<span>Pendapatan Jasa Barber</span>
+</div>
+<div class="item-value" id="lapBarber" style="color: var(--good);">Rp0</div>
+</div>
+<div class="summary-item">
+<div class="item-info">
+<span>🏷</span>
+<span>Pendapatan Produk Showcase</span>
+</div>
+<div class="item-value" id="lapProduct" style="color: var(--good);">Rp0</div>
+</div>
+<div class="summary-item">
+<div class="item-info">
+<span>💵</span>
+<span>Total Seluruh Pemasukan</span>
+</div>
+<div class="item-value" id="lapIncome" style="color: var(--good); font-weight: 700;">Rp0</div>
+</div>
+<div class="summary-item">
+<div class="item-info">
+<span>📉</span>
+<span>Total Seluruh Pengeluaran</span>
+</div>
+<div class="item-value" id="lapExpense" style="color: var(--bad); font-weight: 700;">Rp0</div>
+</div>
+</div>
+<div class="highlight-box" style="margin-top: 20px;">
+<div>
+<div class="title" style="font-size: 13.5px;">Laba Bersih (Net Profit)</div>
+<small id="lapCountText" style="color: var(--text-dim);">0 transaksi tercatat</small>
+</div>
+<div class="val" id="lapProfit">Rp0</div>
+</div>
+</div>
 </section>
-
-<!-- PENGATURAN -->
-<section class="page" id="pengaturan">
-  <h1>Pengaturan & Backup</h1>
-
-  <div class="card">
-    <h3>Cadangkan Data</h3>
-    <p class="note">
-      Ekspor semua transaksi, booking, pengeluaran, dan produk showcase ke file JSON.
-    </p>
-
-    <div class="actions">
-      <button class="primary" id="ekspor" type="button">Unduh Backup JSON</button>
-      <button class="secondary" id="imporBtn" type="button">Impor Backup JSON</button>
-      <input type="file" id="imporFile" accept=".json,application/json" hidden>
-    </div>
-  </div>
-
-  <div class="card">
-    <h3>Reset Data</h3>
-    <p class="note">
-      Menghapus semua transaksi, booking, pengeluaran, dan produk showcase di browser ini.
-    </p>
-    <button class="danger" id="reset" type="button">RESET SEMUA DATA</button>
-  </div>
+<!-- SECTION: PENGATURAN -->
+<section class="page-view" id="pengaturan">
+<div class="grid-equal">
+<div class="card">
+<div class="card-header">
+<h3>
+<svg fill="none" height="18" stroke="currentColor" viewbox="0 0 24 24" width="18"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" x2="12" y1="15" y2="3"></line></svg>
+                Cadangkan &amp; Pulihkan Data
+              </h3>
+</div>
+<p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px; line-height: 1.6;">
+              Amankan data transaksi, booking antrean, katalog produk showcase, dan buku pengeluaran dengan mengunduh file cadangan format JSON.
+            </p>
+<div style="display: flex; gap: 12px; flex-wrap: wrap;">
+<button class="btn-primary" id="ekspor" type="button">
+<svg fill="none" height="16" stroke="currentColor" viewbox="0 0 24 24" width="16"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" x2="12" y1="15" y2="3"></line></svg>
+                Unduh Berkas JSON
+              </button>
+<button class="btn-secondary" id="imporBtn" type="button">
+<svg fill="none" height="16" stroke="currentColor" viewbox="0 0 24 24" width="16"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" x2="12" y1="3" y2="15"></line></svg>
+                Pulihkan / Impor JSON
+              </button>
+<input accept=".json,application/json" id="imporFile" style="display: none;" type="file"/>
+</div>
+</div>
+<div class="card">
+<div class="card-header">
+<h3 style="color: var(--bad);">
+<svg fill="none" height="18" stroke="currentColor" viewbox="0 0 24 24" width="18"><circle cx="12" cy="12" r="10"></circle><line x1="15" x2="9" y1="9" y2="15"></line><line x1="9" x2="15" y1="9" y2="15"></line></svg>
+                Zona Bahaya: Reset Database
+              </h3>
+</div>
+<p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px; line-height: 1.6;">
+              Tindakan ini akan mengosongkan seluruh histori transaksi, booking, katalog showcase, dan catatan beban pada browser ini secara permanen.
+            </p>
+<button class="btn-danger" id="reset" type="button">
+              Hapus Semua Data &amp; Reset Pabrik
+            </button>
+</div>
+</div>
 </section>
-
 </main>
 </div>
-
+</div>
+<!-- INTERACTIVE TOAST NOTIFICATION CONTAINER -->
+<div class="toast-container">
+<div aria-live="assertive" class="toast" id="toastNotification" role="alert">
+<div class="toast-content">
+<div class="toast-icon-circle" id="toastIconCircle">✓</div>
+<div>
+<div id="toastMessage" style="font-weight: 600; color: var(--text-main);">Aksi berhasil dilakukan</div>
+<div id="toastSub" style="font-size: 11.5px; color: var(--text-muted); margin-top: 1px;">Sistem diperbarui seketika</div>
+</div>
+</div>
+<button aria-label="Tutup notifikasi" class="toast-close-btn" onclick="dismissToast()" type="button">✕</button>
+</div>
+</div>
 <script>
 "use strict";
 
 const $ = id => document.getElementById(id);
 
+/* THEME MANAGER */
+const THEME_KEY = "asser_theme";
+
+function applyTheme(theme) {
+  if (theme === "dark") {
+    document.documentElement.setAttribute("data-theme", "dark");
+    $("themeIconSun").style.display = "none";
+    $("themeIconMoon").style.display = "block";
+    $("themeLabelText").textContent = "Mode Gelap";
+  } else {
+    document.documentElement.setAttribute("data-theme", "light");
+    $("themeIconSun").style.display = "block";
+    $("themeIconMoon").style.display = "none";
+    $("themeLabelText").textContent = "Mode Terang";
+  }
+  try {
+    localStorage.setItem(THEME_KEY, theme);
+  } catch (e) {
+    console.warn("Storage not available:", e);
+  }
+}
+
+function initTheme() {
+  let saved = null;
+  try {
+    saved = localStorage.getItem(THEME_KEY);
+  } catch {}
+  if (!saved) {
+    saved = (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "dark" : "light";
+  }
+  applyTheme(saved);
+}
+
+$("themeToggleBtn").addEventListener("click", () => {
+  const current = document.documentElement.getAttribute("data-theme") || "light";
+  const target = current === "dark" ? "light" : "dark";
+  applyTheme(target);
+  showToast(
+    target === "dark" ? "Mode Gelap Diaktifkan" : "Mode Terang Diaktifkan",
+    target === "dark" ? "🌙" : "☀",
+    false,
+    `Tampilan barbershop diubah ke tema ${target === 'dark' ? 'gelap elegan' : 'terang bersih'}`
+  );
+});
+
+initTheme();
+
 const DEFAULT_SERVICES = Object.freeze({
   dewasa: { nama: "Potong Rambut Dewasa", harga: 20000, tipe: "barber" },
-  paketDewasa: { nama: "Paket Dewasa", harga: 30000, tipe: "barber" },
+  paketDewasa: { nama: "Paket Dewasa (Cuci + Pomade)", harga: 30000, tipe: "barber" },
   anak: { nama: "Potong Rambut Anak", harga: 15000, tipe: "barber" },
   paketAnak: { nama: "Paket Rambut Anak", harga: 10000, tipe: "barber" }
 });
@@ -552,7 +1880,7 @@ const KEYS = {
   showcase: "asser_showcase"
 };
 
-const rupiah = n => "Rp" + Number(n).toLocaleString("id-ID");
+const rupiah = n => "Rp " + Number(n).toLocaleString("id-ID");
 
 const tanggal = (d = new Date()) =>
   `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
@@ -568,6 +1896,46 @@ const validMoney = n =>
 
 const validText = (s, max = 160) =>
   typeof s === "string" && s.trim().length > 0 && s.length <= max;
+
+let toastTimer = null;
+
+function showToast(msg, icon = "✓", isWarning = false, subText = "Sistem diperbarui seketika") {
+  const t = $("toastNotification");
+  const msgEl = $("toastMessage");
+  const iconEl = $("toastIconCircle");
+  const subEl = $("toastSub");
+
+  msgEl.textContent = msg;
+  iconEl.textContent = icon;
+  subEl.textContent = subText;
+
+  if (isWarning) {
+    t.classList.add("warning");
+  } else {
+    t.classList.remove("warning");
+  }
+
+  t.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => {
+    t.classList.remove("show");
+  }, 3200);
+}
+
+function dismissToast() {
+  const t = $("toastNotification");
+  t.classList.remove("show");
+  clearTimeout(toastTimer);
+}
+
+function updateClock() {
+  const d = new Date();
+  const h = String(d.getHours()).padStart(2, '0');
+  const m = String(d.getMinutes()).padStart(2, '0');
+  $("liveClock").textContent = `${h}:${m} WIB`;
+}
+setInterval(updateClock, 1000);
+updateClock();
 
 function read(key) {
   try {
@@ -588,27 +1956,35 @@ function save(key, value) {
     localStorage.setItem(key, JSON.stringify(value));
     return true;
   } catch {
-    alert("Gagal menyimpan data.");
+    showToast("Gagal menyimpan data ke penyimpanan lokal.", "⚠", true, "Periksa kapasitas penyimpanan browser");
     return false;
   }
 }
 
-function cell(row, value) {
+function cell(row, value, customClass = "") {
   const td = document.createElement("td");
-  td.textContent = String(value ?? "");
+  if (customClass) td.className = customClass;
+  if (typeof value === "object" && value !== null && value.nodeType) {
+    td.append(value);
+  } else {
+    td.textContent = String(value ?? "");
+  }
   row.append(td);
 }
 
-function rows(id, items, mapper) {
+function rows(id, items, mapper, emptyMsg = "Belum ada catatan data") {
   const body = $(id);
   body.replaceChildren();
 
   if (!items.length) {
     const tr = document.createElement("tr");
     const td = document.createElement("td");
-    td.colSpan = mapper.length;
-    td.className = "empty";
-    td.textContent = "Belum ada data";
+    td.colSpan = 10;
+    td.className = "empty-state";
+    td.innerHTML = `
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+      <p>${emptyMsg}</p>
+    `;
     tr.append(td);
     body.append(tr);
     return;
@@ -616,7 +1992,10 @@ function rows(id, items, mapper) {
 
   items.forEach((x, i) => {
     const tr = document.createElement("tr");
-    mapper.forEach(fn => cell(tr, fn(x, i)));
+    mapper.forEach(fn => {
+      const val = fn(x, i);
+      cell(tr, val);
+    });
     body.append(tr);
   });
 }
@@ -628,17 +2007,65 @@ function total(arr, key, filterFn = null) {
   }, 0);
 }
 
+const pageTitles = {
+  dashboard: { title: "Ringkasan Dashboard", sub: "Kelola operasional dan performa harian barbershop" },
+  kasir: { title: "Kasir & Transaksi", sub: "Input order layanan pangkas rambut & produk retail" },
+  booking: { title: "Booking Antrean", sub: "Jadwalkan slot potong rambut pelanggan lebih awal" },
+  customer: { title: "Riwayat Customer", sub: "Arsip pelanggan dan rekaman order transaksi" },
+  showcase: { title: "Showcase Produk Retail", sub: "Kelola produk hair care, pomade, dan minuman" },
+  biaya: { title: "Biaya Operasional", sub: "Catat pengeluaran listrik, gaji, dan kebutuhan toko" },
+  laporan: { title: "Laporan Keuangan", sub: "Analisis performa omzet dan keuntungan bersih" },
+  pengaturan: { title: "Pengaturan & Cadangan", sub: "Cadangkan dan pulihkan data usaha secara aman" }
+};
+
+function navigateTo(pageId) {
+  document.querySelectorAll(".page-view").forEach(p => {
+    if (p.id === pageId) {
+      p.classList.remove("active");
+      void p.offsetWidth;
+      p.classList.add("active");
+    } else {
+      p.classList.remove("active");
+    }
+  });
+
+  document.querySelectorAll("[data-page]").forEach(b =>
+    b.classList.toggle("active", b.dataset.page === pageId));
+
+  const info = pageTitles[pageId] || { title: "Asser Barber", sub: "" };
+  $("topBarHeading").textContent = info.title;
+  $("topBarSub").textContent = info.sub;
+
+  render();
+}
+
 document.querySelectorAll("[data-page]").forEach(btn =>
-  btn.addEventListener("click", () => {
-    document.querySelectorAll(".page").forEach(p =>
-      p.classList.toggle("active", p.id === btn.dataset.page));
-
-    document.querySelectorAll("[data-page]").forEach(b =>
-      b.classList.toggle("active", b === btn));
-
-    render();
-  })
+  btn.addEventListener("click", () => navigateTo(btn.dataset.page))
 );
+
+function renderQuickPresets() {
+  const container = $("quickBarberPresets");
+  container.replaceChildren();
+
+  Object.keys(DEFAULT_SERVICES).forEach(k => {
+    const item = DEFAULT_SERVICES[k];
+    const chip = document.createElement("div");
+    chip.className = "preset-chip";
+    chip.innerHTML = `
+      <span class="title">${item.nama}</span>
+      <span class="price">${rupiah(item.harga)}</span>
+    `;
+    chip.addEventListener("click", () => {
+      $("tipeTransaksi").value = "barber";
+      updateKasirDropdown();
+      $("layanan").value = k;
+      document.querySelectorAll(".preset-chip").forEach(c => c.classList.remove("selected"));
+      chip.classList.add("selected");
+      hitung();
+    });
+    container.append(chip);
+  });
+}
 
 function updateKasirDropdown() {
   const tipe = $("tipeTransaksi").value;
@@ -646,6 +2073,8 @@ function updateKasirDropdown() {
   sel.replaceChildren();
 
   if (tipe === "barber") {
+    $("billBadge").textContent = "Jasa Barber";
+    $("billBadge").className = "badge badge-barber";
     Object.keys(DEFAULT_SERVICES).forEach(k => {
       const s = DEFAULT_SERVICES[k];
       const opt = document.createElement("option");
@@ -654,6 +2083,8 @@ function updateKasirDropdown() {
       sel.append(opt);
     });
   } else {
+    $("billBadge").textContent = "Produk Retail";
+    $("billBadge").className = "badge badge-product";
     if (showcase.length === 0) {
       const opt = document.createElement("option");
       opt.value = "";
@@ -677,27 +2108,64 @@ function hitung() {
   const tipe = $("tipeTransaksi").value;
   const val = $("layanan").value;
   let harga = 0;
+  let namaItem = "-";
 
   if (tipe === "barber") {
     const s = DEFAULT_SERVICES[val];
-    if (s) harga = s.harga;
+    if (s) {
+      harga = s.harga;
+      namaItem = s.nama;
+    }
   } else if (val.startsWith("prod_")) {
     const idx = Number(val.replace("prod_", ""));
-    if (showcase[idx]) harga = showcase[idx].harga;
+    if (showcase[idx]) {
+      harga = showcase[idx].harga;
+      namaItem = showcase[idx].nama;
+    }
   }
 
   const qty = Number($("jumlah").value);
   const bayar = Number($("bayar").value);
 
-  const v = Number.isSafeInteger(qty) && qty > 0 && qty <= 1000 ? harga * qty : 0;
+  const totalTagihan = Number.isSafeInteger(qty) && qty > 0 && qty <= 1000 ? harga * qty : 0;
 
-  $("tagihan").textContent = rupiah(v);
-  $("kembali").textContent = rupiah(validMoney(bayar) ? Math.max(0, bayar - v) : 0);
+  $("billItemName").textContent = namaItem;
+  $("billItemPrice").textContent = rupiah(harga);
+  $("billQty").textContent = `${qty}x`;
+
+  $("tagihan").textContent = rupiah(totalTagihan);
+  $("kembali").textContent = rupiah(validMoney(bayar) ? Math.max(0, bayar - totalTagihan) : 0);
 }
 
 ["layanan","jumlah","bayar"].forEach(id =>
   $(id).addEventListener("input", hitung)
 );
+
+function setExactPay() {
+  const billText = $("tagihan").textContent.replace(/[^0-9]/g, '');
+  const amt = Number(billText);
+  if (amt > 0) {
+    $("bayar").value = amt;
+    hitung();
+  }
+}
+
+function addCash(extra) {
+  const current = Number($("bayar").value) || 0;
+  $("bayar").value = current + extra;
+  hitung();
+}
+
+function updateAnimatedText(elementId, newText) {
+  const el = $(elementId);
+  if (!el) return;
+  if (el.textContent !== newText) {
+    el.textContent = newText;
+    el.classList.remove("value-flash");
+    void el.offsetWidth;
+    el.classList.add("value-flash");
+  }
+}
 
 $("formKasir").addEventListener("submit", e => {
   e.preventDefault();
@@ -713,27 +2181,27 @@ $("formKasir").addEventListener("submit", e => {
 
   if (tipe === "barber") {
     const s = DEFAULT_SERVICES[val];
-    if (!s) { alert("Pilih layanan barber valid."); return; }
+    if (!s) { showToast("Pilih layanan barber valid.", "⚠", true); return; }
     namaItem = s.nama;
     hargaItem = s.harga;
   } else {
-    if (!val.startsWith("prod_")) { alert("Pilih produk valid."); return; }
+    if (!val.startsWith("prod_")) { showToast("Pilih produk showcase yang valid.", "⚠", true); return; }
     const idx = Number(val.replace("prod_", ""));
     const p = showcase[idx];
-    if (!p) { alert("Produk tidak ditemukan."); return; }
+    if (!p) { showToast("Produk tidak ditemukan.", "⚠", true); return; }
     namaItem = p.nama;
     hargaItem = p.harga;
   }
 
   if (!validText(nama, 80) || !Number.isSafeInteger(qty) || qty < 1 || qty > 1000) {
-    alert("Periksa nama dan jumlah order.");
+    showToast("Periksa kembali nama pelanggan dan jumlah order.", "⚠", true);
     return;
   }
 
   const amount = hargaItem * qty;
 
   if (!validMoney(bayar) || bayar < amount) {
-    alert("Uang diterima tidak valid atau kurang.");
+    showToast("Nominal bayar tidak boleh kurang dari total tagihan.", "⚠", true, `Kurang: ${rupiah(amount - bayar)}`);
     return;
   }
 
@@ -745,9 +2213,10 @@ $("formKasir").addEventListener("submit", e => {
   if (!save(KEYS.transaksi, next)) return;
 
   transaksi = next;
-  alert("Transaksi berhasil. Kembalian: " + rupiah(bayar - amount));
+  showToast(`Transaksi Berhasil Disimpan!`, "✓", false, `Kembalian: ${rupiah(bayar - amount)}`);
   e.target.reset();
   $("jumlah").value = "1";
+  document.querySelectorAll(".preset-chip").forEach(c => c.classList.remove("selected"));
   updateKasirDropdown();
   render();
 });
@@ -759,7 +2228,7 @@ $("formShowcase").addEventListener("submit", e => {
   const harga = Number($("prodHarga").value);
 
   if (!validText(nama, 100) || !validMoney(harga) || harga < 1) {
-    alert("Periksa nama produk dan harga.");
+    showToast("Periksa nama produk dan harga jual.", "⚠", true);
     return;
   }
 
@@ -768,7 +2237,7 @@ $("formShowcase").addEventListener("submit", e => {
 
   showcase = next;
   e.target.reset();
-  alert("Produk berhasil ditambahkan ke Showcase.");
+  showToast(`Produk Showcase Ditambahkan!`, "✓", false, `${nama} siap dijual di kasir`);
   updateKasirDropdown();
   render();
 });
@@ -781,8 +2250,11 @@ function renderShowcaseTable() {
     const tr = document.createElement("tr");
     const td = document.createElement("td");
     td.colSpan = 5;
-    td.className = "empty";
-    td.textContent = "Belum ada produk showcase";
+    td.className = "empty-state";
+    td.innerHTML = `
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/></svg>
+      <p>Belum ada produk terdaftar di katalog showcase.</p>
+    `;
     tr.append(td);
     body.append(tr);
     return;
@@ -791,19 +2263,27 @@ function renderShowcaseTable() {
   showcase.forEach((p, i) => {
     const tr = document.createElement("tr");
     cell(tr, i + 1);
-    cell(tr, p.nama);
-    cell(tr, p.kategori);
-    cell(tr, rupiah(p.harga));
+    cell(tr, p.nama, "font-weight: 600; color: var(--text-main);");
+    
+    const catBadge = document.createElement("span");
+    catBadge.className = "badge badge-product";
+    catBadge.textContent = p.kategori;
+    cell(tr, catBadge);
+
+    cell(tr, rupiah(p.harga), "color: var(--accent-dark); font-weight: 700;");
 
     const tdAction = document.createElement("td");
+    tdAction.style.textAlign = "right";
     const btnDel = document.createElement("button");
-    btnDel.className = "danger";
+    btnDel.className = "btn-danger";
     btnDel.textContent = "Hapus";
-    btnDel.style.padding = "5px 10px";
+    btnDel.style.padding = "4px 10px";
+    btnDel.style.fontSize = "11.5px";
     btnDel.addEventListener("click", () => {
-      if (confirm(`Hapus produk ${p.nama}?`)) {
+      if (confirm(`Hapus produk "${p.nama}" dari katalog?`)) {
         showcase.splice(i, 1);
         save(KEYS.showcase, showcase);
+        showToast("Produk Telah Dihapus!", "✓", false, `Item "${p.nama}" dikeluarkan dari katalog`);
         updateKasirDropdown();
         render();
       }
@@ -822,7 +2302,7 @@ $("formBooking").addEventListener("submit", e => {
   const jam = $("bookingJam").value;
 
   if (!validText(nama, 80) || !DEFAULT_SERVICES[key] || !dateOK(t) || t < tanggal()) {
-    alert("Periksa data booking.");
+    showToast("Periksa data booking. Tanggal tidak boleh lampau.", "⚠", true);
     return;
   }
 
@@ -831,7 +2311,7 @@ $("formBooking").addEventListener("submit", e => {
 
   bookings = next;
   e.target.reset();
-  alert("Booking tersimpan.");
+  showToast(`Booking Antrean Berhasil!`, "✓", false, `Jadwal antrean untuk ${nama} telah dicatat`);
   render();
 });
 
@@ -842,7 +2322,7 @@ $("formBiaya").addEventListener("submit", e => {
   const nominal = Number($("nominal").value);
 
   if (!validText(keterangan) || !validMoney(nominal) || nominal < 1) {
-    alert("Periksa keterangan dan nominal.");
+    showToast("Periksa kelengkapan keterangan dan nominal biaya.", "⚠", true);
     return;
   }
 
@@ -851,7 +2331,7 @@ $("formBiaya").addEventListener("submit", e => {
 
   pengeluaran = next;
   e.target.reset();
-  alert("Pengeluaran dicatat.");
+  showToast("Pengeluaran Berhasil Dicatat!", "✓", false, `Beban ${kategori}: ${rupiah(nominal)}`);
   render();
 });
 
@@ -884,13 +2364,15 @@ function renderLaporan() {
   const prodInc = total(tr, "total", x => x.kategoriTransaksi === "produk");
   const masuk = barberInc + prodInc;
   const keluar = total(ex, "nominal");
+  const profit = masuk - keluar;
 
-  $("lapBarber").textContent = rupiah(barberInc);
-  $("lapProduct").textContent = rupiah(prodInc);
-  $("lapIncome").textContent = rupiah(masuk);
-  $("lapExpense").textContent = rupiah(keluar);
-  $("lapProfit").textContent = rupiah(masuk - keluar);
-  $("lapCount").textContent = tr.length;
+  updateAnimatedText("lapBarber", rupiah(barberInc));
+  updateAnimatedText("lapProduct", rupiah(prodInc));
+  updateAnimatedText("lapIncome", rupiah(masuk));
+  updateAnimatedText("lapExpense", rupiah(keluar));
+  updateAnimatedText("lapProfit", rupiah(profit));
+  $("lapProfit").style.color = profit >= 0 ? "var(--good)" : "var(--bad)";
+  $("lapCountText").textContent = `${tr.length} transaksi pada periode ini`;
 }
 
 ["periode","tanggalLaporan"].forEach(id =>
@@ -900,6 +2382,7 @@ function renderLaporan() {
 function render() {
   const hari = tanggal();
   if (!$("tanggalLaporan").value) $("tanggalLaporan").value = hari;
+  if (!$("bookingTanggal").value) $("bookingTanggal").value = hari;
 
   const trToday = transaksi.filter(x => x.tanggal === hari);
   const exToday = pengeluaran.filter(x => x.tanggal === hari);
@@ -908,46 +2391,56 @@ function render() {
   const prodIncToday = total(trToday, "total", x => x.kategoriTransaksi === "produk");
   const masukToday = barberIncToday + prodIncToday;
   const keluarToday = total(exToday, "nominal");
+  const netProfitToday = masukToday - keluarToday;
 
-  $("incomeToday").textContent = rupiah(masukToday);
-  $("expenseToday").textContent = rupiah(keluarToday);
-  $("profitToday").textContent = rupiah(masukToday - keluarToday);
-  $("countToday").textContent = trToday.length;
+  updateAnimatedText("incomeToday", rupiah(masukToday));
+  updateAnimatedText("expenseToday", rupiah(keluarToday));
+  updateAnimatedText("profitToday", rupiah(netProfitToday));
+  updateAnimatedText("countToday", String(trToday.length));
 
   const allBarber = total(transaksi, "total", x => x.kategoriTransaksi === "barber" || !x.kategoriTransaksi);
   const allProd = total(transaksi, "total", x => x.kategoriTransaksi === "produk");
   const allInc = allBarber + allProd;
   const allExp = total(pengeluaran, "nominal");
+  const netAllProfit = allInc - allExp;
 
-  $("allBarberIncome").textContent = rupiah(allBarber);
-  $("allProductIncome").textContent = rupiah(allProd);
-  $("allIncome").textContent = rupiah(allInc);
-  $("allExpense").textContent = rupiah(allExp);
-  $("allProfit").textContent = rupiah(allInc - allExp);
+  updateAnimatedText("allBarberIncome", rupiah(allBarber));
+  updateAnimatedText("allProductIncome", rupiah(allProd));
+  updateAnimatedText("allIncome", rupiah(allInc));
+  updateAnimatedText("allExpense", rupiah(allExp));
+  updateAnimatedText("allProfit", rupiah(netAllProfit));
 
-  rows("customerTable", transaksi, [
+  // Customer table
+  rows("customerTable", [...transaksi].reverse(), [
     (_,i) => i+1,
     x => x.nama,
-    x => x.kategoriTransaksi === "produk" ? "Produk/Showcase" : "Jasa Barber",
+    x => {
+      const b = document.createElement("span");
+      b.className = x.kategoriTransaksi === "produk" ? "badge badge-product" : "badge badge-barber";
+      b.textContent = x.kategoriTransaksi === "produk" ? "Produk Showcase" : "Jasa Pangkas";
+      return b;
+    },
     x => x.layanan,
-    x => x.jumlah,
+    x => `${x.jumlah}x`,
     x => rupiah(x.total),
     x => x.tanggal
-  ]);
+  ], "Belum ada transaksi customer tersimpan.");
 
+  // Booking table
   rows("bookingTable", bookings, [
     x => x.nama,
     x => x.layanan,
     x => x.tanggal,
     x => x.jam
-  ]);
+  ], "Belum ada jadwal booking antrean.");
 
-  rows("biayaTable", pengeluaran, [
+  // Biaya table
+  rows("biayaTable", [...pengeluaran].reverse(), [
     x => x.tanggal,
     x => x.kategori,
     x => x.keterangan,
     x => rupiah(x.nominal)
-  ]);
+  ], "Belum ada catatan pengeluaran.");
 
   renderShowcaseTable();
   renderLaporan();
@@ -956,7 +2449,7 @@ function render() {
 $("ekspor").addEventListener("click", () => {
   const blob = new Blob([JSON.stringify({
     app: "asser",
-    version: 2,
+    version: 3,
     exportedAt: new Date().toISOString(),
     transaksi, pengeluaran, bookings, showcase
   }, null, 2)], {type:"application/json"});
@@ -967,6 +2460,7 @@ $("ekspor").addEventListener("click", () => {
   a.download = `asser-backup-${tanggal()}.json`;
   a.click();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
+  showToast("Data Berhasil Dicadangkan!", "✓", false, "Berkas cadangan JSON berhasil diunduh");
 });
 
 $("imporBtn").addEventListener("click", () => $("imporFile").click());
@@ -978,7 +2472,10 @@ $("imporFile").addEventListener("change", async e => {
 
   try {
     const v = JSON.parse(await file.text());
-    if (v.app !== "asser") { alert("File backup tidak valid."); return; }
+    if (v.app !== "asser") { 
+      showToast("File backup tidak cocok dengan format Asser.", "⚠", true); 
+      return; 
+    }
 
     transaksi = Array.isArray(v.transaksi) ? v.transaksi : [];
     pengeluaran = Array.isArray(v.pengeluaran) ? v.pengeluaran : [];
@@ -992,28 +2489,30 @@ $("imporFile").addEventListener("change", async e => {
 
     updateKasirDropdown();
     render();
-    alert("Data berhasil dipulihkan!");
+    showToast("Data Berhasil Dipulihkan!", "✓", false, "Seluruh basis data telah disinkronkan");
   } catch {
-    alert("Gagal membaca file backup.");
+    showToast("Gagal membaca atau mem-parsing file backup.", "⚠", true);
   }
 });
 
 $("reset").addEventListener("click", () => {
-  if (confirm("Yakin ingin mereset seluruh data?")) {
+  if (confirm("PERINGATAN: Apakah Anda yakin ingin mengosongkan seluruh database? Tindakan ini permanen dan tidak dapat dibatalkan.")) {
+    const currentTheme = localStorage.getItem(THEME_KEY);
     localStorage.clear();
+    if (currentTheme) localStorage.setItem(THEME_KEY, currentTheme);
     transaksi = [];
     pengeluaran = [];
     bookings = [];
     showcase = [];
     updateKasirDropdown();
     render();
-    alert("Data telah direset.");
+    showToast("Database Berhasil Direset!", "✓", false, "Seluruh data telah dikembalikan ke kondisi awal");
   }
 });
 
-// Inisialisasi awal
+// Setup & First Run
+renderQuickPresets();
 updateKasirDropdown();
 render();
 </script>
-</body>
-</html>
+</body></html>
