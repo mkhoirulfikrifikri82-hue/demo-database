@@ -1,124 +1,60 @@
 <!DOCTYPE html>
-
-<html lang="id"><head>
+<html lang="id">
+<head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Rumah Pangkas Asser — Modern Barber Management</title>
+<link rel="icon" type="image/png" href="logo-cropped.png"/>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;family=Playfair+Display:ital,wght@0,600;1,600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet"/>
 <style>
 :root {
-  /* Soft Warm Light Mode Palette */
-  --bg-main: #f8fafc;
-  --bg-sidebar: #ffffff;
-  --bg-card: #ffffff;
-  --bg-card-hover: #ffffff;
-  --bg-card-subtle: #f8fafc;
-  --bg-input: #ffffff;
-  --topbar-bg: rgba(255, 255, 255, 0.88);
-  --border: #e2e8f0;
-  --border-light: #edf2f7;
-  --border-focus: rgba(217, 119, 6, 0.45);
+  --bg-main: #0d1117;
+  --bg-sidebar: #131922;
+  --bg-card: rgba(23, 31, 42, 0.75);
+  --bg-card-hover: rgba(28, 38, 51, 0.9);
+  --bg-input: #101620;
+  --border: rgba(255, 255, 255, 0.08);
+  --border-focus: rgba(212, 163, 115, 0.5);
   
   /* Kalem & Premium Barber Palette */
-  --accent: #d97706;          /* Warm golden amber / honey caramel */
-  --accent-dark: #b45309;     /* Deep refined amber */
-  --accent-light: #fef3c7;    /* Soft warm cream amber */
-  --accent-glow: rgba(217, 119, 6, 0.16);
-  --accent-subtle: rgba(217, 119, 6, 0.08);
+  --accent: #d4a373;          /* Warm refined copper/amber */
+  --accent-light: #faedcd;    /* Soft warm cream */
+  --accent-glow: rgba(212, 163, 115, 0.18);
+  --accent-subtle: rgba(212, 163, 115, 0.1);
 
-  --text-main: #0f172a;       /* Charcoal Slate deep */
-  --text-muted: #64748b;      /* Elegant soft gray-slate */
-  --text-dim: #94a3b8;        /* Subtle slate */
+  --text-main: #f0f3f6;
+  --text-muted: #8b9bb4;
+  --text-dim: #5c6b7f;
   
-  --good: #16a34a;            /* Fresh clean green */
-  --good-bg: rgba(22, 163, 74, 0.1);
-  --bad: #dc2626;             /* Soft red */
-  --bad-bg: rgba(220, 38, 38, 0.08);
-  --info: #0284c7;
-
-  --badge-product-bg: #e0f2fe;
-  --badge-product-txt: #0369a1;
-  --badge-product-border: #bae6fd;
-
-  --shortcut-hover-bg: #ffffff;
-  --bill-card-bg: linear-gradient(145deg, #ffffff, #fafaf9);
-  --preset-hover-bg: #fffbeb;
-  --toast-bg: #ffffff;
-  --status-pill-bg: #f8fafc;
-  --th-bg: #f8fafc;
-  --tr-hover: #f8fafc;
-  --tr-border: #f1f5f9;
+  --good: #52b788;
+  --good-bg: rgba(82, 183, 136, 0.12);
+  --bad: #e76f51;
+  --bad-bg: rgba(231, 111, 81, 0.12);
+  --info: #4ea8de;
 
   --radius-sm: 8px;
   --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 20px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
   
-  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.04), 0 4px 12px rgba(15, 23, 42, 0.03);
-  --shadow-hover: 0 6px 20px -4px rgba(217, 119, 6, 0.12), 0 2px 8px rgba(0, 0, 0, 0.04);
-  --transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-/* Dark Mode Palette */
-[data-theme="dark"] {
-  --bg-main: #0b0f15;
-  --bg-sidebar: #101720;
-  --bg-card: #16202c;
-  --bg-card-hover: #1c2837;
-  --bg-card-subtle: #121b26;
-  --bg-input: #121c27;
-  --topbar-bg: rgba(16, 23, 32, 0.88);
-  --border: #233142;
-  --border-light: #1b2634;
-  --border-focus: rgba(245, 158, 11, 0.5);
-
-  --accent: #f59e0b;
-  --accent-dark: #fbbf24;
-  --accent-light: #2b2210;
-  --accent-glow: rgba(245, 158, 11, 0.22);
-  --accent-subtle: rgba(245, 158, 11, 0.12);
-
-  --text-main: #f8fafc;
-  --text-muted: #94a3b8;
-  --text-dim: #64748b;
-
-  --good: #22c55e;
-  --good-bg: rgba(34, 197, 94, 0.14);
-  --bad: #ef4444;
-  --bad-bg: rgba(239, 68, 68, 0.14);
-  --info: #38bdf8;
-
-  --badge-product-bg: #0c2d48;
-  --badge-product-txt: #38bdf8;
-  --badge-product-border: #154c79;
-
-  --shortcut-hover-bg: #1c2837;
-  --bill-card-bg: linear-gradient(145deg, #16202c, #131b25);
-  --preset-hover-bg: #231e13;
-  --toast-bg: #16202c;
-  --status-pill-bg: #101720;
-  --th-bg: #121b26;
-  --tr-hover: #1a2533;
-  --tr-border: #1e2c3d;
-
-  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.28), 0 1px 2px rgba(0, 0, 0, 0.2);
-  --shadow-hover: 0 8px 24px -4px rgba(245, 158, 11, 0.2), 0 2px 10px rgba(0, 0, 0, 0.35);
+  --shadow-card: 0 10px 30px -10px rgba(0, 0, 0, 0.5), 0 0 0 1px var(--border);
+  --shadow-hover: 0 16px 36px -8px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(212, 163, 115, 0.35);
+  --transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  transition: background-color 0.28s ease, border-color 0.28s ease, color 0.28s ease, box-shadow 0.28s ease;
 }
 
 body {
   background-color: var(--bg-main);
   background-image: 
-    radial-gradient(at 10% 10%, rgba(217, 119, 6, 0.035) 0px, transparent 50%),
-    radial-gradient(at 90% 90%, rgba(2, 132, 199, 0.03) 0px, transparent 50%);
+    radial-gradient(at 15% 15%, rgba(212, 163, 115, 0.05) 0px, transparent 60%),
+    radial-gradient(at 85% 85%, rgba(78, 168, 222, 0.03) 0px, transparent 50%);
   background-attachment: fixed;
   color: var(--text-main);
   font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
@@ -135,10 +71,10 @@ body {
 
 /* Sidebar */
 .sidebar {
-  width: 280px;
+  width: 285px;
   background: var(--bg-sidebar);
   border-right: 1px solid var(--border);
-  padding: 28px 20px;
+  padding: 24px 18px;
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
@@ -147,58 +83,71 @@ body {
   height: 100vh;
   box-sizing: border-box;
   z-index: 100;
-  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.02);
+  backdrop-filter: blur(16px);
 }
 
 .brand-wrapper {
-  padding-bottom: 24px;
-  margin-bottom: 20px;
+  padding-bottom: 20px;
+  margin-bottom: 18px;
   border-bottom: 1px solid var(--border);
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 .brand-logo-badge {
-  width: 44px;
-  height: 44px;
-  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  width: 52px;
+  height: 52px;
+  background: radial-gradient(circle, rgba(212, 163, 115, 0.18) 0%, rgba(19, 25, 34, 0.95) 100%);
+  border: 1.5px solid rgba(212, 163, 115, 0.4);
   border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 20px;
-  box-shadow: 0 4px 12px rgba(217, 119, 6, 0.25);
-  color: #ffffff;
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  padding: 5px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 0 14px rgba(212, 163, 115, 0.15);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
+  overflow: hidden;
+  flex-shrink: 0;
 }
 
 .brand-wrapper:hover .brand-logo-badge {
-  transform: rotate(-6deg) scale(1.05);
-  box-shadow: 0 6px 18px rgba(217, 119, 6, 0.35);
+  transform: rotate(-3deg) scale(1.08);
+  box-shadow: 0 6px 22px rgba(212, 163, 115, 0.45);
+  border-color: var(--accent);
+}
+
+.brand-logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
 }
 
 .brand-info h2 {
-  font-size: 15px;
+  font-size: 14.5px;
   font-weight: 700;
-  letter-spacing: 0.6px;
+  letter-spacing: 0.5px;
   color: var(--text-main);
   text-transform: uppercase;
+  line-height: 1.25;
 }
 
 .brand-info p {
   font-size: 11px;
-  color: var(--accent-dark);
-  letter-spacing: 0.2px;
-  font-weight: 600;
-  margin-top: 2px;
+  color: var(--accent);
+  letter-spacing: 0.3px;
+  font-weight: 500;
+  margin-top: 3px;
 }
 
 .nav-label {
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 1.1px;
+  letter-spacing: 1.2px;
   color: var(--text-dim);
   padding: 0 12px 10px;
 }
@@ -206,7 +155,7 @@ body {
 .nav-menu {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 5px;
   flex: 1;
   overflow-y: auto;
 }
@@ -235,25 +184,26 @@ body {
   left: 0;
   top: 50%;
   transform: translateY(-50%) scaleY(0);
-  width: 3.5px;
+  width: 3px;
   height: 20px;
   background: var(--accent);
   border-radius: 0 4px 4px 0;
-  box-shadow: 0 0 8px rgba(217, 119, 6, 0.4);
-  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.22s ease;
+  box-shadow: 0 0 10px var(--accent);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   opacity: 0;
 }
 
 .nav-item svg {
   width: 18px;
   height: 18px;
-  stroke-width: 1.9;
-  opacity: 0.75;
+  stroke-width: 1.8;
+  opacity: 0.7;
   transition: var(--transition);
+  flex-shrink: 0;
 }
 
 .nav-item:hover {
-  background: var(--bg-card-subtle);
+  background: rgba(255, 255, 255, 0.04);
   color: var(--text-main);
   transform: translateX(3px);
 }
@@ -269,8 +219,8 @@ body {
 
 .nav-item.active {
   background: var(--accent-subtle);
-  color: var(--accent-dark);
-  border-color: rgba(217, 119, 6, 0.25);
+  color: var(--accent-light);
+  border-color: rgba(212, 163, 115, 0.3);
   font-weight: 600;
 }
 
@@ -286,7 +236,7 @@ body {
 
 .sidebar-footer {
   margin-top: auto;
-  padding-top: 18px;
+  padding-top: 16px;
   border-top: 1px solid var(--border);
 }
 
@@ -295,18 +245,18 @@ body {
   align-items: center;
   gap: 8px;
   font-size: 11.5px;
-  font-weight: 500;
   color: var(--text-muted);
   padding: 8px 12px;
-  background: var(--status-pill-bg);
+  background: rgba(255, 255, 255, 0.02);
   border-radius: var(--radius-sm);
   border: 1px solid var(--border);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
-  transition: border-color 0.25s ease;
+  box-shadow: 0 0 15px -3px rgba(82, 183, 136, 0.06);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .status-pill:hover {
-  border-color: rgba(22, 163, 74, 0.3);
+  border-color: rgba(82, 183, 136, 0.3);
+  box-shadow: 0 0 18px rgba(82, 183, 136, 0.15);
 }
 
 .status-dot {
@@ -314,14 +264,14 @@ body {
   height: 8px;
   background: var(--good);
   border-radius: 50%;
-  box-shadow: 0 0 6px rgba(22, 163, 74, 0.5);
+  box-shadow: 0 0 8px var(--good);
   animation: pulseDot 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 @keyframes pulseDot {
-  0% { transform: scale(0.9); opacity: 0.8; box-shadow: 0 0 4px var(--good); }
-  50% { transform: scale(1.15); opacity: 1; box-shadow: 0 0 10px rgba(22, 163, 74, 0.6); }
-  100% { transform: scale(0.9); opacity: 0.8; box-shadow: 0 0 4px var(--good); }
+  0% { transform: scale(0.9); opacity: 0.7; box-shadow: 0 0 4px var(--good); }
+  50% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 12px rgba(82, 183, 136, 0.7); }
+  100% { transform: scale(0.9); opacity: 0.7; box-shadow: 0 0 4px var(--good); }
 }
 
 /* Main Content Area */
@@ -334,22 +284,21 @@ body {
 }
 
 .top-bar {
-  padding: 18px 36px;
+  padding: 16px 36px;
   border-bottom: 1px solid var(--border);
   display: flex;
   align-items: center;
   justify-content: space-between;
   backdrop-filter: blur(12px);
-  background: var(--topbar-bg);
+  background: rgba(13, 17, 23, 0.7);
   position: sticky;
   top: 0;
   z-index: 90;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02);
 }
 
 .page-title h1 {
   font-size: 18px;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: -0.3px;
   color: var(--text-main);
 }
@@ -367,9 +316,8 @@ body {
 
 .date-badge {
   font-size: 12px;
-  font-weight: 600;
   color: var(--text-muted);
-  background: var(--bg-card-subtle);
+  background: rgba(255, 255, 255, 0.03);
   padding: 6px 14px;
   border-radius: 20px;
   border: 1px solid var(--border);
@@ -380,89 +328,12 @@ body {
 }
 
 .date-badge:hover {
-  border-color: rgba(217, 119, 6, 0.3);
-  color: var(--accent-dark);
-}
-
-/* Modern Dual Theme Toggle Switch Pill */
-.theme-switch-btn {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: var(--bg-card-subtle);
-  border: 1px solid var(--border);
-  border-radius: 30px;
-  padding: 4px 6px;
-  cursor: pointer;
-  user-select: none;
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--text-muted);
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
-}
-
-.theme-switch-btn:hover {
-  border-color: var(--accent);
-  color: var(--text-main);
-  box-shadow: 0 2px 8px var(--accent-glow);
-}
-
-.theme-pill-track {
-  position: relative;
-  width: 48px;
-  height: 24px;
-  background: #e2e8f0;
-  border-radius: 20px;
-  display: flex;
-  align-items: center;
-  padding: 2px;
-  transition: background-color 0.25s ease;
-}
-
-[data-theme="dark"] .theme-pill-track {
-  background: #2a384b;
-}
-
-.theme-pill-slider {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
-  transform: translateX(0);
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.25s ease;
-  color: #d97706;
-}
-
-[data-theme="dark"] .theme-pill-slider {
-  transform: translateX(24px);
-  background: #f59e0b;
-  color: #0b0f15;
-}
-
-.theme-pill-slider svg {
-  width: 13px;
-  height: 13px;
-  stroke-width: 2.2;
-}
-
-.theme-label-text {
-  padding: 0 6px 0 2px;
-  font-size: 11.5px;
-  font-weight: 600;
-  letter-spacing: 0.2px;
-  display: flex;
-  align-items: center;
-  gap: 4px;
+  border-color: rgba(212, 163, 115, 0.3);
+  color: var(--accent-light);
 }
 
 .main-content {
-  padding: 32px 36px 60px;
+  padding: 30px 36px 60px;
   max-width: 1400px;
   width: 100%;
   margin: 0 auto;
@@ -476,13 +347,13 @@ body {
 
 .page-view.active {
   display: block;
-  animation: pageSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: pageSlideIn 0.32s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 @keyframes pageSlideIn {
   from {
     opacity: 0;
-    transform: translateY(6px);
+    transform: translateY(8px);
   }
   to {
     opacity: 1;
@@ -490,23 +361,24 @@ body {
   }
 }
 
-/* Cards */
+/* Glass Cards */
 .card {
   background: var(--bg-card);
+  backdrop-filter: blur(16px);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   padding: 24px;
   box-shadow: var(--shadow-card);
-  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), 
-              border-color 0.22s ease, 
-              box-shadow 0.22s ease;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
+              border-color 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
+              box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
 }
 
 .card:hover {
   transform: translateY(-2px);
-  border-color: rgba(217, 119, 6, 0.3);
-  box-shadow: var(--shadow-hover);
+  border-color: rgba(212, 163, 115, 0.25);
+  box-shadow: 0 10px 25px -5px rgba(212, 163, 115, 0.08), 0 0 0 1px rgba(212, 163, 115, 0.2), 0 12px 30px rgba(0,0,0,0.5);
 }
 
 .card-header {
@@ -518,7 +390,7 @@ body {
 
 .card-header h3 {
   font-size: 15px;
-  font-weight: 700;
+  font-weight: 600;
   color: var(--text-main);
   display: flex;
   align-items: center;
@@ -543,9 +415,9 @@ body {
   border-radius: var(--radius-lg);
   padding: 22px;
   box-shadow: var(--shadow-card);
-  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), 
-              border-color 0.22s ease, 
-              box-shadow 0.22s ease;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
+              border-color 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
+              box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
   overflow: hidden;
 }
@@ -557,14 +429,19 @@ body {
   right: 0;
   width: 90px;
   height: 90px;
-  background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+  background: radial-gradient(circle, var(--accent-subtle) 0%, transparent 70%);
   pointer-events: none;
+  transition: opacity 0.3s ease;
 }
 
 .stat-card:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
   box-shadow: var(--shadow-hover);
-  border-color: rgba(217, 119, 6, 0.28);
+  border-color: rgba(212, 163, 115, 0.35);
+}
+
+.stat-card:hover::after {
+  opacity: 0.9;
 }
 
 .stat-top {
@@ -576,15 +453,15 @@ body {
 
 .stat-label {
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 500;
   color: var(--text-muted);
 }
 
 .stat-icon {
-  width: 36px;
-  height: 36px;
+  width: 34px;
+  height: 34px;
   border-radius: var(--radius-sm);
-  background: var(--bg-card-subtle);
+  background: rgba(255, 255, 255, 0.04);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -594,34 +471,33 @@ body {
 }
 
 .stat-card:hover .stat-icon {
-  transform: scale(1.06);
-  border-color: rgba(217, 119, 6, 0.35);
-  background: var(--accent-light);
+  transform: scale(1.08);
+  border-color: rgba(212, 163, 115, 0.3);
 }
 
 .stat-value {
   font-size: 24px;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: -0.5px;
   color: var(--text-main);
   margin-bottom: 4px;
-  transition: color 0.2s ease, transform 0.2s ease;
+  transition: color 0.3s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   display: inline-block;
 }
 
 .stat-value.accent {
-  color: var(--accent-dark);
+  color: var(--accent-light);
 }
 
 /* Value Flash update animation */
 .value-flash {
-  animation: numberPulse 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: numberPulse 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @keyframes numberPulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.04); color: var(--accent); }
-  100% { transform: scale(1); }
+  0% { transform: scale(1); filter: brightness(1); }
+  50% { transform: scale(1.05); filter: brightness(1.3); }
+  100% { transform: scale(1); filter: brightness(1); }
 }
 
 .stat-sub {
@@ -650,7 +526,7 @@ body {
 .summary-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
 .summary-item {
@@ -658,17 +534,16 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: 12px 16px;
-  background: var(--bg-card-subtle);
+  background: rgba(255, 255, 255, 0.02);
   border-radius: var(--radius-md);
   border: 1px solid var(--border);
   transition: var(--transition);
 }
 
 .summary-item:hover {
-  background: var(--bg-card);
-  transform: translateX(3px);
-  border-color: var(--border-focus);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  background: rgba(255, 255, 255, 0.04);
+  transform: translateX(4px);
+  border-color: rgba(212, 163, 115, 0.2);
 }
 
 .summary-item .item-info {
@@ -676,19 +551,19 @@ body {
   align-items: center;
   gap: 10px;
   font-size: 13.5px;
-  font-weight: 500;
-  color: var(--text-main);
+  color: var(--text-muted);
 }
 
 .summary-item .item-value {
-  font-weight: 700;
+  font-weight: 600;
   font-size: 14.5px;
   color: var(--text-main);
+  transition: transform 0.2s ease;
 }
 
 .highlight-box {
-  background: linear-gradient(135deg, rgba(217, 119, 6, 0.08) 0%, rgba(22, 163, 74, 0.06) 100%);
-  border: 1px solid rgba(217, 119, 6, 0.25);
+  background: linear-gradient(135deg, rgba(212, 163, 115, 0.12) 0%, rgba(82, 183, 136, 0.08) 100%);
+  border: 1px solid rgba(212, 163, 115, 0.3);
   border-radius: var(--radius-md);
   padding: 18px 20px;
   display: flex;
@@ -699,20 +574,21 @@ body {
 }
 
 .highlight-box:hover {
-  border-color: rgba(217, 119, 6, 0.45);
-  box-shadow: 0 3px 12px rgba(217, 119, 6, 0.12);
+  border-color: rgba(212, 163, 115, 0.5);
+  box-shadow: 0 4px 18px rgba(212, 163, 115, 0.12);
 }
 
 .highlight-box .title {
-  font-size: 13px;
-  color: var(--text-main);
-  font-weight: 600;
+  font-size: 12.5px;
+  color: var(--accent-light);
+  font-weight: 500;
 }
 
 .highlight-box .val {
   font-size: 20px;
-  font-weight: 800;
-  color: var(--good);
+  font-weight: 700;
+  color: #74d99f;
+  transition: transform 0.25s ease;
 }
 
 /* Forms & Inputs */
@@ -731,26 +607,28 @@ label {
 }
 
 .form-group:focus-within label {
-  color: var(--accent-dark);
+  color: var(--accent-light);
 }
 
 input, select, textarea {
   width: 100%;
-  padding: 11px 15px;
+  padding: 12px 16px;
   background: var(--bg-input);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   color: var(--text-main);
   font-family: inherit;
   font-size: 13.5px;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+  transition: border-color 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
+              box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
+              background-color 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   outline: none;
 }
 
 input:focus, select:focus, textarea:focus {
   border-color: var(--accent);
-  box-shadow: 0 0 0 3.5px var(--accent-glow);
-  background: var(--bg-card);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+  background: #141b26;
 }
 
 /* Quick Select Buttons */
@@ -763,33 +641,33 @@ input:focus, select:focus, textarea:focus {
 
 .preset-chip {
   padding: 12px 14px;
-  background: var(--bg-card-subtle);
+  background: rgba(255, 255, 255, 0.02);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   cursor: pointer;
   text-align: left;
-  transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), 
-              border-color 0.18s ease, 
-              background 0.18s ease, 
-              box-shadow 0.18s ease;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), 
+              border-color 0.2s ease, 
+              background 0.2s ease, 
+              box-shadow 0.2s ease;
   position: relative;
   user-select: none;
 }
 
 .preset-chip:hover {
   border-color: var(--accent);
-  background: var(--preset-hover-bg);
+  background: var(--accent-subtle);
   transform: translateY(-2px);
 }
 
 .preset-chip:active {
-  transform: scale(0.98);
+  transform: scale(0.97);
 }
 
 .preset-chip.selected {
   border-color: var(--accent);
-  background: var(--preset-hover-bg);
-  box-shadow: 0 0 0 1px var(--accent), 0 3px 10px rgba(217, 119, 6, 0.15);
+  background: var(--accent-subtle);
+  box-shadow: 0 0 0 1px var(--accent), 0 4px 14px rgba(212, 163, 115, 0.18);
 }
 
 .preset-chip .title {
@@ -802,23 +680,22 @@ input:focus, select:focus, textarea:focus {
 
 .preset-chip .price {
   font-size: 12px;
-  color: var(--accent-dark);
-  font-weight: 700;
+  color: var(--accent);
+  font-weight: 600;
 }
 
 /* Bill Calculator Preview */
 .bill-summary-card {
-  background: var(--bill-card-bg);
+  background: linear-gradient(145deg, #161f2c, #111822);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   padding: 24px;
-  box-shadow: var(--shadow-card);
   transition: var(--transition);
 }
 
 .bill-summary-card:hover {
-  border-color: rgba(217, 119, 6, 0.3);
-  box-shadow: var(--shadow-hover);
+  border-color: rgba(212, 163, 115, 0.25);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
 }
 
 .bill-row {
@@ -828,11 +705,12 @@ input:focus, select:focus, textarea:focus {
   padding: 10px 0;
   font-size: 13.5px;
   color: var(--text-muted);
-  border-bottom: 1px dashed var(--border);
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.07);
+  transition: color 0.2s ease;
 }
 
 .bill-row.total-row {
-  border-top: 1.5px solid var(--border);
+  border-top: 1px solid var(--border);
   border-bottom: none;
   padding-top: 16px;
   margin-top: 8px;
@@ -840,14 +718,16 @@ input:focus, select:focus, textarea:focus {
 
 .bill-row.total-row .val {
   font-size: 22px;
-  font-weight: 800;
-  color: var(--accent-dark);
+  font-weight: 700;
+  color: var(--accent-light);
+  transition: transform 0.2s ease;
 }
 
 .bill-row.change-row .val {
   font-size: 18px;
-  font-weight: 800;
+  font-weight: 700;
   color: var(--good);
+  transition: transform 0.2s ease;
 }
 
 /* Buttons */
@@ -858,8 +738,8 @@ button {
   cursor: pointer;
   border-radius: var(--radius-md);
   border: none;
-  padding: 11px 20px;
-  transition: transform 0.16s cubic-bezier(0.16, 1, 0.3, 1), 
+  padding: 12px 20px;
+  transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), 
               background 0.2s ease, 
               border-color 0.2s ease, 
               box-shadow 0.2s ease;
@@ -875,42 +755,41 @@ button:active {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
-  color: #ffffff;
-  box-shadow: 0 2px 8px rgba(217, 119, 6, 0.25);
+  background: linear-gradient(135deg, #d4a373 0%, #b88556 100%);
+  color: #161008;
+  box-shadow: 0 4px 16px rgba(212, 163, 115, 0.28);
 }
 
 .btn-primary:hover {
-  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-  box-shadow: 0 4px 14px rgba(217, 119, 6, 0.32);
+  background: linear-gradient(135deg, #dfb183 0%, #c59364 100%);
+  box-shadow: 0 6px 20px rgba(212, 163, 115, 0.42);
   transform: translateY(-1.5px);
 }
 
 .btn-secondary {
-  background: var(--bg-card-subtle);
+  background: rgba(255, 255, 255, 0.05);
   color: var(--text-main);
   border: 1px solid var(--border);
 }
 
 .btn-secondary:hover {
-  background: var(--bg-card);
-  border-color: var(--accent);
-  color: var(--accent-dark);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(212, 163, 115, 0.35);
   transform: translateY(-1.5px);
+  color: var(--accent-light);
 }
 
 .btn-danger {
   background: var(--bad-bg);
   color: var(--bad);
-  border: 1px solid rgba(220, 38, 38, 0.3);
+  border: 1px solid rgba(231, 111, 81, 0.3);
 }
 
 .btn-danger:hover {
-  background: #ef4444;
-  color: #ffffff;
-  border-color: #ef4444;
+  background: var(--bad);
+  color: #fff;
   transform: translateY(-1.5px);
-  box-shadow: 0 3px 10px rgba(239, 68, 68, 0.25);
+  box-shadow: 0 4px 14px rgba(231, 111, 81, 0.3);
 }
 
 .btn-full {
@@ -925,19 +804,18 @@ button:active {
   align-items: center;
   justify-content: flex-start;
   gap: 12px;
-  background: var(--bg-card-subtle);
+  background: rgba(255, 255, 255, 0.03);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   color: var(--text-main);
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .shortcut-btn:hover {
-  background: var(--shortcut-hover-bg);
-  border-color: var(--accent);
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(212, 163, 115, 0.35);
   transform: translateX(4px);
-  color: var(--accent-dark);
-  box-shadow: 0 2px 8px var(--accent-glow);
+  color: var(--accent-light);
 }
 
 /* Tables */
@@ -945,7 +823,6 @@ button:active {
   overflow-x: auto;
   border-radius: var(--radius-md);
   border: 1px solid var(--border);
-  background: var(--bg-card);
 }
 
 table {
@@ -955,19 +832,19 @@ table {
 }
 
 thead th {
-  background: var(--th-bg);
+  background: rgba(255, 255, 255, 0.02);
   color: var(--text-muted);
   font-size: 11.5px;
-  font-weight: 700;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.6px;
-  padding: 13px 18px;
+  letter-spacing: 0.8px;
+  padding: 14px 18px;
   border-bottom: 1px solid var(--border);
 }
 
 tbody tr {
-  border-bottom: 1px solid var(--tr-border);
-  transition: background-color 0.15s ease;
+  border-bottom: 1px solid var(--border);
+  transition: background-color 0.2s ease;
 }
 
 tbody tr:last-child {
@@ -975,11 +852,11 @@ tbody tr:last-child {
 }
 
 tbody tr:hover {
-  background: var(--tr-hover);
+  background: rgba(255, 255, 255, 0.028);
 }
 
 tbody td {
-  padding: 13px 18px;
+  padding: 14px 18px;
   font-size: 13px;
   color: var(--text-main);
 }
@@ -995,16 +872,20 @@ tbody td {
   transition: transform 0.2s ease;
 }
 
+.badge:hover {
+  transform: scale(1.05);
+}
+
 .badge-barber {
-  background: var(--accent-light);
-  color: var(--accent-dark);
-  border: 1px solid rgba(217, 119, 6, 0.3);
+  background: rgba(212, 163, 115, 0.15);
+  color: var(--accent-light);
+  border: 1px solid rgba(212, 163, 115, 0.3);
 }
 
 .badge-product {
-  background: var(--badge-product-bg);
-  color: var(--badge-product-txt);
-  border: 1px solid var(--badge-product-border);
+  background: rgba(78, 168, 222, 0.15);
+  color: #7ec5f1;
+  border: 1px solid rgba(78, 168, 222, 0.3);
 }
 
 .empty-state {
@@ -1017,95 +898,42 @@ tbody td {
   width: 44px;
   height: 44px;
   stroke: var(--text-dim);
-  opacity: 0.6;
+  opacity: 0.5;
   margin-bottom: 12px;
 }
 
 .empty-state p {
   font-size: 13px;
-  color: var(--text-muted);
 }
 
-/* Floating Interactive Toast Notification (Top-Right) */
-.toast-container {
+/* Tier-1 Spring Toast Notification (Top-Right) */
+.toast {
   position: fixed;
   top: 24px;
   right: 24px;
-  z-index: 1000;
-  pointer-events: none;
-}
-
-.toast {
-  min-width: 320px;
-  max-width: 420px;
-  padding: 14px 18px;
-  background: var(--toast-bg);
+  padding: 14px 22px;
+  background: #192330;
   border: 1px solid var(--border);
-  border-left: 4.5px solid var(--accent);
+  border-left: 4px solid var(--accent);
   border-radius: var(--radius-md);
-  box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.2), 0 4px 10px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.55), 0 0 15px rgba(212, 163, 115, 0.15);
   color: var(--text-main);
   font-size: 13.5px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 12px;
-  transform: translateX(120%) scale(0.96);
+  z-index: 1000;
+  transform: translateX(120%) scale(0.95);
   opacity: 0;
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), 
-              opacity 0.25s ease;
+  pointer-events: none;
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+              opacity 0.3s ease;
 }
 
 .toast.show {
   transform: translateX(0) scale(1);
   opacity: 1;
   pointer-events: auto;
-}
-
-.toast-content {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex: 1;
-}
-
-.toast-icon-circle {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: var(--good-bg);
-  color: var(--good);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  font-weight: 700;
-  flex-shrink: 0;
-}
-
-.toast.warning .toast-icon-circle {
-  background: var(--accent-light);
-  color: var(--accent-dark);
-}
-
-.toast.warning {
-  border-left-color: var(--accent);
-}
-
-.toast-close-btn {
-  background: transparent;
-  border: none;
-  color: var(--text-dim);
-  font-size: 16px;
-  cursor: pointer;
-  padding: 4px;
-  border-radius: 4px;
-  line-height: 1;
-}
-
-.toast-close-btn:hover {
-  background: var(--bg-card-subtle);
-  color: var(--text-main);
 }
 
 /* Accessibility: Reduced Motion */
@@ -1153,12 +981,6 @@ tbody td {
   }
   .top-bar {
     padding: 14px 16px;
-    flex-wrap: wrap;
-    gap: 12px;
-  }
-  .top-actions {
-    width: 100%;
-    justify-content: space-between;
   }
   .grid-equal {
     grid-template-columns: 1fr;
@@ -1166,15 +988,11 @@ tbody td {
   .stats-grid {
     grid-template-columns: 1fr;
   }
-  .toast-container {
+  .toast {
     top: auto;
     bottom: 20px;
     right: 16px;
     left: 16px;
-  }
-  .toast {
-    min-width: 0;
-    width: 100%;
     transform: translateY(120%);
   }
   .toast.show {
@@ -1187,13 +1005,13 @@ tbody td {
 <div class="app-layout">
 <!-- SIDEBAR NAVIGATION -->
 <aside class="sidebar">
-<div class="brand-wrapper">
+<div class="brand-wrapper" onclick="navigateTo('dashboard')">
 <div class="brand-logo-badge">
-        ✂
-      </div>
+  <img src="logo-cropped.png" onerror="this.onerror=null; this.src='logo.jpg';" alt="Logo Rumah Pangkas Asser" class="brand-logo-img"/>
+</div>
 <div class="brand-info">
-<h2>Asser Barber</h2>
-<p>Potong Rambut, Potong Masalah</p>
+  <h2>Rumah Pangkas Asser</h2>
+  <p>A20 • EST. 2017</p>
 </div>
 </div>
 <div class="nav-label">Navigasi Utama</div>
@@ -1204,7 +1022,7 @@ tbody td {
 </button>
 <button class="nav-item" data-page="kasir">
 <svg fill="none" stroke="currentColor" viewbox="0 0 24 24"><rect height="16" rx="2" width="20" x="2" y="4"></rect><line x1="2" x2="22" y1="10" y2="10"></line></svg>
-<span>Kasir &amp; Transaksi</span>
+<span>Kasir & Transaksi</span>
 </button>
 <button class="nav-item" data-page="booking">
 <svg fill="none" stroke="currentColor" viewbox="0 0 24 24"><rect height="18" rx="2" width="18" x="3" y="4"></rect><line x1="16" x2="16" y1="2" y2="6"></line><line x1="8" x2="8" y1="2" y2="6"></line><line x1="3" x2="21" y1="10" y2="10"></line></svg>
@@ -1228,13 +1046,13 @@ tbody td {
 </button>
 <button class="nav-item" data-page="pengaturan">
 <svg fill="none" stroke="currentColor" viewbox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-<span>Pengaturan &amp; Cadangan</span>
+<span>Pengaturan & Cadangan</span>
 </button>
 </nav>
 <div class="sidebar-footer">
 <div class="status-pill">
 <span class="status-dot"></span>
-<span>Sistem Offline &amp; Aktif</span>
+<span>Sistem Offline & Aktif</span>
 </div>
 </div>
 </aside>
@@ -1247,16 +1065,6 @@ tbody td {
 <p id="topBarSub">Kelola operasional dan performa harian barbershop</p>
 </div>
 <div class="top-actions">
-<!-- TOGGLE SWITCH DARK/LIGHT MODE -->
-<button aria-label="Ganti Tema Gelap / Terang" class="theme-switch-btn" id="themeToggleBtn" type="button">
-<div class="theme-pill-track">
-<div class="theme-pill-slider" id="themeSlider">
-<svg fill="none" id="themeIconSun" stroke="currentColor" style="display: block;" viewbox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" x2="12" y1="1" y2="3"></line><line x1="12" x2="12" y1="21" y2="23"></line><line x1="4.22" x2="5.64" y1="4.22" y2="5.64"></line><line x1="18.36" x2="19.78" y1="18.36" y2="19.78"></line><line x1="1" x2="3" y1="12" y2="12"></line><line x1="21" x2="23" y1="12" y2="12"></line><line x1="4.22" x2="5.64" y1="19.78" y2="18.36"></line><line x1="18.36" x2="19.78" y1="5.64" y2="4.22"></line></svg>
-<svg fill="none" id="themeIconMoon" stroke="currentColor" style="display: none;" viewbox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-</div>
-</div>
-<span class="theme-label-text" id="themeLabelText">Mode Terang</span>
-</button>
 <div class="date-badge">
 <svg fill="none" height="14" stroke="currentColor" viewbox="0 0 24 24" width="14"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
 <span id="liveClock">--:-- WIB</span>
@@ -1283,7 +1091,7 @@ tbody td {
 <div class="stat-card">
 <div class="stat-top">
 <span class="stat-label">Pengeluaran Hari Ini</span>
-<div class="stat-icon" style="color: var(--bad); background: var(--bad-bg);">
+<div class="stat-icon" style="color: var(--bad);">
 <svg fill="none" height="16" stroke="currentColor" viewbox="0 0 24 24" width="16"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline><polyline points="17 18 23 18 23 12"></polyline></svg>
 </div>
 </div>
@@ -1293,7 +1101,7 @@ tbody td {
 <div class="stat-card">
 <div class="stat-top">
 <span class="stat-label">Laba Bersih Hari Ini</span>
-<div class="stat-icon" style="color: var(--good); background: var(--good-bg);">
+<div class="stat-icon" style="color: var(--good);">
 <svg fill="none" height="16" stroke="currentColor" viewbox="0 0 24 24" width="16"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
 </div>
 </div>
@@ -1308,7 +1116,7 @@ tbody td {
 </div>
 </div>
 <div class="stat-value" id="countToday">0</div>
-<div class="stat-sub">Order &amp; booking selesai</div>
+<div class="stat-sub">Order & booking selesai</div>
 </div>
 </div>
 <!-- DASHBOARD DETAILS GRID -->
@@ -1331,14 +1139,14 @@ tbody td {
 </div>
 <div class="summary-item">
 <div class="item-info">
-<span style="color: var(--info);">🏷</span>
+<span style="color: #7ec5f1;">🏷</span>
 <span>Pendapatan Produk Showcase</span>
 </div>
 <div class="item-value" id="allProductIncome">Rp0</div>
 </div>
 <div class="summary-item">
 <div class="item-info">
-<span>💰</span>
+<span>💵</span>
 <span>Total Seluruh Pemasukan</span>
 </div>
 <div class="item-value" id="allIncome">Rp0</div>
@@ -1363,29 +1171,29 @@ tbody td {
 <div class="card">
 <div class="card-header">
 <h3>
-<svg fill="none" height="18" stroke="currentColor" viewbox="0 0 24 24" width="18"><circle cx="12" cy="12" r="10"></circle><line x1="12" x2="12" y1="16" y2="12"></line><line x1="12" x2="12.01" y1="8" y2="8"></line></svg>
-                Panduan Pintasan Kasir
+<svg fill="none" height="18" stroke="currentColor" viewbox="0 0 24 24" width="18"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" y2="12"></line><line x1="12" y2="12.01" y1="8" y2="8"></line></svg>
+                Panduan Pintasan Cepat
               </h3>
 </div>
 <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">
-              Gunakan menu kasir untuk melayani walk-in customer dengan cepat menggunakan preset sekali klik.
+              Gunakan pintasan di bawah untuk mencatat transaksi pelanggan baru, jadwal booking, atau stok barang.
             </p>
 <div style="display: flex; flex-direction: column; gap: 10px;">
 <button class="shortcut-btn" onclick="navigateTo('kasir')">
 <span style="color: var(--accent); font-size: 15px;">⚡</span>
-<span style="font-weight: 600;">Mulai Transaksi Kasir Baru</span>
+<span style="font-weight: 500;">Mulai Transaksi Kasir Baru</span>
 </button>
 <button class="shortcut-btn" onclick="navigateTo('booking')">
-<span style="color: var(--info); font-size: 15px;">📅</span>
-<span style="font-weight: 600;">Tambah Jadwal Booking</span>
+<span style="color: #7ec5f1; font-size: 15px;">📅</span>
+<span style="font-weight: 500;">Tambah Jadwal Booking</span>
 </button>
 <button class="shortcut-btn" onclick="navigateTo('showcase')">
-<span style="color: var(--good); font-size: 15px;">🏷</span>
-<span style="font-weight: 600;">Tambah Stok Produk</span>
+<span style="color: #67d5a0; font-size: 15px;">🏷</span>
+<span style="font-weight: 500;">Tambah Stok Produk Showcase</span>
 </button>
 </div>
-<div style="margin-top: 24px; padding: 14px; background: var(--bg-card-subtle); border-radius: var(--radius-sm); border: 1px solid var(--border); transition: border-color 0.2s ease;">
-<small style="color: var(--text-muted); font-size: 11.5px; display: block; line-height: 1.6;">
+<div style="margin-top: 24px; padding: 14px; background: rgba(255,255,255,0.02); border-radius: var(--radius-sm); border: 1px solid var(--border);">
+<small style="color: var(--text-dim); font-size: 11.5px; display: block; line-height: 1.6;">
                 🔒 <strong>Privasi Data:</strong> Data tersimpan aman di penyimpanan lokal peramban Anda. Lakukan ekspor cadangan rutin di menu <em>Pengaturan</em>.
               </small>
 </div>
@@ -1417,8 +1225,8 @@ tbody td {
 <div class="form-group">
 <label for="tipeTransaksi">Kategori Transaksi</label>
 <select id="tipeTransaksi" required="">
-<option value="barber">Jasa Barber (Potong &amp; Paket)</option>
-<option value="produk">Produk Showcase (Hair Care &amp; Minuman)</option>
+<option value="barber">Jasa Barber (Potong & Paket)</option>
+<option value="produk">Produk Showcase (Hair Care & Minuman)</option>
 </select>
 </div>
 <div class="form-group">
@@ -1443,7 +1251,7 @@ tbody td {
 </div>
 <button class="btn-primary btn-full" type="submit">
 <svg fill="none" height="16" stroke="currentColor" viewbox="0 0 24 24" width="16"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                Proses &amp; Simpan Transaksi
+                Proses & Simpan Transaksi
               </button>
 </form>
 </div>
@@ -1452,11 +1260,11 @@ tbody td {
 <div class="bill-summary-card">
 <div class="card-header" style="margin-bottom: 12px;">
 <h3 style="font-size: 14px; color: var(--text-muted);">Detail Pembayaran</h3>
-<span class="badge badge-barber" id="billBadge">Walk-in</span>
+<span class="badge badge-barber" id="billBadge">Jasa Barber</span>
 </div>
 <div class="bill-row">
 <span>Item Terpilih</span>
-<span id="billItemName" style="color: var(--text-main); font-weight: 600;">-</span>
+<span id="billItemName" style="color: var(--text-main); font-weight: 500;">-</span>
 </div>
 <div class="bill-row">
 <span>Harga Satuan</span>
@@ -1477,9 +1285,9 @@ tbody td {
 </div>
 <!-- Petunjuk Cepat -->
 <div class="card" style="margin-top: 20px;">
-<h4 style="font-size: 13px; font-weight: 700; color: var(--accent-dark); margin-bottom: 6px;">Catatan Kasir</h4>
+<h4 style="font-size: 13px; font-weight: 600; color: var(--accent-light); margin-bottom: 6px;">Catatan Kasir</h4>
 <p style="font-size: 12.5px; color: var(--text-muted); line-height: 1.6;">
-                Semua transaksi berhasil otomatis masuk ke Laporan Keuangan dan memperbarui grafik pendapatan hari ini.
+                Semua transaksi berhasil otomatis masuk ke Laporan Keuangan dan memperbarui total pendapatan hari ini.
               </p>
 </div>
 </div>
@@ -1541,6 +1349,7 @@ tbody td {
 <th>Layanan</th>
 <th>Tanggal</th>
 <th>Jam</th>
+<th style="text-align: right;">Aksi</th>
 </tr>
 </thead>
 <tbody id="bookingTable"></tbody>
@@ -1555,7 +1364,7 @@ tbody td {
 <div class="card-header">
 <div>
 <h3>Riwayat Transaksi Pelanggan</h3>
-<p style="font-size: 12.5px; color: var(--text-muted); margin-top: 2px;">Daftar seluruh aktivitas belanja jasa dan produk showcase</p>
+<p style="font-size: 12.5px; color: var(--text-muted); margin-top: 2px;">Daftar seluruh aktivitas order jasa dan produk showcase</p>
 </div>
 </div>
 <div class="table-container">
@@ -1569,6 +1378,7 @@ tbody td {
 <th>Qty</th>
 <th>Total</th>
 <th>Tanggal</th>
+<th style="text-align: right;">Aksi</th>
 </tr>
 </thead>
 <tbody id="customerTable"></tbody>
@@ -1596,11 +1406,11 @@ tbody td {
 <label for="prodKategori">Kategori</label>
 <select id="prodKategori" required="">
 <option value="Hair Styling">Hair Styling (Pomade/Clay/Wax)</option>
-<option value="Hair Tonic">Hair Tonic &amp; Serum</option>
+<option value="Hair Tonic">Hair Tonic & Serum</option>
 <option value="Shampo">Shampo Khusus Barber</option>
 <option value="Conditioner">Conditioner Rambut</option>
 <option value="Minyak Rambut">Minyak Rambut Tradisional</option>
-<option value="Sisir Rambut">Sisir &amp; Peralatan</option>
+<option value="Sisir Rambut">Sisir & Peralatan</option>
 <option value="Minuman">Minuman Dingin / Hangat</option>
 <option value="Lainnya">Lainnya (Fleksibel)</option>
 </select>
@@ -1651,7 +1461,7 @@ tbody td {
 <div class="form-group">
 <label for="kategori">Kategori Pengeluaran</label>
 <select id="kategori">
-<option>Listrik &amp; PLN</option>
+<option>Listrik & PLN</option>
 <option>Air / PAM</option>
 <option>Gaji Karyawan / Barberman</option>
 <option>Sewa Tempat</option>
@@ -1686,6 +1496,7 @@ tbody td {
 <th>Kategori</th>
 <th>Keterangan</th>
 <th>Nominal</th>
+<th style="text-align: right;">Aksi</th>
 </tr>
 </thead>
 <tbody id="biayaTable"></tbody>
@@ -1742,7 +1553,7 @@ tbody td {
 </div>
 <div class="summary-item">
 <div class="item-info">
-<span>📉</span>
+<span style="color: var(--bad);">📉</span>
 <span>Total Seluruh Pengeluaran</span>
 </div>
 <div class="item-value" id="lapExpense" style="color: var(--bad); font-weight: 700;">Rp0</div>
@@ -1764,7 +1575,7 @@ tbody td {
 <div class="card-header">
 <h3>
 <svg fill="none" height="18" stroke="currentColor" viewbox="0 0 24 24" width="18"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" x2="12" y1="15" y2="3"></line></svg>
-                Cadangkan &amp; Pulihkan Data
+                Cadangkan & Pulihkan Data
               </h3>
 </div>
 <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px; line-height: 1.6;">
@@ -1793,7 +1604,7 @@ tbody td {
               Tindakan ini akan mengosongkan seluruh histori transaksi, booking, katalog showcase, dan catatan beban pada browser ini secara permanen.
             </p>
 <button class="btn-danger" id="reset" type="button">
-              Hapus Semua Data &amp; Reset Pabrik
+              Hapus Semua Data & Reset Pabrik
             </button>
 </div>
 </div>
@@ -1801,70 +1612,16 @@ tbody td {
 </main>
 </div>
 </div>
-<!-- INTERACTIVE TOAST NOTIFICATION CONTAINER -->
-<div class="toast-container">
-<div aria-live="assertive" class="toast" id="toastNotification" role="alert">
-<div class="toast-content">
-<div class="toast-icon-circle" id="toastIconCircle">✓</div>
-<div>
-<div id="toastMessage" style="font-weight: 600; color: var(--text-main);">Aksi berhasil dilakukan</div>
-<div id="toastSub" style="font-size: 11.5px; color: var(--text-muted); margin-top: 1px;">Sistem diperbarui seketika</div>
+<!-- TOAST NOTIFICATION -->
+<div class="toast" id="toastNotification">
+<span id="toastIcon" style="font-size: 17px;">✨</span>
+<span id="toastMessage">Aksi berhasil dilakukan</span>
 </div>
-</div>
-<button aria-label="Tutup notifikasi" class="toast-close-btn" onclick="dismissToast()" type="button">✕</button>
-</div>
-</div>
+
 <script>
 "use strict";
 
 const $ = id => document.getElementById(id);
-
-/* THEME MANAGER */
-const THEME_KEY = "asser_theme";
-
-function applyTheme(theme) {
-  if (theme === "dark") {
-    document.documentElement.setAttribute("data-theme", "dark");
-    $("themeIconSun").style.display = "none";
-    $("themeIconMoon").style.display = "block";
-    $("themeLabelText").textContent = "Mode Gelap";
-  } else {
-    document.documentElement.setAttribute("data-theme", "light");
-    $("themeIconSun").style.display = "block";
-    $("themeIconMoon").style.display = "none";
-    $("themeLabelText").textContent = "Mode Terang";
-  }
-  try {
-    localStorage.setItem(THEME_KEY, theme);
-  } catch (e) {
-    console.warn("Storage not available:", e);
-  }
-}
-
-function initTheme() {
-  let saved = null;
-  try {
-    saved = localStorage.getItem(THEME_KEY);
-  } catch {}
-  if (!saved) {
-    saved = (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "dark" : "light";
-  }
-  applyTheme(saved);
-}
-
-$("themeToggleBtn").addEventListener("click", () => {
-  const current = document.documentElement.getAttribute("data-theme") || "light";
-  const target = current === "dark" ? "light" : "dark";
-  applyTheme(target);
-  showToast(
-    target === "dark" ? "Mode Gelap Diaktifkan" : "Mode Terang Diaktifkan",
-    target === "dark" ? "🌙" : "☀",
-    false,
-    `Tampilan barbershop diubah ke tema ${target === 'dark' ? 'gelap elegan' : 'terang bersih'}`
-  );
-});
-
-initTheme();
 
 const DEFAULT_SERVICES = Object.freeze({
   dewasa: { nama: "Potong Rambut Dewasa", harga: 20000, tipe: "barber" },
@@ -1897,35 +1654,15 @@ const validMoney = n =>
 const validText = (s, max = 160) =>
   typeof s === "string" && s.trim().length > 0 && s.length <= max;
 
-let toastTimer = null;
-
-function showToast(msg, icon = "✓", isWarning = false, subText = "Sistem diperbarui seketika") {
+function showToast(msg, icon = "✓") {
   const t = $("toastNotification");
-  const msgEl = $("toastMessage");
-  const iconEl = $("toastIconCircle");
-  const subEl = $("toastSub");
-
-  msgEl.textContent = msg;
-  iconEl.textContent = icon;
-  subEl.textContent = subText;
-
-  if (isWarning) {
-    t.classList.add("warning");
-  } else {
-    t.classList.remove("warning");
-  }
-
+  $("toastMessage").textContent = msg;
+  $("toastIcon").textContent = icon;
   t.classList.add("show");
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => {
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => {
     t.classList.remove("show");
   }, 3200);
-}
-
-function dismissToast() {
-  const t = $("toastNotification");
-  t.classList.remove("show");
-  clearTimeout(toastTimer);
 }
 
 function updateClock() {
@@ -1956,14 +1693,20 @@ function save(key, value) {
     localStorage.setItem(key, JSON.stringify(value));
     return true;
   } catch {
-    showToast("Gagal menyimpan data ke penyimpanan lokal.", "⚠", true, "Periksa kapasitas penyimpanan browser");
+    showToast("Gagal menyimpan data ke penyimpanan lokal.", "⚠");
     return false;
   }
 }
 
-function cell(row, value, customClass = "") {
+function cell(row, value, customClassOrStyle = "") {
   const td = document.createElement("td");
-  if (customClass) td.className = customClass;
+  if (customClassOrStyle) {
+    if (customClassOrStyle.includes(":")) {
+      td.style.cssText = customClassOrStyle;
+    } else {
+      td.className = customClassOrStyle;
+    }
+  }
   if (typeof value === "object" && value !== null && value.nodeType) {
     td.append(value);
   } else {
@@ -2102,7 +1845,10 @@ function updateKasirDropdown() {
   hitung();
 }
 
-$("tipeTransaksi").addEventListener("change", updateKasirDropdown);
+$("tipeTransaksi").addEventListener("change", () => {
+  document.querySelectorAll(".preset-chip").forEach(c => c.classList.remove("selected"));
+  updateKasirDropdown();
+});
 
 function hitung() {
   const tipe = $("tipeTransaksi").value;
@@ -2116,7 +1862,7 @@ function hitung() {
       harga = s.harga;
       namaItem = s.nama;
     }
-  } else if (val.startsWith("prod_")) {
+  } else if (val && val.startsWith("prod_")) {
     const idx = Number(val.replace("prod_", ""));
     if (showcase[idx]) {
       harga = showcase[idx].harga;
@@ -2181,27 +1927,27 @@ $("formKasir").addEventListener("submit", e => {
 
   if (tipe === "barber") {
     const s = DEFAULT_SERVICES[val];
-    if (!s) { showToast("Pilih layanan barber valid.", "⚠", true); return; }
+    if (!s) { showToast("Pilih layanan barber yang valid.", "⚠"); return; }
     namaItem = s.nama;
     hargaItem = s.harga;
   } else {
-    if (!val.startsWith("prod_")) { showToast("Pilih produk showcase yang valid.", "⚠", true); return; }
+    if (!val || !val.startsWith("prod_")) { showToast("Pilih produk showcase yang valid.", "⚠"); return; }
     const idx = Number(val.replace("prod_", ""));
     const p = showcase[idx];
-    if (!p) { showToast("Produk tidak ditemukan.", "⚠", true); return; }
+    if (!p) { showToast("Produk tidak ditemukan.", "⚠"); return; }
     namaItem = p.nama;
     hargaItem = p.harga;
   }
 
   if (!validText(nama, 80) || !Number.isSafeInteger(qty) || qty < 1 || qty > 1000) {
-    showToast("Periksa kembali nama pelanggan dan jumlah order.", "⚠", true);
+    showToast("Periksa kembali nama pelanggan dan jumlah order.", "⚠");
     return;
   }
 
   const amount = hargaItem * qty;
 
   if (!validMoney(bayar) || bayar < amount) {
-    showToast("Nominal bayar tidak boleh kurang dari total tagihan.", "⚠", true, `Kurang: ${rupiah(amount - bayar)}`);
+    showToast("Nominal bayar tidak boleh kurang dari total tagihan.", "⚠");
     return;
   }
 
@@ -2213,7 +1959,7 @@ $("formKasir").addEventListener("submit", e => {
   if (!save(KEYS.transaksi, next)) return;
 
   transaksi = next;
-  showToast(`Transaksi Berhasil Disimpan!`, "✓", false, `Kembalian: ${rupiah(bayar - amount)}`);
+  showToast(`Transaksi berhasil disimpan! Kembalian: ${rupiah(bayar - amount)}`, "✓");
   e.target.reset();
   $("jumlah").value = "1";
   document.querySelectorAll(".preset-chip").forEach(c => c.classList.remove("selected"));
@@ -2228,7 +1974,7 @@ $("formShowcase").addEventListener("submit", e => {
   const harga = Number($("prodHarga").value);
 
   if (!validText(nama, 100) || !validMoney(harga) || harga < 1) {
-    showToast("Periksa nama produk dan harga jual.", "⚠", true);
+    showToast("Periksa nama produk dan harga jual.", "⚠");
     return;
   }
 
@@ -2237,7 +1983,7 @@ $("formShowcase").addEventListener("submit", e => {
 
   showcase = next;
   e.target.reset();
-  showToast(`Produk Showcase Ditambahkan!`, "✓", false, `${nama} siap dijual di kasir`);
+  showToast(`Produk "${nama}" berhasil didaftarkan.`, "✓");
   updateKasirDropdown();
   render();
 });
@@ -2263,27 +2009,27 @@ function renderShowcaseTable() {
   showcase.forEach((p, i) => {
     const tr = document.createElement("tr");
     cell(tr, i + 1);
-    cell(tr, p.nama, "font-weight: 600; color: var(--text-main);");
+    cell(tr, p.nama, "font-weight: 600;");
     
     const catBadge = document.createElement("span");
     catBadge.className = "badge badge-product";
     catBadge.textContent = p.kategori;
     cell(tr, catBadge);
 
-    cell(tr, rupiah(p.harga), "color: var(--accent-dark); font-weight: 700;");
+    cell(tr, rupiah(p.harga), "color: var(--accent); font-weight: 600;");
 
     const tdAction = document.createElement("td");
     tdAction.style.textAlign = "right";
     const btnDel = document.createElement("button");
     btnDel.className = "btn-danger";
     btnDel.textContent = "Hapus";
-    btnDel.style.padding = "4px 10px";
+    btnDel.style.padding = "5px 12px";
     btnDel.style.fontSize = "11.5px";
     btnDel.addEventListener("click", () => {
       if (confirm(`Hapus produk "${p.nama}" dari katalog?`)) {
         showcase.splice(i, 1);
         save(KEYS.showcase, showcase);
-        showToast("Produk Telah Dihapus!", "✓", false, `Item "${p.nama}" dikeluarkan dari katalog`);
+        showToast("Produk dihapus.", "✓");
         updateKasirDropdown();
         render();
       }
@@ -2302,7 +2048,7 @@ $("formBooking").addEventListener("submit", e => {
   const jam = $("bookingJam").value;
 
   if (!validText(nama, 80) || !DEFAULT_SERVICES[key] || !dateOK(t) || t < tanggal()) {
-    showToast("Periksa data booking. Tanggal tidak boleh lampau.", "⚠", true);
+    showToast("Periksa data booking. Tanggal tidak boleh lampau.", "⚠");
     return;
   }
 
@@ -2311,7 +2057,7 @@ $("formBooking").addEventListener("submit", e => {
 
   bookings = next;
   e.target.reset();
-  showToast(`Booking Antrean Berhasil!`, "✓", false, `Jadwal antrean untuk ${nama} telah dicatat`);
+  showToast(`Booking untuk ${nama} berhasil dijadwalkan!`, "✓");
   render();
 });
 
@@ -2322,7 +2068,7 @@ $("formBiaya").addEventListener("submit", e => {
   const nominal = Number($("nominal").value);
 
   if (!validText(keterangan) || !validMoney(nominal) || nominal < 1) {
-    showToast("Periksa kelengkapan keterangan dan nominal biaya.", "⚠", true);
+    showToast("Periksa kelengkapan keterangan dan nominal biaya.", "⚠");
     return;
   }
 
@@ -2331,7 +2077,7 @@ $("formBiaya").addEventListener("submit", e => {
 
   pengeluaran = next;
   e.target.reset();
-  showToast("Pengeluaran Berhasil Dicatat!", "✓", false, `Beban ${kategori}: ${rupiah(nominal)}`);
+  showToast("Pengeluaran berhasil dicatat.", "✓");
   render();
 });
 
@@ -2382,7 +2128,10 @@ function renderLaporan() {
 function render() {
   const hari = tanggal();
   if (!$("tanggalLaporan").value) $("tanggalLaporan").value = hari;
-  if (!$("bookingTanggal").value) $("bookingTanggal").value = hari;
+  if (!$("bookingTanggal").value) {
+    $("bookingTanggal").value = hari;
+    $("bookingTanggal").min = hari;
+  }
 
   const trToday = transaksi.filter(x => x.tanggal === hari);
   const exToday = pengeluaran.filter(x => x.tanggal === hari);
@@ -2396,6 +2145,7 @@ function render() {
   updateAnimatedText("incomeToday", rupiah(masukToday));
   updateAnimatedText("expenseToday", rupiah(keluarToday));
   updateAnimatedText("profitToday", rupiah(netProfitToday));
+  $("profitToday").style.color = netProfitToday >= 0 ? "var(--good)" : "var(--bad)";
   updateAnimatedText("countToday", String(trToday.length));
 
   const allBarber = total(transaksi, "total", x => x.kategoriTransaksi === "barber" || !x.kategoriTransaksi);
@@ -2409,6 +2159,7 @@ function render() {
   updateAnimatedText("allIncome", rupiah(allInc));
   updateAnimatedText("allExpense", rupiah(allExp));
   updateAnimatedText("allProfit", rupiah(netAllProfit));
+  $("allProfit").style.color = netAllProfit >= 0 ? "#74d99f" : "var(--bad)";
 
   // Customer table
   rows("customerTable", [...transaksi].reverse(), [
@@ -2423,7 +2174,24 @@ function render() {
     x => x.layanan,
     x => `${x.jumlah}x`,
     x => rupiah(x.total),
-    x => x.tanggal
+    x => x.tanggal,
+    (x, i) => {
+      const actualIndex = transaksi.length - 1 - i;
+      const btn = document.createElement("button");
+      btn.className = "btn-danger";
+      btn.textContent = "Hapus";
+      btn.style.padding = "4px 10px";
+      btn.style.fontSize = "11px";
+      btn.addEventListener("click", () => {
+        if (confirm(`Hapus transaksi ${x.nama} (${rupiah(x.total)})?`)) {
+          transaksi.splice(actualIndex, 1);
+          save(KEYS.transaksi, transaksi);
+          showToast("Transaksi dihapus.", "✓");
+          render();
+        }
+      });
+      return btn;
+    }
   ], "Belum ada transaksi customer tersimpan.");
 
   // Booking table
@@ -2431,7 +2199,23 @@ function render() {
     x => x.nama,
     x => x.layanan,
     x => x.tanggal,
-    x => x.jam
+    x => x.jam,
+    (x, i) => {
+      const btn = document.createElement("button");
+      btn.className = "btn-danger";
+      btn.textContent = "Hapus";
+      btn.style.padding = "4px 10px";
+      btn.style.fontSize = "11px";
+      btn.addEventListener("click", () => {
+        if (confirm(`Hapus booking untuk ${x.nama}?`)) {
+          bookings.splice(i, 1);
+          save(KEYS.bookings, bookings);
+          showToast("Booking dihapus.", "✓");
+          render();
+        }
+      });
+      return btn;
+    }
   ], "Belum ada jadwal booking antrean.");
 
   // Biaya table
@@ -2439,7 +2223,24 @@ function render() {
     x => x.tanggal,
     x => x.kategori,
     x => x.keterangan,
-    x => rupiah(x.nominal)
+    x => rupiah(x.nominal),
+    (x, i) => {
+      const actualIndex = pengeluaran.length - 1 - i;
+      const btn = document.createElement("button");
+      btn.className = "btn-danger";
+      btn.textContent = "Hapus";
+      btn.style.padding = "4px 10px";
+      btn.style.fontSize = "11px";
+      btn.addEventListener("click", () => {
+        if (confirm(`Hapus pengeluaran "${x.keterangan}" (${rupiah(x.nominal)})?`)) {
+          pengeluaran.splice(actualIndex, 1);
+          save(KEYS.pengeluaran, pengeluaran);
+          showToast("Pengeluaran dihapus.", "✓");
+          render();
+        }
+      });
+      return btn;
+    }
   ], "Belum ada catatan pengeluaran.");
 
   renderShowcaseTable();
@@ -2460,7 +2261,7 @@ $("ekspor").addEventListener("click", () => {
   a.download = `asser-backup-${tanggal()}.json`;
   a.click();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
-  showToast("Data Berhasil Dicadangkan!", "✓", false, "Berkas cadangan JSON berhasil diunduh");
+  showToast("Berkas cadangan JSON berhasil diunduh.", "✓");
 });
 
 $("imporBtn").addEventListener("click", () => $("imporFile").click());
@@ -2472,10 +2273,7 @@ $("imporFile").addEventListener("change", async e => {
 
   try {
     const v = JSON.parse(await file.text());
-    if (v.app !== "asser") { 
-      showToast("File backup tidak cocok dengan format Asser.", "⚠", true); 
-      return; 
-    }
+    if (v.app !== "asser") { showToast("File backup tidak cocok dengan format Asser.", "⚠"); return; }
 
     transaksi = Array.isArray(v.transaksi) ? v.transaksi : [];
     pengeluaran = Array.isArray(v.pengeluaran) ? v.pengeluaran : [];
@@ -2489,24 +2287,22 @@ $("imporFile").addEventListener("change", async e => {
 
     updateKasirDropdown();
     render();
-    showToast("Data Berhasil Dipulihkan!", "✓", false, "Seluruh basis data telah disinkronkan");
+    showToast("Data cadangan berhasil dipulihkan!", "✓");
   } catch {
-    showToast("Gagal membaca atau mem-parsing file backup.", "⚠", true);
+    showToast("Gagal membaca atau mem-parsing file backup.", "⚠");
   }
 });
 
 $("reset").addEventListener("click", () => {
-  if (confirm("PERINGATAN: Apakah Anda yakin ingin mengosongkan seluruh database? Tindakan ini permanen dan tidak dapat dibatalkan.")) {
-    const currentTheme = localStorage.getItem(THEME_KEY);
+  if (confirm("PERINGATAN: Apakah Anda yakin ingin mengosongkan seluruh database? Data tidak dapat dikembalikan tanpa file backup.")) {
     localStorage.clear();
-    if (currentTheme) localStorage.setItem(THEME_KEY, currentTheme);
     transaksi = [];
     pengeluaran = [];
     bookings = [];
     showcase = [];
     updateKasirDropdown();
     render();
-    showToast("Database Berhasil Direset!", "✓", false, "Seluruh data telah dikembalikan ke kondisi awal");
+    showToast("Seluruh database telah direset.", "✓");
   }
 });
 
@@ -2515,4 +2311,5 @@ renderQuickPresets();
 updateKasirDropdown();
 render();
 </script>
-</body></html>
+</body>
+</html>
