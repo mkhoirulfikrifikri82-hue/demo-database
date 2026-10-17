@@ -866,12 +866,51 @@
             .menu-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; }
         }
 
+        /* FORMAT CETAK PRINTER THERMAL (58mm / 80mm) */
         @media print {
-            body * { visibility: hidden; }
-            #receiptModal, #receiptModal * { visibility: visible; }
-            #receiptModal { position: absolute; left: 0; top: 0; width: 100%; background: none; }
-            .modal-box { box-shadow: none; border: none; padding: 0; width: 100%; max-width: 100%; }
-            button { display: none !important; }
+            @page {
+                size: 58mm auto;
+                margin: 0;
+            }
+            html, body {
+                width: 58mm !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                background: #ffffff !important;
+                color: #000000 !important;
+                font-family: 'Courier New', Courier, monospace !important;
+                font-size: 11px !important;
+                font-weight: 600 !important;
+            }
+            .sidebar, .header-content, .card, .menu-grid, .bottom-grid, .form-grid, .summary-cards-grid, .toast, .cloud-status-badge, button, input, select, textarea, #printerStatusBadgeModal {
+                display: none !important;
+            }
+            #receiptModal {
+                display: block !important;
+                position: static !important;
+                width: 58mm !important;
+                padding: 2mm 3mm !important;
+                background: none !important;
+            }
+            .modal-box.receipt-card {
+                box-shadow: none !important;
+                border: none !important;
+                padding: 0 !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                border-radius: 0 !important;
+                font-family: 'Courier New', Courier, monospace !important;
+            }
+            .receipt-logo {
+                filter: grayscale(100%) contrast(250%) !important;
+                margin: 0 auto 6px !important;
+                width: 54px !important;
+                height: 36px !important;
+            }
+            .receipt-divider {
+                border-top: 1px dashed #000000 !important;
+                margin: 6px 0 !important;
+            }
         }
     </style>
 </head>
@@ -914,7 +953,7 @@
                 <span>Showcase Produk</span>
             </button>
             <button class="nav-link" onclick="pindahHalaman('biaya')">
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><line x1="12" x2="12" y1="1" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><line x1="12" x2="12" y1="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
                 <span>Biaya Operasional</span>
             </button>
             <button class="nav-link" onclick="pindahHalaman('laporan')">
@@ -941,6 +980,10 @@
                 <p id="pageHeadingSub">Kelola operasional harian dan kasir barbershop</p>
             </div>
             <div class="header-actions">
+                <div id="headerPrinterBadge" class="cloud-status-badge" onclick="hubungkanPrinterBluetooth()" style="cursor: pointer;" title="Klik untuk sambungkan mesin struk Bluetooth">
+                    <span id="printerDot" class="cloud-dot"></span>
+                    <span id="printerStatusHeader">Mesin Struk: Siap</span>
+                </div>
                 <div id="headerCloudBadge" class="cloud-status-badge">
                     <span class="cloud-dot"></span>
                     <span id="cloudStatusText">Offline (Lokal)</span>
@@ -1082,6 +1125,9 @@
                     <div style="display: flex; flex-direction: column; gap: 10px;">
                         <button class="btn-main" onclick="bukaModalCustomItem()" style="background: var(--text-active);">
                             &#10010; Input Layanan / Item Manual
+                        </button>
+                        <button class="btn-main" onclick="hubungkanPrinterBluetooth()" style="background: var(--accent-hover);">
+                            &#128225; Hubungkan Mesin Struk Bluetooth
                         </button>
                         <button class="pill-btn" onclick="pindahHalaman('booking')" style="width: 100%; padding: 11px; text-align: center;">
                             Lihat Antrean Booking Masuk
@@ -1295,7 +1341,48 @@
         <section class="page-view" id="view-pengaturan">
             <div class="form-grid">
                 
-                <!-- CARD 1: FIREBASE REALTIME DATABASE SYNC -->
+                <!-- CARD 1: MESIN STRUK & PRINTER THERMAL -->
+                <div class="card" style="grid-column: 1 / -1;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px;">
+                        <h3 class="section-title" style="margin-bottom: 0;">Integrasi Mesin Struk &amp; Printer Thermal</h3>
+                        <div id="printerStatusBadgeSettings" style="padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; border: 1px solid var(--border-color); background: #f8fafc; color: var(--secondary-text);">
+                            &#9675; Mesin Struk: Belum Konek Bluetooth
+                        </div>
+                    </div>
+                    <p style="font-size: 13px; color: var(--secondary-text); margin-bottom: 16px; line-height: 1.6;">
+                        Hubungkan website dengan <b>Printer Thermal Struk Kasir</b> (Bluetooth / USB / Wi-Fi). Mendukung printer thermal mini 58mm portable maupun printer kasir 80mm. Struk dapat langsung dicetak otomatis setiap transaksi kasir selesai.
+                    </p>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 18px;">
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label for="printerPaperSelect">Lebar Kertas Mesin Struk</label>
+                            <select id="printerPaperSelect" onchange="ubahLebarKertasPrinter(this.value)">
+                                <option value="58">58 mm (Printer Thermal Portable / Mini Bluetooth)</option>
+                                <option value="80">80 mm (Printer Kasir Thermal Standar / Desktop)</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0; justify-content: center;">
+                            <label style="cursor: pointer; display: flex; align-items: center; gap: 8px; margin-top: 24px;">
+                                <input type="checkbox" id="settingAutoPrintCheckbox" checked onchange="toggleAutoPrint(this.checked)" style="width: auto;">
+                                <span><b>Cetak Otomatis saat Bayar</b></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <button class="btn-main" onclick="hubungkanPrinterBluetooth()" style="width: auto; padding: 10px 20px;">
+                            &#128225; Sambungkan Mesin Struk Bluetooth
+                        </button>
+                        <button class="pill-btn" onclick="ujiCetakPrinter()" style="padding: 10px 18px; font-size: 13px;">
+                            &#128438; Uji Cetak Struk (Test Print)
+                        </button>
+                        <button class="pill-btn" onclick="putuskanPrinterBluetooth()" style="padding: 10px 18px; font-size: 13px; color: var(--danger-color);">
+                            Putuskan Bluetooth
+                        </button>
+                    </div>
+                </div>
+
+                <!-- CARD 2: FIREBASE REALTIME DATABASE SYNC -->
                 <div class="card" style="grid-column: 1 / -1;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px;">
                         <h3 class="section-title" style="margin-bottom: 0;">Integrasi Cloud Database Realtime (Firebase)</h3>
@@ -1350,7 +1437,7 @@
                     </details>
                 </div>
 
-                <!-- CARD 2: BACKUP CADANGAN LOKAL -->
+                <!-- CARD 3: BACKUP CADANGAN LOKAL -->
                 <div class="card">
                     <h3 class="section-title" style="margin-bottom: 12px;">Cadangkan &amp; Pulihkan Data JSON</h3>
                     <p style="font-size: 13px; color: var(--secondary-text); margin-bottom: 18px; line-height: 1.6;">
@@ -1367,7 +1454,7 @@
                     </div>
                 </div>
 
-                <!-- CARD 3: RESET PABRIK -->
+                <!-- CARD 4: RESET PABRIK -->
                 <div class="card">
                     <h3 class="section-title" style="color: var(--danger-color); margin-bottom: 12px;">Zona Bahaya: Reset Database</h3>
                     <p style="font-size: 13px; color: var(--secondary-text); margin-bottom: 18px; line-height: 1.6;">
@@ -1384,6 +1471,11 @@
     <!-- --- MODAL STRUK DIGITAL --- -->
     <div id="receiptModal" class="modal-overlay">
         <div class="modal-box receipt-card">
+            <div id="printerStatusBadgeModal" style="margin-bottom: 12px; padding: 6px 10px; border-radius: 8px; font-size: 11px; font-weight: 700; background: #f8fafc; border: 1px solid var(--border-color); color: var(--secondary-text); display: flex; align-items: center; justify-content: space-between;">
+                <span id="printerStatusModalText">&#9675; Mesin Struk: Belum Konek Bluetooth</span>
+                <button type="button" onclick="hubungkanPrinterBluetooth()" style="background: none; border: none; color: var(--accent-color); font-weight: 700; cursor: pointer; text-decoration: underline; font-size: 11px;">Koneksikan</button>
+            </div>
+
             <div class="receipt-logo">
                 <img src="data:image/png;base64,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" alt="Logo Rumah Pangkas Asser">
             </div>
@@ -1419,9 +1511,23 @@
 
             <p style="font-size: 11px; color: #94a3b8; margin: 16px 0 12px;">Terima kasih atas kunjungan Anda!</p>
 
-            <div style="display: flex; gap: 8px;">
-                <button class="btn-main" onclick="window.print()" style="flex: 1;">&#128438; Cetak Struk</button>
-                <button class="pill-btn" onclick="tutupReceipt()" style="flex: 1; padding: 10px;">Tutup</button>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+                <button class="btn-main" onclick="cetakStrukSekarang()" style="width: 100%; padding: 12px;">
+                    &#128438; Cetak ke Mesin Struk
+                </button>
+                <div style="display: flex; gap: 8px;">
+                    <button class="pill-btn" onclick="hubungkanPrinterBluetooth()" style="flex: 1; padding: 9px; font-size: 11.5px;">
+                        &#128225; Konek Bluetooth
+                    </button>
+                    <button class="pill-btn" onclick="window.print()" style="flex: 1; padding: 9px; font-size: 11.5px;">
+                        &#128438; Dialog Sistem
+                    </button>
+                </div>
+                <label style="font-size: 11px; color: var(--secondary-text); display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; margin-top: 2px;">
+                    <input type="checkbox" id="modalAutoPrintCheckbox" checked onchange="toggleAutoPrint(this.checked)" style="width: auto;">
+                    <span>Cetak otomatis setiap selesai transaksi</span>
+                </label>
+                <button class="pill-btn" onclick="tutupReceipt()" style="width: 100%; padding: 9px; margin-top: 4px;">Tutup</button>
             </div>
         </div>
     </div>
@@ -1517,7 +1623,7 @@
             { id: 7, nama: "Layanan Lainnya", harga: 0, kategori: "layanan", tipePendapatan: "jasa", isManualPrice: true }
         ];
 
-        // Skema Showcase Produk & Minuman (Update: Minuman Lainnya tanpa nominal tetap / isi sendiri)
+        // Skema Showcase Produk & Minuman
         const defaultShowcase = [
             { 
                 id: 101, 
@@ -1657,6 +1763,270 @@
             $("current-time").textContent = `${h}:${m} WIB`;
         }, 1000);
 
+        // ================= PRINTER THERMAL & BLUETOOTH ESC/POS =================
+        let bluetoothDevice = null;
+        let printCharacteristic = null;
+        let isPrinterConnected = false;
+        let isAutoPrintEnabled = localStorage.getItem("asser_autoprint") !== "false"; // default true!
+        let paperWidthChars = Number(localStorage.getItem("asser_paper_width")) === 80 ? 48 : 32; // 32 for 58mm, 48 for 80mm
+        let currentReceiptData = null;
+
+        function updatePrinterStatusUI(connected, deviceName = "") {
+            isPrinterConnected = connected;
+            const headerBtn = $("headerPrinterBadge");
+            const headerText = $("printerStatusHeader");
+            const headerDot = $("printerDot");
+            const modalBadge = $("printerStatusBadgeModal");
+            const modalText = $("printerStatusModalText");
+            const settingsBadge = $("printerStatusBadgeSettings");
+
+            if (connected) {
+                const name = deviceName || "Printer Thermal";
+                if (headerBtn) headerBtn.classList.add("connected");
+                if (headerDot) headerDot.style.background = "var(--accent-color)";
+                if (headerText) headerText.textContent = `Mesin Struk: ${name}`;
+                if (modalBadge) {
+                    modalBadge.style.background = "#ecfdf5";
+                    modalBadge.style.color = "#065f46";
+                    modalBadge.style.borderColor = "#a7f3d0";
+                }
+                if (modalText) modalText.innerHTML = `&#9679; Mesin Struk: <b>${name}</b>`;
+                if (settingsBadge) {
+                    settingsBadge.style.background = "#ecfdf5";
+                    settingsBadge.style.color = "#065f46";
+                    settingsBadge.style.borderColor = "#a7f3d0";
+                    settingsBadge.innerHTML = `&#9679; Terhubung ke <b>${name}</b>`;
+                }
+            } else {
+                if (headerBtn) headerBtn.classList.remove("connected");
+                if (headerDot) headerDot.style.background = "#94a3b8";
+                if (headerText) headerText.textContent = "Mesin Struk: Siap";
+                if (modalBadge) {
+                    modalBadge.style.background = "#f8fafc";
+                    modalBadge.style.color = "var(--secondary-text)";
+                    modalBadge.style.borderColor = "var(--border-color)";
+                }
+                if (modalText) modalText.innerHTML = `&#9675; Mesin Struk: Belum Konek Bluetooth`;
+                if (settingsBadge) {
+                    settingsBadge.style.background = "#f8fafc";
+                    settingsBadge.style.color = "var(--secondary-text)";
+                    settingsBadge.style.borderColor = "var(--border-color)";
+                    settingsBadge.innerHTML = `&#9675; Mesin Struk: Belum Konek Bluetooth`;
+                }
+            }
+        }
+
+        async function hubungkanPrinterBluetooth() {
+            if (!navigator.bluetooth) {
+                alert("Browser Anda belum mendukung Web Bluetooth secara langsung.\n\nTips: Gunakan Google Chrome di ponsel Android atau PC untuk koneksi Bluetooth langsung.\n\nAnda tetap dapat mencetak struk langsung ke mesin struk Anda via Dialog Cetak Sistem!");
+                window.print();
+                return;
+            }
+
+            try {
+                showToast("Mencari mesin struk Bluetooth...", "&#128225;");
+                bluetoothDevice = await navigator.bluetooth.requestDevice({
+                    acceptAllDevices: true,
+                    optionalServices: [
+                        "000018f0-0000-1000-8000-00805f9b34fb",
+                        "49535343-fe7d-4ae5-8fa9-9fafd205e455",
+                        "e7810a71-73ae-499d-8c15-faa9aef0c3f2",
+                        "0000ff00-0000-1000-8000-00805f9b34fb",
+                        "0000e0ff-0000-1000-8000-00805f9b34fb",
+                        "0000ae30-0000-1000-8000-00805f9b34fb",
+                        "0000ae00-0000-1000-8000-00805f9b34fb",
+                        "0000af30-0000-1000-8000-00805f9b34fb"
+                    ]
+                });
+
+                showToast("Menghubungkan ke " + (bluetoothDevice.name || "Printer") + "...", "&#128225;");
+                const server = await bluetoothDevice.gatt.connect();
+                
+                printCharacteristic = null;
+                const services = await server.getPrimaryServices();
+                for (const s of services) {
+                    try {
+                        const chars = await s.getCharacteristics();
+                        for (const c of chars) {
+                            if (c.properties.write || c.properties.writeWithoutResponse) {
+                                printCharacteristic = c;
+                                break;
+                            }
+                        }
+                    } catch(e){}
+                    if (printCharacteristic) break;
+                }
+
+                if (printCharacteristic) {
+                    updatePrinterStatusUI(true, bluetoothDevice.name || "Printer Thermal");
+                    showToast(`Terkoneksi ke ${bluetoothDevice.name || "Mesin Struk"}!`, "&#10003;");
+                    localStorage.setItem("asser_printer_name", bluetoothDevice.name || "Printer Thermal");
+
+                    bluetoothDevice.addEventListener("gattserverdisconnected", () => {
+                        updatePrinterStatusUI(false);
+                        showToast("Koneksi mesin struk terputus.", "!");
+                    });
+                } else {
+                    alert("Tersambung ke Bluetooth, namun tidak menemukan port data cetak. Pastikan printer thermal menyala dan coba sambungkan kembali.");
+                }
+            } catch (err) {
+                console.error("Bluetooth error:", err);
+                if (err.name !== "NotFoundError") {
+                    alert("Gagal konek Bluetooth: " + err.message);
+                }
+            }
+        }
+
+        function putuskanPrinterBluetooth() {
+            if (bluetoothDevice && bluetoothDevice.gatt.connected) {
+                bluetoothDevice.gatt.disconnect();
+            }
+            bluetoothDevice = null;
+            printCharacteristic = null;
+            updatePrinterStatusUI(false);
+            showToast("Mesin struk Bluetooth diputuskan.", "!");
+        }
+
+        function toggleAutoPrint(checked) {
+            isAutoPrintEnabled = checked;
+            localStorage.setItem("asser_autoprint", checked ? "true" : "false");
+            if ($("settingAutoPrintCheckbox")) $("settingAutoPrintCheckbox").checked = checked;
+            if ($("modalAutoPrintCheckbox")) $("modalAutoPrintCheckbox").checked = checked;
+            showToast(checked ? "Cetak otomatis diaktifkan" : "Cetak otomatis dinonaktifkan", "&#128438;");
+        }
+
+        function ubahLebarKertasPrinter(val) {
+            paperWidthChars = Number(val) === 80 ? 48 : 32;
+            localStorage.setItem("asser_paper_width", val);
+            showToast(`Ukuran kertas diatur ke ${val} mm`, "&#128438;");
+        }
+
+        // Format ESC/POS Raw Data untuk Printer Thermal
+        function buatDataStrukESCPOS(receiptData, width = 32) {
+            const encoder = new TextEncoder();
+            const ESC = "\x1B";
+            const GS = "\x1D";
+            let buf = "";
+
+            // Inisialisasi printer
+            buf += ESC + "@";
+
+            // Header RUMAH PANGKAS ASSER
+            buf += ESC + "a" + "\x01"; // Center align
+            buf += ESC + "!" + "\x28"; // Double height + bold
+            buf += "RUMAH PANGKAS ASSER\n";
+            buf += ESC + "!" + "\x00"; // Normal
+            buf += "A20 - EST. 2017\n";
+            buf += "\"Potong Rambut, Potong Masalah\"\n";
+            buf += "=".repeat(width) + "\n";
+
+            // Metadata Transaksi
+            buf += ESC + "a" + "\x00"; // Left align
+            buf += `Tgl : ${receiptData.tanggal}\n`;
+            buf += `Plg : ${receiptData.nama}\n`;
+            buf += "-".repeat(width) + "\n";
+
+            // Daftar Item
+            receiptData.items.forEach(item => {
+                buf += `${item.nama}\n`;
+                const qtyStr = ` ${item.jumlah}x ${formatRp(item.harga).replace("Rp ", "")}`;
+                const subStr = formatRp(item.harga * item.jumlah).replace("Rp ", "");
+                const pad = Math.max(1, width - qtyStr.length - subStr.length);
+                buf += qtyStr + " ".repeat(pad) + subStr + "\n";
+            });
+
+            buf += "-".repeat(width) + "\n";
+
+            // Total, Bayar, Kembalian
+            const barisRataKanan = (lbl, val) => {
+                const pad = Math.max(1, width - lbl.length - val.length);
+                return lbl + " ".repeat(pad) + val + "\n";
+            };
+
+            buf += ESC + "E" + "\x01"; // Bold ON
+            buf += barisRataKanan("TOTAL:", formatRp(receiptData.total));
+            buf += ESC + "E" + "\x00"; // Bold OFF
+            buf += barisRataKanan("BAYAR:", formatRp(receiptData.bayar));
+            buf += barisRataKanan("KEMBALIAN:", formatRp(receiptData.kembalian));
+
+            buf += "=".repeat(width) + "\n";
+
+            // Footer
+            buf += ESC + "a" + "\x01"; // Center align
+            buf += "Terima Kasih Atas Kunjungan Anda!\n";
+            buf += "\n\n\n\n"; // Feed paper to cutter
+            buf += GS + "V" + "\x41" + "\x00"; // Cut paper
+
+            return encoder.encode(buf);
+        }
+
+        async function cetakKePrinterBluetooth(dataBytes) {
+            if (!printCharacteristic) throw new Error("Port cetak printer tidak tersedia.");
+            const CHUNK_SIZE = 64;
+            for (let i = 0; i < dataBytes.length; i += CHUNK_SIZE) {
+                const chunk = dataBytes.slice(i, i + CHUNK_SIZE);
+                if (printCharacteristic.writeValueWithoutResponse) {
+                    await printCharacteristic.writeValueWithoutResponse(chunk);
+                } else {
+                    await printCharacteristic.writeValue(chunk);
+                }
+                await new Promise(res => setTimeout(res, 20));
+            }
+        }
+
+        async function cetakStrukSekarang(isAutoTrigger = false) {
+            if (isPrinterConnected && printCharacteristic && currentReceiptData) {
+                try {
+                    showToast("Mengirim ke mesin struk Bluetooth...", "&#128438;");
+                    const bytes = buatDataStrukESCPOS(currentReceiptData, paperWidthChars);
+                    await cetakKePrinterBluetooth(bytes);
+                    showToast("Struk selesai dicetak!", "&#10003;");
+                    return;
+                } catch (e) {
+                    console.warn("Bluetooth print error, fallback ke print dialog:", e);
+                    showToast("Bluetooth terputus, membuka cetak sistem...", "!");
+                }
+            }
+
+            if (isAutoTrigger && !isPrinterConnected) {
+                // Jangan popup dialog cetak sistem jika belum konek printer
+                return;
+            }
+
+            // Fallback: window.print() dengan format thermal 58mm/80mm
+            window.print();
+        }
+
+        async function ujiCetakPrinter() {
+            const sampleData = {
+                nama: "Tes Cetak Struk",
+                tanggal: tanggalHariIni() + " " + (new Date().toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'})),
+                items: [
+                    { nama: "Potong Rambut Dewasa", harga: 20000, jumlah: 1 },
+                    { nama: "Hair Styling Pomade (50k)", harga: 50000, jumlah: 1 }
+                ],
+                total: 70000,
+                bayar: 100000,
+                kembalian: 30000
+            };
+
+            currentReceiptData = sampleData;
+            bukaReceipt(sampleData);
+
+            if (isPrinterConnected && printCharacteristic) {
+                try {
+                    const bytes = buatDataStrukESCPOS(sampleData, paperWidthChars);
+                    await cetakKePrinterBluetooth(bytes);
+                    showToast("Uji cetak berhasil dikirim ke printer!", "&#10003;");
+                } catch(e) {
+                    alert("Gagal uji cetak Bluetooth: " + e.message);
+                }
+            } else {
+                showToast("Printer Bluetooth belum terkoneksi. Membuka dialog sistem...", "&#128438;");
+                window.print();
+            }
+        }
+
         // ================= FIREBASE REALTIME SYNC LOGIC =================
         let firebaseApp = null;
         let firebaseDb = null;
@@ -1738,7 +2108,6 @@
             if (!firebaseDb) return;
             const root = firebaseDb.ref("rumah_pangkas_asser");
 
-            // Realtime listener transaksi
             root.child("transaksi").on("value", snap => {
                 const val = snap.val();
                 if (val !== null) {
@@ -1748,7 +2117,6 @@
                 }
             });
 
-            // Realtime listener pengeluaran
             root.child("pengeluaran").on("value", snap => {
                 const val = snap.val();
                 if (val !== null) {
@@ -1758,7 +2126,6 @@
                 }
             });
 
-            // Realtime listener bookings
             root.child("bookings").on("value", snap => {
                 const val = snap.val();
                 if (val !== null) {
@@ -1768,7 +2135,6 @@
                 }
             });
 
-            // Realtime listener showcase
             root.child("showcase").on("value", snap => {
                 const val = snap.val();
                 if (val !== null) {
@@ -1865,7 +2231,7 @@
                 showcase: { title: "Showcase Produk Display", sub: "Atur katalog produk styling, perawatan rambut & minuman" },
                 biaya: { title: "Beban Biaya Operasional", sub: "Catat pengeluaran harian, sewa, listrik, dan perlengkapan" },
                 laporan: { title: "Laporan & Rekapitulasi", sub: "Laporan pemasukan, pengeluaran, dan laba bersih berkala" },
-                pengaturan: { title: "Pengaturan & Cloud Sync", sub: "Koneksi Firebase Realtime, cadangan data JSON, dan reset" }
+                pengaturan: { title: "Pengaturan, Cloud & Printer", sub: "Koneksi Mesin Struk, Firebase Realtime, cadangan data JSON, dan reset" }
             };
 
             const links = document.querySelectorAll(".nav-link");
@@ -2159,14 +2525,23 @@
             transaksi = [...transaksi, ...newRecords];
             saveStorage(KEYS.transaksi, transaksi);
 
-            bukaReceipt({
+            const receiptPayload = {
                 nama: namaCust,
                 tanggal: hari + " " + (new Date().toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'})),
                 items: [...keranjang],
                 total: grandTotal,
                 bayar: bayar,
                 kembalian: bayar - grandTotal
-            });
+            };
+
+            bukaReceipt(receiptPayload);
+
+            // LANGSUNG KONEK & CETAK KE MESIN STRUK OTOMATIS
+            if (isAutoPrintEnabled) {
+                setTimeout(() => {
+                    cetakStrukSekarang(true);
+                }, 350);
+            }
 
             keranjang = [];
             $("kasirUangDiterima").value = "";
@@ -2263,6 +2638,7 @@
 
         // ================= STRUK MODAL LOGIC =================
         function bukaReceipt(data) {
+            currentReceiptData = data;
             $("recCustomer").textContent = data.nama;
             $("recDate").textContent = data.tanggal;
             $("recTotal").textContent = formatRp(data.total);
@@ -2504,7 +2880,7 @@
         function eksporDataJSON() {
             const payload = {
                 app: "asser",
-                version: "2.2",
+                version: "2.3",
                 exported_at: new Date().toISOString(),
                 transaksi,
                 pengeluaran,
@@ -2694,6 +3070,12 @@
         initBookingOptions();
         renderAll();
         initFirebase();
+
+        // Restore status printer UI
+        if ($("settingAutoPrintCheckbox")) $("settingAutoPrintCheckbox").checked = isAutoPrintEnabled;
+        if ($("modalAutoPrintCheckbox")) $("modalAutoPrintCheckbox").checked = isAutoPrintEnabled;
+        if ($("printerPaperSelect")) $("printerPaperSelect").value = (paperWidthChars === 48 ? "80" : "58");
+        updatePrinterStatusUI(false);
     </script>
 </body>
 </html>
