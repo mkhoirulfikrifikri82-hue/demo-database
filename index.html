@@ -1509,8 +1509,8 @@
         // Skema Layanan Rumah Pangkas Asser (Update Lengkap)
         const defaultServices = [
             { id: 1, nama: "Potong Rambut Dewasa", harga: 20000, kategori: "layanan", tipePendapatan: "jasa" },
-            { id: 2, nama: "Paket Dewasa (Cuci+Potong+Styling)", harga: 30000, kategori: "layanan", tipePendapatan: "jasa" },
-            { id: 3, nama: "Paket Lengkap Dewasa (Potong + Semir Hitam)", harga: 40000, kategori: "layanan", tipePendapatan: "jasa" },
+            { id: 2, nama: "Paket Lengkap Dewasa", harga: 30000, kategori: "layanan", tipePendapatan: "jasa" },
+            { id: 3, nama: "Potong + Semir Hitam", harga: 40000, kategori: "layanan", tipePendapatan: "jasa" },
             { id: 4, nama: "Semir Hitam", harga: 25000, kategori: "layanan", tipePendapatan: "jasa" },
             { id: 5, nama: "Potong Rambut Anak", harga: 15000, kategori: "layanan", tipePendapatan: "jasa" },
             { id: 6, nama: "Paket Lengkap Anak", harga: 20000, kategori: "layanan", tipePendapatan: "jasa" },
@@ -1537,6 +1537,14 @@
             },
             { 
                 id: 103, 
+                nama: "Shampo", 
+                harga: 30000, 
+                kategori: "Perawatan Rambut", 
+                tipePendapatan: "produk",
+                varianHarga: [30000, 40000, 50000]
+            },
+            { 
+                id: 104, 
                 nama: "Conditioner Rambut", 
                 harga: 30000, 
                 kategori: "Perawatan Rambut", 
@@ -1544,7 +1552,7 @@
                 varianHarga: [30000, 35000, 40000]
             },
             { 
-                id: 104, 
+                id: 105, 
                 nama: "Minyak Rambut Tradisional", 
                 harga: 20000, 
                 kategori: "Perawatan Rambut", 
@@ -1552,7 +1560,7 @@
                 varianHarga: [20000, 25000, 30000]
             },
             { 
-                id: 105, 
+                id: 106, 
                 nama: "Sisir Rambut Premium", 
                 harga: 10000, 
                 kategori: "Perawatan Rambut", 
@@ -1560,7 +1568,7 @@
                 varianHarga: [10000, 15000, 20000, 25000]
             },
             { 
-                id: 106, 
+                id: 107, 
                 nama: "Perawatan / Produk Lainnya", 
                 harga: 0, 
                 kategori: "Perawatan Rambut", 
@@ -1568,14 +1576,14 @@
                 isManualPrice: true
             },
             { 
-                id: 107, 
+                id: 108, 
                 nama: "Air Mineral Dingin", 
                 harga: 5000, 
                 kategori: "Minuman", 
                 tipePendapatan: "produk" 
             },
             { 
-                id: 108, 
+                id: 109, 
                 nama: "Minuman Lainnya", 
                 harga: 0, 
                 kategori: "Minuman", 
@@ -1621,7 +1629,7 @@
         let showcase = readStorage(KEYS.showcase, null);
 
         // Skema versi migration check (Auto update saat dibuka di HP)
-        const CATALOG_SCHEMA_VERSION = "2026-10-17_v4";
+        const CATALOG_SCHEMA_VERSION = "2026-10-17_v5";
         if (localStorage.getItem("asser_catalog_ver") !== CATALOG_SCHEMA_VERSION || !showcase || showcase.length === 0) {
             showcase = [...defaultShowcase];
             saveStorage(KEYS.showcase, showcase, false);
