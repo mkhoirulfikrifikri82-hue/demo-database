@@ -1182,7 +1182,7 @@
                         </div>
                         <div class="form-group">
                             <label for="prodHarga">Harga Jual (Rp)</label>
-                            <input type="number" id="prodHarga" placeholder="Contoh: 45000" min="500" max="1000000000" required>
+                            <input type="number" id="prodHarga" placeholder="Contoh: 45000 (Isi 0 jika nominal manual)" min="0" max="1000000000" required>
                         </div>
                         <button type="submit" class="btn-main" style="margin-top: 6px;">Daftarkan ke Showcase &amp; Kasir</button>
                     </form>
@@ -1430,20 +1430,31 @@
     <div id="modalCustomItem" class="modal-overlay">
         <div class="modal-box" style="max-width: 440px; text-align: left;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                <h3 style="font-size: 16.5px; font-weight: 800; color: var(--text-active);">Input Layanan / Item Manual</h3>
+                <h3 id="customModalHeaderTitle" style="font-size: 16.5px; font-weight: 800; color: var(--text-active);">Input Item Manual</h3>
                 <button type="button" onclick="tutupModalCustomItem()" style="background: none; border: none; font-size: 22px; cursor: pointer; color: var(--secondary-text); line-height: 1;">&times;</button>
             </div>
-            <p style="font-size: 12px; color: var(--secondary-text); margin-bottom: 16px; line-height: 1.5;">
-                Ketik nama layanan atau produk dan nominal harga bebas sesuai transaksi saat ini.
+            <p style="font-size: 12px; color: var(--secondary-text); margin-bottom: 14px; line-height: 1.5;">
+                Ketik nama layanan atau produk dan nominal harga sesuai transaksi saat ini.
             </p>
             <form id="formCustomItem" onsubmit="simpanCustomItemKeKeranjang(event)">
                 <div class="form-group" style="margin-bottom: 12px;">
                     <label for="customItemNama">Nama Layanan / Produk</label>
-                    <input id="customItemNama" placeholder="Contoh: Semir Rambut Cokelat, Cukur Kumis, dll" required maxlength="80">
+                    <input id="customItemNama" placeholder="Contoh: Minuman Lainnya, Semir Rambut Cokelat, dll" required maxlength="80">
                 </div>
-                <div class="form-group" style="margin-bottom: 12px;">
+                <div class="form-group" style="margin-bottom: 6px;">
                     <label for="customItemHarga">Nominal Harga (Rp)</label>
-                    <input type="number" id="customItemHarga" placeholder="Contoh: 35000" min="500" required>
+                    <input type="number" id="customItemHarga" placeholder="Contoh: 8000" min="500" required>
+                </div>
+                <!-- Tombol Nominal Cepat -->
+                <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px;">
+                    <button type="button" class="pill-btn" onclick="isiNominalCepat(4000)" style="font-size: 11px; padding: 3px 8px;">4rb</button>
+                    <button type="button" class="pill-btn" onclick="isiNominalCepat(5000)" style="font-size: 11px; padding: 3px 8px;">5rb</button>
+                    <button type="button" class="pill-btn" onclick="isiNominalCepat(8000)" style="font-size: 11px; padding: 3px 8px;">8rb</button>
+                    <button type="button" class="pill-btn" onclick="isiNominalCepat(10000)" style="font-size: 11px; padding: 3px 8px;">10rb</button>
+                    <button type="button" class="pill-btn" onclick="isiNominalCepat(15000)" style="font-size: 11px; padding: 3px 8px;">15rb</button>
+                    <button type="button" class="pill-btn" onclick="isiNominalCepat(20000)" style="font-size: 11px; padding: 3px 8px;">20rb</button>
+                    <button type="button" class="pill-btn" onclick="isiNominalCepat(25000)" style="font-size: 11px; padding: 3px 8px;">25rb</button>
+                    <button type="button" class="pill-btn" onclick="isiNominalCepat(40000)" style="font-size: 11px; padding: 3px 8px;">40rb</button>
                 </div>
                 <div class="form-group" style="margin-bottom: 18px;">
                     <label for="customItemKategori">Kategori</label>
@@ -1495,17 +1506,18 @@
             showcase: "asser_showcase"
         };
 
-        // Skema Layanan Rumah Pangkas Asser
+        // Skema Layanan Rumah Pangkas Asser (Update Lengkap)
         const defaultServices = [
             { id: 1, nama: "Potong Rambut Dewasa", harga: 20000, kategori: "layanan", tipePendapatan: "jasa" },
             { id: 2, nama: "Paket Dewasa (Cuci+Potong+Styling)", harga: 30000, kategori: "layanan", tipePendapatan: "jasa" },
             { id: 3, nama: "Paket Lengkap Dewasa (Potong + Semir Hitam)", harga: 40000, kategori: "layanan", tipePendapatan: "jasa" },
             { id: 4, nama: "Semir Hitam", harga: 25000, kategori: "layanan", tipePendapatan: "jasa" },
             { id: 5, nama: "Potong Rambut Anak", harga: 15000, kategori: "layanan", tipePendapatan: "jasa" },
-            { id: 6, nama: "Paket Rambut Anak", harga: 20000, kategori: "layanan", tipePendapatan: "jasa" }
+            { id: 6, nama: "Paket Lengkap Anak", harga: 20000, kategori: "layanan", tipePendapatan: "jasa" },
+            { id: 7, nama: "Layanan Lainnya", harga: 0, kategori: "layanan", tipePendapatan: "jasa", isManualPrice: true }
         ];
 
-        // Skema Showcase Produk & Varian Harga
+        // Skema Showcase Produk & Minuman (Update: Minuman Lainnya tanpa nominal tetap / isi sendiri)
         const defaultShowcase = [
             { 
                 id: 101, 
@@ -1549,17 +1561,26 @@
             },
             { 
                 id: 106, 
+                nama: "Perawatan / Produk Lainnya", 
+                harga: 0, 
+                kategori: "Perawatan Rambut", 
+                tipePendapatan: "produk",
+                isManualPrice: true
+            },
+            { 
+                id: 107, 
                 nama: "Air Mineral Dingin", 
                 harga: 5000, 
                 kategori: "Minuman", 
                 tipePendapatan: "produk" 
             },
             { 
-                id: 107, 
-                nama: "Es Teh Manis / Lemon Tea", 
-                harga: 8000, 
+                id: 108, 
+                nama: "Minuman Lainnya", 
+                harga: 0, 
                 kategori: "Minuman", 
-                tipePendapatan: "produk" 
+                tipePendapatan: "produk",
+                isManualPrice: true
             }
         ];
 
@@ -1599,8 +1620,8 @@
         let bookings = readStorage(KEYS.bookings, []);
         let showcase = readStorage(KEYS.showcase, null);
 
-        // Skema versi migration check
-        const CATALOG_SCHEMA_VERSION = "2026-10-17_v3";
+        // Skema versi migration check (Auto update saat dibuka di HP)
+        const CATALOG_SCHEMA_VERSION = "2026-10-17_v4";
         if (localStorage.getItem("asser_catalog_ver") !== CATALOG_SCHEMA_VERSION || !showcase || showcase.length === 0) {
             showcase = [...defaultShowcase];
             saveStorage(KEYS.showcase, showcase, false);
@@ -1859,10 +1880,11 @@
             const dynamicShowcase = showcase.map((item, idx) => ({
                 id: item.id || (100 + idx),
                 nama: item.nama,
-                harga: Number(item.harga),
+                harga: Number(item.harga) || 0,
                 kategori: item.kategori || "Perawatan Rambut",
                 tipePendapatan: item.tipePendapatan || "produk",
-                varianHarga: Array.isArray(item.varianHarga) ? item.varianHarga : null
+                varianHarga: Array.isArray(item.varianHarga) ? item.varianHarga : null,
+                isManualPrice: Boolean(item.isManualPrice || item.harga === 0)
             }));
             return [...defaultServices, ...dynamicShowcase];
         }
@@ -1880,7 +1902,7 @@
             const catalog = getCombinedCatalog();
             container.replaceChildren();
 
-            // 1. Kartu Khusus + INPUT MANUAL (Layanan / Item Lainnya)
+            // 1. Kartu Universal + INPUT MANUAL
             const manualCard = document.createElement("div");
             manualCard.className = "menu-card card-custom-action";
             manualCard.innerHTML = `
@@ -1888,7 +1910,7 @@
                 <div class="item-name" style="font-weight: 700;">Layanan / Item Lainnya</div>
                 <div class="item-price" style="font-size: 12px; color: var(--secondary-text);">Bebas tulis nama &amp; nominal manual</div>
             `;
-            manualCard.addEventListener("click", bukaModalCustomItem);
+            manualCard.addEventListener("click", () => bukaModalManualItem("", "layanan", "jasa"));
             container.append(manualCard);
 
             // 2. Filter Item
@@ -1900,7 +1922,15 @@
                 const card = document.createElement("div");
                 card.className = "menu-card";
 
-                if (item.varianHarga && item.varianHarga.length > 0) {
+                if (item.isManualPrice || item.harga === 0) {
+                    card.classList.add("card-custom-action");
+                    card.innerHTML = `
+                        <div class="item-category" style="color: var(--accent-color); font-weight: 800;">${item.kategori.toUpperCase()}</div>
+                        <div class="item-name" style="font-weight: 700;">${item.nama}</div>
+                        <div class="item-price" style="font-size: 12px; color: var(--secondary-text); font-weight: 700;">&#9998; Nominal Isi Sendiri</div>
+                    `;
+                    card.addEventListener("click", () => bukaModalManualItem(item.nama, item.kategori, item.tipePendapatan));
+                } else if (item.varianHarga && item.varianHarga.length > 0) {
                     card.classList.add("has-variants");
                     const lowest = Math.min(...item.varianHarga);
                     const highest = Math.max(...item.varianHarga);
@@ -2171,13 +2201,28 @@
         }
 
         function bukaModalCustomItem() {
+            bukaModalManualItem("", "layanan", "jasa");
+        }
+
+        function bukaModalManualItem(namaDefault = "", kategoriDefault = "layanan", tipeDefault = "jasa") {
             $("formCustomItem").reset();
+            if (namaDefault) {
+                $("customItemNama").value = namaDefault;
+                $("customModalHeaderTitle").textContent = "Isi Nominal: " + namaDefault;
+            } else {
+                $("customModalHeaderTitle").textContent = "Input Item Manual";
+            }
+            if (kategoriDefault) $("customItemKategori").value = kategoriDefault;
             $("modalCustomItem").classList.add("show");
-            setTimeout(() => $("customItemNama").focus(), 100);
+            setTimeout(() => $("customItemHarga").focus(), 100);
         }
 
         function tutupModalCustomItem() {
             $("modalCustomItem").classList.remove("show");
+        }
+
+        function isiNominalCepat(v) {
+            $("customItemHarga").value = v;
         }
 
         function simpanCustomItemKeKeranjang(e) {
@@ -2243,14 +2288,9 @@
             defaultServices.forEach(s => {
                 const opt = document.createElement("option");
                 opt.value = s.nama;
-                opt.textContent = `${s.nama} \u2014 ${formatRp(s.harga)}`;
+                opt.textContent = `${s.nama} \u2014 ${s.isManualPrice ? 'Nominal Manual' : formatRp(s.harga)}`;
                 sel.append(opt);
             });
-            const optCust = document.createElement("option");
-            optCust.value = "Layanan Lainnya";
-            optCust.textContent = "Layanan Lainnya (Sesuai Permintaan)";
-            sel.append(optCust);
-
             $("bookTanggal").value = tanggalHariIni();
             $("bookTanggal").min = tanggalHariIni();
         }
@@ -2284,7 +2324,11 @@
             const catalog = getCombinedCatalog();
             const matched = catalog.find(i => i.nama.toLowerCase().includes(b.layanan.toLowerCase())) || defaultServices[0];
             if (matched) {
-                tambahKeKeranjang(matched);
+                if (matched.isManualPrice || matched.harga === 0) {
+                    bukaModalManualItem(matched.nama, matched.kategori, matched.tipePendapatan);
+                } else {
+                    tambahKeKeranjang(matched);
+                }
             }
             showToast(`Data ${b.nama} siap di kasir!`, "&#9889;");
         }
@@ -2303,16 +2347,17 @@
             e.preventDefault();
             const nama = $("prodNama").value.trim();
             const kategori = $("prodKategori").value;
-            const harga = Number($("prodHarga").value);
+            const harga = Number($("prodHarga").value) || 0;
 
-            if (!nama || harga < 1) return alert("Periksa nama produk dan harga jual!");
+            if (!nama) return alert("Periksa nama produk!");
 
-            showcase = [...showcase, { id: Date.now(), nama, kategori, harga, tipePendapatan: "produk" }];
+            const isManualPrice = (harga === 0);
+            showcase = [...showcase, { id: Date.now(), nama, kategori, harga, tipePendapatan: "produk", isManualPrice }];
             saveStorage(KEYS.showcase, showcase);
 
             $("formShowcase").reset();
             renderAll();
-            showToast(`Produk "${nama}" siap dijual di kasir!`, "&#10003;");
+            showToast(`Produk "${nama}" siap ditampilkan di kasir!`, "&#10003;");
         }
 
         function hapusShowcase(index) {
@@ -2451,7 +2496,7 @@
         function eksporDataJSON() {
             const payload = {
                 app: "asser",
-                version: "2.1",
+                version: "2.2",
                 exported_at: new Date().toISOString(),
                 transaksi,
                 pengeluaran,
@@ -2593,7 +2638,9 @@
             showcase.forEach((p, idx) => {
                 const tr = document.createElement("tr");
                 let hargaDisplay = formatRp(p.harga);
-                if (p.varianHarga && p.varianHarga.length > 0) {
+                if (p.isManualPrice || p.harga === 0) {
+                    hargaDisplay = '<span style="color: var(--secondary-text); font-style: italic;">Manual (Isi Sendiri)</span>';
+                } else if (p.varianHarga && p.varianHarga.length > 0) {
                     const min = Math.min(...p.varianHarga);
                     const max = Math.max(...p.varianHarga);
                     hargaDisplay = `${formatRp(min)} &ndash; ${formatRp(max)} (${p.varianHarga.length} Varian)`;
