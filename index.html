@@ -1,658 +1,702 @@
 <!DOCTYPE html>
-<html lang="id" class="dark">
+<html lang="id">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Portal Data FTTH G2A LN - Serang & Cilegon</title>
+  <title>XL SATU Fiber & Wireless | Sales Resmi Fikri (Serang, Cilegon & Se-Indonesia)</title>
+  <meta name="description" content="Layanan pendaftaran resmi XL SATU Fiber (FTTH) & Wireless (FWA) bersama Fikri. Cek jangkauan lokasi GPS Sherlock, pilih paket terbaik, dan pasang sekarang!">
   
-  <!-- Tailwind CSS CDN -->
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=Outfit:wght@600;800;900&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- GSAP & Canvas Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
   <script>
     tailwind.config = {
-      darkMode: 'class',
       theme: {
         extend: {
           colors: {
-            brand: {
-              50: '#f0f9ff',
-              100: '#e0f2fe',
-              500: '#0ea5e9',
-              600: '#0284c7',
-              700: '#0369a1',
-              900: '#0c4a6e',
-            },
-            darkbg: '#0b0f17',
-            darkcard: '#161e2e',
-            darkborder: '#232f48'
+            xlBlue: '#0052FF',
+            xlCyan: '#00F0FF',
+            xlDark: '#030712',
+            xlGlass: 'rgba(15, 23, 42, 0.75)',
+            xlNeonGreen: '#10B981',
+            xlMagenta: '#FF007A'
+          },
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+            heading: ['Outfit', 'sans-serif']
           }
         }
       }
     }
   </script>
 
-  <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@latest"></script>
-  
-  <!-- Chart.js CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  
-  <!-- SheetJS (xlsx) for reading Excel files -->
-  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.min.js"></script>
-
-  <!-- Leaflet CSS & JS for Interactive Map -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
   <style>
+    /* Custom 4D Depth & Glassmorphism Effects */
+    body {
+      background-color: #030712;
+      color: #F9FAFB;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      overflow-x: hidden;
+    }
+
+    .glass-card {
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    }
+
+    .glass-card-hover {
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .glass-card-hover:hover {
+      transform: translateY(-8px) rotateX(4deg) rotateY(-2deg) scale(1.02);
+      border-color: rgba(0, 240, 255, 0.5);
+      box-shadow: 0 25px 60px rgba(0, 240, 255, 0.2);
+    }
+
+    .neon-text-glow {
+      text-shadow: 0 0 20px rgba(0, 240, 255, 0.6);
+    }
+
+    .neon-border-pulse {
+      animation: pulseBorder 3s infinite alternate;
+    }
+
+    @keyframes pulseBorder {
+      0% { border-color: rgba(0, 82, 255, 0.4); box-shadow: 0 0 15px rgba(0, 82, 255, 0.2); }
+      50% { border-color: rgba(0, 240, 255, 0.8); box-shadow: 0 0 30px rgba(0, 240, 255, 0.4); }
+      100% { border-color: rgba(255, 0, 122, 0.6); box-shadow: 0 0 20px rgba(255, 0, 122, 0.3); }
+    }
+
+    /* Floating 4D Canvas */
+    #heroCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
     /* Custom Scrollbar */
     ::-webkit-scrollbar {
       width: 8px;
-      height: 8px;
     }
     ::-webkit-scrollbar-track {
-      background: #0b0f17;
+      background: #030712;
     }
     ::-webkit-scrollbar-thumb {
-      background: #232f48;
-      border-radius: 4px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: #0ea5e9;
-    }
-    
-    .glass-card {
-      background: rgba(22, 30, 46, 0.7);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    /* Custom Leaflet Dark Popup */
-    .leaflet-popup-content-wrapper, .leaflet-popup-tip {
-      background: #161e2e !important;
-      color: #e2e8f0 !important;
-      border: 1px solid #232f48;
-      border-radius: 8px;
+      background: #0052FF;
+      border-radius: 10px;
     }
   </style>
 </head>
-<body class="bg-darkbg text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-brand-500 selection:text-white">
+<body class="relative min-h-screen selection:bg-xlCyan selection:text-black">
 
-  <!-- Header / Navbar -->
-  <header class="sticky top-0 z-30 glass-card border-b border-darkborder/50 px-4 lg:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4">
-    <div class="flex items-center space-x-3">
-      <div class="p-2.5 bg-brand-500/10 text-brand-500 rounded-xl border border-brand-500/20">
-        <i data-lucide="network" class="w-6 h-6"></i>
+  <!-- Background 4D Interactive Canvas -->
+  <canvas id="heroCanvas"></canvas>
+
+  <!-- Sticky Navbar Header -->
+  <header class="sticky top-0 z-50 backdrop-blur-xl bg-xlDark/80 border-b border-white/10 px-4 lg:px-12 py-4 flex justify-between items-center">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-xlBlue to-xlCyan flex items-center justify-center font-heading font-black text-xl text-white shadow-lg shadow-xlBlue/50">
+        XL
       </div>
       <div>
-        <h1 class="text-lg font-bold tracking-tight text-white flex items-center gap-2">
-          G2A LN FTTH Portal
-          <span class="text-xs font-medium bg-brand-500/20 text-brand-500 px-2.5 py-0.5 rounded-full border border-brand-500/30">Serang & Cilegon</span>
-        </h1>
-        <p class="text-xs text-slate-400">Sistem Informasi Geografis & Manajemen Data Homepass</p>
+        <div class="font-heading font-extrabold text-xl tracking-wider text-white">XL <span class="text-xlCyan">SATU</span></div>
+        <div class="text-[10px] text-gray-400 -mt-1 tracking-widest uppercase">Fiber & Wireless Indonesia</div>
       </div>
     </div>
 
-    <!-- Action Buttons -->
+    <!-- Sales Tag Badge -->
     <div class="flex items-center gap-3">
-      <label class="cursor-pointer flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold px-3.5 py-2 rounded-lg border border-slate-700 transition">
-        <i data-lucide="upload" class="w-4 h-4 text-brand-500"></i>
-        <span>Upload Excel Baru</span>
-        <input type="file" id="excelFileInput" accept=".xlsx, .xls, .csv" class="hidden">
-      </label>
-      
-      <button id="btnExport" class="flex items-center gap-2 bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold px-3.5 py-2 rounded-lg transition shadow-lg shadow-brand-500/20">
-        <i data-lucide="download" class="w-4 h-4"></i>
-        <span>Export CSV</span>
-      </button>
+      <div class="hidden md:flex flex-col text-right">
+        <span class="text-xs font-semibold text-gray-300">Consultant Sales Executive</span>
+        <span class="text-sm font-bold text-xlCyan flex items-center gap-1 justify-end">
+          <i class="fa-solid fa-circle-check text-xlNeonGreen text-[10px]"></i> M. Khoirul Fikri
+        </span>
+      </div>
+      <a href="#coverage-section" class="bg-gradient-to-r from-xlBlue to-cyan-500 hover:from-blue-600 hover:to-cyan-400 text-white font-bold text-xs md:text-sm px-4 py-2.5 rounded-full shadow-lg shadow-xlBlue/40 transition-all hover:scale-105 flex items-center gap-2">
+        <i class="fa-solid fa-location-crosshairs text-xlCyan"></i>
+        <span>Cek Sherlock</span>
+      </a>
     </div>
   </header>
 
-  <!-- Main Content -->
-  <main class="flex-1 p-4 lg:p-8 max-w-[1600px] w-full mx-auto space-y-6">
-
-    <!-- Metrics Summary Cards -->
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-      <div class="glass-card p-4 rounded-xl">
-        <div class="flex justify-between items-start">
-          <span class="text-xs text-slate-400 font-medium">Total Homepass</span>
-          <i data-lucide="home" class="w-4 h-4 text-brand-500"></i>
-        </div>
-        <div class="mt-2 text-xl font-bold text-white" id="statTotal">0</div>
-        <span class="text-[10px] text-slate-500">Tercatat di sistem</span>
-      </div>
-
-      <div class="glass-card p-4 rounded-xl">
-        <div class="flex justify-between items-start">
-          <span class="text-xs text-slate-400 font-medium">Status Active</span>
-          <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400"></i>
-        </div>
-        <div class="mt-2 text-xl font-bold text-emerald-400" id="statActive">0</div>
-        <span class="text-[10px] text-emerald-500/70" id="pctActive">0% dari total</span>
-      </div>
-
-      <div class="glass-card p-4 rounded-xl">
-        <div class="flex justify-between items-start">
-          <span class="text-xs text-slate-400 font-medium">Status Assigned</span>
-          <i data-lucide="clock" class="w-4 h-4 text-sky-400"></i>
-        </div>
-        <div class="mt-2 text-xl font-bold text-sky-400" id="statAssigned">0</div>
-        <span class="text-[10px] text-sky-500/70" id="pctAssigned">0% dari total</span>
-      </div>
-
-      <div class="glass-card p-4 rounded-xl">
-        <div class="flex justify-between items-start">
-          <span class="text-xs text-slate-400 font-medium">Jumlah Project</span>
-          <i data-lucide="folder-git-2" class="w-4 h-4 text-purple-400"></i>
-        </div>
-        <div class="mt-2 text-xl font-bold text-purple-400" id="statProjects">0</div>
-        <span class="text-[10px] text-slate-500">Perumahan/Cluster</span>
-      </div>
-
-      <div class="glass-card p-4 rounded-xl">
-        <div class="flex justify-between items-start">
-          <span class="text-xs text-slate-400 font-medium">Perangkat FDT</span>
-          <i data-lucide="server" class="w-4 h-4 text-amber-400"></i>
-        </div>
-        <div class="mt-2 text-xl font-bold text-amber-400" id="statFDT">0</div>
-        <span class="text-[10px] text-slate-500">Titik distribusi FDT</span>
-      </div>
-
-      <div class="glass-card p-4 rounded-xl">
-        <div class="flex justify-between items-start">
-          <span class="text-xs text-slate-400 font-medium">Perangkat FAT</span>
-          <i data-lucide="box" class="w-4 h-4 text-rose-400"></i>
-        </div>
-        <div class="mt-2 text-xl font-bold text-rose-400" id="statFAT">0</div>
-        <span class="text-[10px] text-slate-500">Titik penyambung FAT</span>
-      </div>
-    </div>
-
-    <!-- Charts Section -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      <div class="glass-card p-5 rounded-xl lg:col-span-1">
-        <h2 class="text-sm font-semibold text-slate-200 mb-4 flex items-center gap-2">
-          <i data-lucide="pie-chart" class="w-4 h-4 text-brand-500"></i>
-          Distribusi Status Homepass
-        </h2>
-        <div class="h-56 relative flex items-center justify-center">
-          <canvas id="statusChart"></canvas>
-        </div>
-      </div>
-
-      <div class="glass-card p-5 rounded-xl lg:col-span-2">
-        <h2 class="text-sm font-semibold text-slate-200 mb-4 flex items-center gap-2">
-          <i data-lucide="bar-chart-3" class="w-4 h-4 text-brand-500"></i>
-          Sebaran Wilayah (Serang vs Cilegon)
-        </h2>
-        <div class="h-56 relative">
-          <canvas id="cityChart"></canvas>
-        </div>
-      </div>
-    </div>
-
-    <!-- Table & Filtering Area -->
-    <div class="glass-card rounded-xl p-5 space-y-4">
+  <!-- Hero Banner Section -->
+  <section class="relative z-10 pt-10 pb-16 px-4 md:px-12 max-w-7xl mx-auto">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
       
-      <!-- Filter Controls -->
-      <div class="flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
-        
-        <!-- Search Bar -->
-        <div class="relative flex-1">
-          <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
-          <input type="text" id="searchInput" placeholder="Cari ID, Perumahan, Jalan, FDT, FAT, atau Alamat..." class="w-full bg-slate-900/80 border border-darkborder text-slate-200 text-xs rounded-lg pl-10 pr-4 py-2.5 focus:outline-none focus:border-brand-500 transition">
+      <!-- Left Column: Copywriting & Sales Profile -->
+      <div class="lg:col-span-7 space-y-6">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs text-xlCyan font-semibold">
+          <span class="w-2 h-2 rounded-full bg-xlNeonGreen animate-ping"></span>
+          Layanan Pendaftaran Resmi Serang, Cilegon & Seluruh Indonesia
         </div>
 
-        <!-- Dropdown Filters -->
-        <div class="flex flex-wrap items-center gap-2">
-          <select id="cityFilter" class="bg-slate-900/80 border border-darkborder text-slate-200 text-xs rounded-lg px-3 py-2.5 focus:outline-none focus:border-brand-500">
-            <option value="">Semua Kota</option>
-            <option value="KOTA SERANG">Kota Serang</option>
-            <option value="KOTA CILEGON">Kota Cilegon</option>
-          </select>
+        <h1 class="font-heading text-4xl sm:text-5xl lg:text-6xl font-black leading-tight">
+          Internet Rumah <br>
+          <span class="bg-gradient-to-r from-xlCyan via-blue-400 to-xlMagenta bg-clip-text text-transparent neon-text-glow">
+            Super Cepat & Stabil
+          </span>
+        </h1>
 
-          <select id="statusFilter" class="bg-slate-900/80 border border-darkborder text-slate-200 text-xs rounded-lg px-3 py-2.5 focus:outline-none focus:border-brand-500">
-            <option value="">Semua Status</option>
-            <option value="ASSIGNED">ASSIGNED</option>
-            <option value="ACTIVE">ACTIVE</option>
-            <option value="NOT_AVAILABLE">NOT AVAILABLE</option>
-            <option value="AGING">AGING</option>
-            <option value="RESERVED">RESERVED</option>
-          </select>
+        <p class="text-gray-300 text-base sm:text-lg leading-relaxed max-w-2xl">
+          Nikmati koneksi 100% Fiber Optic murni dan FWA Wireless fleksibel dari <strong class="text-white">XL SATU</strong>. Bebas FUP, gratis biaya pasang, dan siap diantar langsung ke rumah Anda!
+        </p>
 
-          <button id="btnResetFilter" class="p-2.5 text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg border border-slate-700 transition" title="Reset Filter">
-            <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
-          </button>
-        </div>
-      </div>
-
-      <!-- Data Table -->
-      <div class="overflow-x-auto rounded-lg border border-darkborder">
-        <table class="w-full text-left text-xs text-slate-300">
-          <thead class="bg-slate-900/90 text-slate-400 font-medium uppercase tracking-wider border-b border-darkborder">
-            <tr>
-              <th class="px-4 py-3">ID Homepass</th>
-              <th class="px-4 py-3">Kota</th>
-              <th class="px-4 py-3">Perumahan / Project</th>
-              <th class="px-4 py-3">FDT Code</th>
-              <th class="px-4 py-3">FAT Code</th>
-              <th class="px-4 py-3">Alamat / No. Rumah</th>
-              <th class="px-4 py-3 text-center">Status</th>
-              <th class="px-4 py-3 text-center">Aksi</th>
-            </tr>
-          </thead>
-          <tbody id="tableBody" class="divide-y divide-darkborder/50">
-            <!-- Dynamic Rows Generated via JS -->
-          </tbody>
-        </table>
-      </div>
-
-      <!-- Table Footer / Pagination -->
-      <div class="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-400 pt-2">
-        <div id="paginationInfo">Menampilkan 0 data</div>
-        <div class="flex items-center gap-2">
-          <button id="btnPrev" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed rounded border border-slate-700 transition">Sebelumnya</button>
-          <span id="pageIndicator" class="font-medium text-slate-200">Halaman 1 dari 1</span>
-          <button id="btnNext" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed rounded border border-slate-700 transition">Selanjutnya</button>
-        </div>
-      </div>
-
-    </div>
-  </main>
-
-  <!-- Modal Detail Item -->
-  <div id="detailModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm hidden p-4">
-    <div class="glass-card bg-darkcard w-full max-w-2xl rounded-2xl p-6 border border-darkborder space-y-4 max-h-[90vh] overflow-y-auto">
-      <div class="flex items-center justify-between border-b border-darkborder pb-3">
-        <h3 class="text-base font-bold text-white flex items-center gap-2">
-          <i data-lucide="info" class="w-5 h-5 text-brand-500"></i>
-          Detail Informasi Homepass
-        </h3>
-        <button id="btnCloseModal" class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition">
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
-      </div>
-      <div id="modalContent" class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-        <!-- Content inserted dynamically -->
-      </div>
-      <div class="border-t border-darkborder pt-3 flex justify-end">
-        <button id="btnCloseModalBottom" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-xs font-semibold">Tutup</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal Peta Interaktif -->
-  <div id="mapModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md hidden p-4">
-    <div class="glass-card bg-darkcard w-full max-w-5xl rounded-2xl border border-darkborder flex flex-col h-[85vh] overflow-hidden">
-      <div class="flex items-center justify-between px-6 py-4 border-b border-darkborder bg-slate-900/50">
-        <div>
-          <h3 class="text-base font-bold text-white flex items-center gap-2">
-            <i data-lucide="map-pin" class="w-5 h-5 text-brand-500"></i>
-            Topologi & Peta Lokasi FTTH
-          </h3>
-          <p id="mapModalSubtitle" class="text-xs text-slate-400">Menampilkan jalur topologi FDT -> FAT -> House</p>
-        </div>
-        <button id="btnCloseMapModal" class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition">
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
-      </div>
-      <div class="flex-1 relative">
-        <div id="leafletMap" class="w-full h-full"></div>
-      </div>
-      <div class="p-3 bg-slate-900/80 border-t border-darkborder flex items-center justify-between text-xs text-slate-400 px-6">
-        <div class="flex items-center gap-4">
-          <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-cyan-400 inline-block"></span> FDT</span>
-          <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-blue-500 inline-block"></span> FAT</span>
-          <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-emerald-400 inline-block"></span> Building/Rumah</span>
-        </div>
-        <div id="mapCoordinates" class="text-slate-400 font-mono"></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- JavaScript Logic -->
-  <script>
-    // State Application Data
-    let fullData = [];
-    let filteredData = [];
-    let currentPage = 1;
-    const pageSize = 15;
-
-    let statusChartInstance = null;
-    let cityChartInstance = null;
-    let leafletMapInstance = null;
-
-    // Default Sample Data (Fallback untuk preview)
-    const sampleData = [
-      { ID: 2515970, CITY: 'KOTA SERANG', PROJECT_NAME: 'PERUM TAMAN PURI INDAH (3)', FDT_CODE: 'FCS027', FAT_CODE: 'FCS027S01A02', STREET_NAME: 'TAMAN PURI INDAH', HOUSE_NUMBER: '28', HOMEPASS_STATUS: 'ASSIGNED', BUILDING_LATITUDE: -6.130093, BUILDING_LONGITUDE: 106.138740, FAT_LATITUDE: -6.129311, FAT_LONGITUDE: 106.138775, FDT_LATITUDE: -6.128668, FDT_LONGITUDE: 106.138173, FULL_ADDRESS: 'PERUM TAMAN PURI INDAH - NO. 28 - KOTA SERANG' },
-      { ID: 2515969, CITY: 'KOTA SERANG', PROJECT_NAME: 'PERUM TAMAN PURI INDAH (3)', FDT_CODE: 'FCS027', FAT_CODE: 'FCS027S01A02', STREET_NAME: 'TAMAN PURI INDAH', HOUSE_NUMBER: '27', HOMEPASS_STATUS: 'ASSIGNED', BUILDING_LATITUDE: -6.130150, BUILDING_LONGITUDE: 106.138728, FAT_LATITUDE: -6.129311, FAT_LONGITUDE: 106.138775, FDT_LATITUDE: -6.128668, FDT_LONGITUDE: 106.138173, FULL_ADDRESS: 'PERUM TAMAN PURI INDAH - NO. 27 - KOTA SERANG' },
-      { ID: 2515968, CITY: 'KOTA SERANG', PROJECT_NAME: 'PERUM TAMAN PURI INDAH (3)', FDT_CODE: 'FCS027', FAT_CODE: 'FCS027S01A02', STREET_NAME: 'TAMAN PURI INDAH', HOUSE_NUMBER: '12', HOMEPASS_STATUS: 'ACTIVE', BUILDING_LATITUDE: -6.129957, BUILDING_LONGITUDE: 106.138557, FAT_LATITUDE: -6.129311, FAT_LONGITUDE: 106.138775, FDT_LATITUDE: -6.128668, FDT_LONGITUDE: 106.138173, FULL_ADDRESS: 'PERUM TAMAN PURI INDAH - NO. 12 - KOTA SERANG' },
-      { ID: 2515967, CITY: 'KOTA CILEGON', PROJECT_NAME: 'TAMAN CILEGON INDAH (1)', FDT_CODE: 'FAC006', FAT_CODE: 'FAC006S02B01', STREET_NAME: 'JL. MELATI', HOUSE_NUMBER: '05', HOMEPASS_STATUS: 'ACTIVE', BUILDING_LATITUDE: -6.021100, BUILDING_LONGITUDE: 106.052200, FAT_LATITUDE: -6.020500, FAT_LONGITUDE: 106.051800, FDT_LATITUDE: -6.019800, FDT_LONGITUDE: 106.051000, FULL_ADDRESS: 'TAMAN CILEGON INDAH - NO. 05 - KOTA CILEGON' },
-      { ID: 2515966, CITY: 'KOTA CILEGON', PROJECT_NAME: 'TAMAN CILEGON INDAH (1)', FDT_CODE: 'FAC006', FAT_CODE: 'FAC006S02B01', STREET_NAME: 'JL. MELATI', HOUSE_NUMBER: '08', HOMEPASS_STATUS: 'NOT_AVAILABLE', BUILDING_LATITUDE: -6.021250, BUILDING_LONGITUDE: 106.052350, FAT_LATITUDE: -6.020500, FAT_LONGITUDE: 106.051800, FDT_LATITUDE: -6.019800, FDT_LONGITUDE: 106.051000, FULL_ADDRESS: 'TAMAN CILEGON INDAH - NO. 08 - KOTA CILEGON' }
-    ];
-
-    document.addEventListener('DOMContentLoaded', () => {
-      lucide.createIcons();
-      initApp(sampleData);
-
-      // Event Listeners Filter & Search
-      document.getElementById('searchInput').addEventListener('input', applyFilters);
-      document.getElementById('cityFilter').addEventListener('change', applyFilters);
-      document.getElementById('statusFilter').addEventListener('change', applyFilters);
-      document.getElementById('btnResetFilter').addEventListener('click', resetFilters);
-
-      // Excel Upload Handler
-      document.getElementById('excelFileInput').addEventListener('change', handleFileUpload);
-      document.getElementById('btnExport').addEventListener('click', exportToCSV);
-
-      // Pagination Handlers
-      document.getElementById('btnPrev').addEventListener('click', () => {
-        if (currentPage > 1) { currentPage--; renderTable(); }
-      });
-      document.getElementById('btnNext').addEventListener('click', () => {
-        if (currentPage * pageSize < filteredData.length) { currentPage++; renderTable(); }
-      });
-
-      // Modal Handlers
-      document.getElementById('btnCloseModal').addEventListener('click', () => closeModal('detailModal'));
-      document.getElementById('btnCloseModalBottom').addEventListener('click', () => closeModal('detailModal'));
-      document.getElementById('btnCloseMapModal').addEventListener('click', () => closeModal('mapModal'));
-    });
-
-    function initApp(data) {
-      fullData = data;
-      filteredData = [...fullData];
-      currentPage = 1;
-      
-      updateMetrics();
-      renderCharts();
-      renderTable();
-    }
-
-    function updateMetrics() {
-      const total = fullData.length;
-      const active = fullData.filter(d => d.HOMEPASS_STATUS === 'ACTIVE').length;
-      const assigned = fullData.filter(d => d.HOMEPASS_STATUS === 'ASSIGNED').length;
-      
-      const projects = new Set(fullData.map(d => d.PROJECT_NAME)).size;
-      const fdt = new Set(fullData.map(d => d.FDT_CODE)).size;
-      const fat = new Set(fullData.map(d => d.FAT_CODE)).size;
-
-      document.getElementById('statTotal').innerText = total.toLocaleString();
-      document.getElementById('statActive').innerText = active.toLocaleString();
-      document.getElementById('statAssigned').innerText = assigned.toLocaleString();
-      document.getElementById('statProjects').innerText = projects.toLocaleString();
-      document.getElementById('statFDT').innerText = fdt.toLocaleString();
-      document.getElementById('statFAT').innerText = fat.toLocaleString();
-
-      document.getElementById('pctActive').innerText = total ? `${((active/total)*100).toFixed(1)}% dari total` : '0%';
-      document.getElementById('pctAssigned').innerText = total ? `${((assigned/total)*100).toFixed(1)}% dari total` : '0%';
-    }
-
-    function renderCharts() {
-      // Status Distribution Chart
-      const statusCounts = {};
-      fullData.forEach(d => {
-        const s = d.HOMEPASS_STATUS || 'UNKNOWN';
-        statusCounts[s] = (statusCounts[s] || 0) + 1;
-      });
-
-      if (statusChartInstance) statusChartInstance.destroy();
-      const ctxStatus = document.getElementById('statusChart').getContext('2d');
-      statusChartInstance = new Chart(ctxStatus, {
-        type: 'doughnut',
-        data: {
-          labels: Object.keys(statusCounts),
-          datasets: [{
-            data: Object.values(statusCounts),
-            backgroundColor: ['#38bdf8', '#34d399', '#f87171', '#fbbf24', '#c084fc'],
-            borderWidth: 0
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { position: 'bottom', labels: { color: '#94a3b8', font: { size: 10 } } }
-          }
-        }
-      });
-
-      // City Distribution Chart
-      const cityCounts = {};
-      fullData.forEach(d => {
-        const c = d.CITY || 'LAINNYA';
-        cityCounts[c] = (cityCounts[c] || 0) + 1;
-      });
-
-      if (cityChartInstance) cityChartInstance.destroy();
-      const ctxCity = document.getElementById('cityChart').getContext('2d');
-      cityChartInstance = new Chart(ctxCity, {
-        type: 'bar',
-        data: {
-          labels: Object.keys(cityCounts),
-          datasets: [{
-            label: 'Jumlah Homepass',
-            data: Object.values(cityCounts),
-            backgroundColor: '#0ea5e9',
-            borderRadius: 6
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            x: { ticks: { color: '#94a3b8' }, grid: { display: false } },
-            y: { ticks: { color: '#94a3b8' }, grid: { color: '#232f48' } }
-          },
-          plugins: {
-            legend: { display: false }
-          }
-        }
-      });
-    }
-
-    function applyFilters() {
-      const search = document.getElementById('searchInput').value.toLowerCase();
-      const city = document.getElementById('cityFilter').value;
-      const status = document.getElementById('statusFilter').value;
-
-      filteredData = fullData.filter(item => {
-        const matchSearch = !search || 
-          (item.ID && String(item.ID).toLowerCase().includes(search)) ||
-          (item.PROJECT_NAME && item.PROJECT_NAME.toLowerCase().includes(search)) ||
-          (item.FDT_CODE && item.FDT_CODE.toLowerCase().includes(search)) ||
-          (item.FAT_CODE && item.FAT_CODE.toLowerCase().includes(search)) ||
-          (item.FULL_ADDRESS && item.FULL_ADDRESS.toLowerCase().includes(search));
-
-        const matchCity = !city || item.CITY === city;
-        const matchStatus = !status || item.HOMEPASS_STATUS === status;
-
-        return matchSearch && matchCity && matchStatus;
-      });
-
-      currentPage = 1;
-      renderTable();
-    }
-
-    function resetFilters() {
-      document.getElementById('searchInput').value = '';
-      document.getElementById('cityFilter').value = '';
-      document.getElementById('statusFilter').value = '';
-      applyFilters();
-    }
-
-    function renderTable() {
-      const tbody = document.getElementById('tableBody');
-      tbody.innerHTML = '';
-
-      const start = (currentPage - 1) * pageSize;
-      const end = start + pageSize;
-      const pageData = filteredData.slice(start, end);
-
-      if (pageData.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="8" class="text-center py-8 text-slate-500">Data tidak ditemukan.</td></tr>`;
-      } else {
-        pageData.forEach(item => {
-          const tr = document.createElement('tr');
-          tr.className = 'hover:bg-slate-800/50 transition';
-
-          let statusBadge = 'bg-slate-700 text-slate-300';
-          if (item.HOMEPASS_STATUS === 'ACTIVE') statusBadge = 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20';
-          else if (item.HOMEPASS_STATUS === 'ASSIGNED') statusBadge = 'bg-sky-500/10 text-sky-400 border border-sky-500/20';
-          else if (item.HOMEPASS_STATUS === 'NOT_AVAILABLE') statusBadge = 'bg-rose-500/10 text-rose-400 border border-rose-500/20';
-
-          tr.innerHTML = `
-            <td class="px-4 py-3 font-mono text-brand-500 font-semibold">${item.ID || '-'}</td>
-            <td class="px-4 py-3">${item.CITY || '-'}</td>
-            <td class="px-4 py-3 font-medium text-slate-200">${item.PROJECT_NAME || '-'}</td>
-            <td class="px-4 py-3 font-mono text-slate-400">${item.FDT_CODE || '-'}</td>
-            <td class="px-4 py-3 font-mono text-slate-400">${item.FAT_CODE || '-'}</td>
-            <td class="px-4 py-3 text-slate-400 truncate max-w-xs">${item.FULL_ADDRESS || `${item.STREET_NAME || ''} No. ${item.HOUSE_NUMBER || ''}`}</td>
-            <td class="px-4 py-3 text-center">
-              <span class="px-2 py-0.5 text-[10px] rounded-full font-semibold ${statusBadge}">${item.HOMEPASS_STATUS || 'N/A'}</span>
-            </td>
-            <td class="px-4 py-3 text-center">
-              <div class="flex items-center justify-center gap-1.5">
-                <button onclick="openMapModal('${item.ID}')" class="p-1.5 bg-brand-500/10 hover:bg-brand-500/20 text-brand-400 rounded-lg transition" title="Lihat Peta Topologi">
-                  <i data-lucide="map-pin" class="w-4 h-4"></i>
-                </button>
-                <button onclick="openDetailModal('${item.ID}')" class="p-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg transition" title="Detail Informasi">
-                  <i data-lucide="eye" class="w-4 h-4"></i>
-                </button>
+        <!-- Sales Card Profile (Fikri) -->
+        <div class="glass-card rounded-2xl p-5 border border-white/15 neon-border-pulse flex flex-col sm:flex-row items-center gap-4">
+          <div class="relative">
+            <div class="w-16 h-16 rounded-full bg-gradient-to-br from-xlCyan to-xlBlue p-1 shadow-lg shadow-xlBlue/50">
+              <div class="w-full h-full rounded-full bg-slate-900 flex items-center justify-center font-heading text-2xl font-black text-xlCyan">
+                F
               </div>
-            </td>
-          `;
-          tbody.appendChild(tr);
-        });
-      }
-
-      lucide.createIcons();
-
-      // Update Pagination UI
-      const totalPages = Math.ceil(filteredData.length / pageSize) || 1;
-      document.getElementById('paginationInfo').innerText = `Menampilkan ${filteredData.length ? start + 1 : 0} - ${Math.min(end, filteredData.length)} dari ${filteredData.length} data`;
-      document.getElementById('pageIndicator').innerText = `Halaman ${currentPage} dari ${totalPages}`;
-      document.getElementById('btnPrev').disabled = currentPage === 1;
-      document.getElementById('btnNext').disabled = currentPage >= totalPages;
-    }
-
-    function openDetailModal(id) {
-      const item = fullData.find(d => String(d.ID) === String(id));
-      if (!item) return;
-
-      const container = document.getElementById('modalContent');
-      container.innerHTML = Object.entries(item).map(([key, val]) => `
-        <div class="bg-slate-900/60 p-2.5 rounded-lg border border-darkborder/60">
-          <span class="text-[10px] text-slate-500 block uppercase font-mono">${key}</span>
-          <span class="text-xs text-slate-200 font-medium break-all">${val !== null && val !== undefined ? val : '-'}</span>
-        </div>
-      `).join('');
-
-      document.getElementById('detailModal').classList.remove('hidden');
-    }
-
-    function openMapModal(id) {
-      const item = fullData.find(d => String(d.ID) === String(id));
-      if (!item) return;
-
-      document.getElementById('mapModalSubtitle').innerText = `${item.PROJECT_NAME || 'Project'} - Homepass ID: ${item.ID}`;
-      document.getElementById('mapModal').classList.remove('hidden');
-
-      const bLat = parseFloat(item.BUILDING_LATITUDE) || -6.13;
-      const bLng = parseFloat(item.BUILDING_LONGITUDE) || 106.13;
-      const fatLat = parseFloat(item.FAT_LATITUDE) || bLat + 0.0005;
-      const fatLng = parseFloat(item.FAT_LONGITUDE) || bLng + 0.0005;
-      const fdtLat = parseFloat(item.FDT_LATITUDE) || fatLat + 0.001;
-      const fdtLng = parseFloat(item.FDT_LONGITUDE) || fatLng + 0.001;
-
-      document.getElementById('mapCoordinates').innerText = `Building: ${bLat.toFixed(6)}, ${bLng.toFixed(6)}`;
-
-      setTimeout(() => {
-        if (leafletMapInstance) {
-          leafletMapInstance.remove();
-        }
-
-        leafletMapInstance = L.map('leafletMap').setView([bLat, bLng], 17);
-
-        // Dark Map Tiles
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-          maxZoom: 19,
-          attribution: '&copy; OpenStreetMap &copy; CARTO'
-        }).addTo(leafletMapInstance);
-
-        // Custom Icons
-        const fdtIcon = L.divIcon({ className: 'custom-icon', html: `<div class="w-4 h-4 bg-cyan-400 rounded-full border-2 border-white shadow-lg shadow-cyan-500/50"></div>` });
-        const fatIcon = L.divIcon({ className: 'custom-icon', html: `<div class="w-3.5 h-3.5 bg-blue-500 rounded-full border-2 border-white shadow-lg shadow-blue-500/50"></div>` });
-        const homeIcon = L.divIcon({ className: 'custom-icon', html: `<div class="w-3 h-3 bg-emerald-400 rounded-full border-2 border-white shadow-lg shadow-emerald-500/50"></div>` });
-
-        // Markers & Popups
-        L.marker([fdtLat, fdtLng], { icon: fdtIcon }).addTo(leafletMapInstance)
-          .bindPopup(`<b>FDT Code:</b> ${item.FDT_CODE || 'N/A'}`);
-
-        L.marker([fatLat, fatLng], { icon: fatIcon }).addTo(leafletMapInstance)
-          .bindPopup(`<b>FAT Code:</b> ${item.FAT_CODE || 'N/A'}`);
-
-        const googleMapsUrl = `https://www.google.com/maps?q=${bLat},${bLng}`;
-        L.marker([bLat, bLng], { icon: homeIcon }).addTo(leafletMapInstance)
-          .bindPopup(`
-            <div class="text-xs">
-              <p class="font-bold text-emerald-400 mb-1">Homepass ID: ${item.ID}</p>
-              <p class="text-slate-300 mb-2">${item.FULL_ADDRESS || ''}</p>
-              <a href="${googleMapsUrl}" target="_blank" class="inline-flex items-center gap-1 text-[11px] bg-brand-600 text-white px-2.5 py-1 rounded">
-                Buka di Google Maps
-              </a>
             </div>
-          `).openPopup();
+            <span class="absolute bottom-0 right-0 w-4 h-4 bg-xlNeonGreen border-2 border-slate-900 rounded-full"></span>
+          </div>
+          
+          <div class="text-center sm:text-left flex-1">
+            <div class="flex items-center justify-center sm:justify-start gap-2">
+              <h3 class="font-heading font-extrabold text-lg text-white">Fikri (M. Khoirul Fikri)</h3>
+              <span class="bg-xlBlue/30 text-xlCyan text-[10px] px-2 py-0.5 rounded font-bold uppercase">Official Sales</span>
+            </div>
+            <p class="text-xs text-gray-400 mt-0.5">Spesialis Pemasangan & Konsultasi XL SATU Serang, Cilegon & Nasional</p>
+            
+            <!-- Guaranteed Service Badges -->
+            <div class="flex flex-wrap items-center justify-center sm:justify-start gap-2 mt-2">
+              <span class="text-[11px] bg-white/5 border border-white/10 text-gray-300 px-2 py-0.5 rounded-md flex items-center gap-1">
+                <i class="fa-solid fa-bolt text-yellow-400"></i> Respon Cepat
+              </span>
+              <span class="text-[11px] bg-white/5 border border-white/10 text-gray-300 px-2 py-0.5 rounded-md flex items-center gap-1">
+                <i class="fa-solid fa-headset text-xlCyan"></i> Kawal Sampai Aktif
+              </span>
+              <span class="text-[11px] bg-white/5 border border-white/10 text-gray-300 px-2 py-0.5 rounded-md flex items-center gap-1">
+                <i class="fa-solid fa-gift text-xlMagenta"></i> Gratis Instalasi
+              </span>
+            </div>
+          </div>
 
-        // Topology Lines (Polyline)
-        const polyline = L.polyline([
-          [fdtLat, fdtLng],
-          [fatLat, fatLng],
-          [bLat, bLng]
-        ], { color: '#0ea5e9', weight: 3, opacity: 0.8, dashArray: '6, 6' }).addTo(leafletMapInstance);
+          <a href="https://wa.me/6285124377565?text=Halo%20Mas%20Fikri,%20saya%20mau%20konsultasi%20pasang%20XL%20SATU" target="_blank" class="w-full sm:w-auto bg-xlNeonGreen hover:bg-emerald-600 text-black font-extrabold px-5 py-3 rounded-xl shadow-lg shadow-emerald-500/30 transition text-center flex items-center justify-center gap-2">
+            <i class="fa-brands fa-whatsapp text-lg"></i>
+            <span>Chat Fikri</span>
+          </a>
+        </div>
 
-      }, 200);
+      </div>
+
+      <!-- Right Column: Interactive 4D Floating Router & Quick Highlights -->
+      <div class="lg:col-span-5 relative">
+        <div class="glass-card rounded-3xl p-6 text-center relative overflow-hidden group">
+          <div class="absolute -top-24 -right-24 w-48 h-48 bg-xlCyan/20 rounded-full blur-3xl group-hover:bg-xlCyan/40 transition-all"></div>
+          
+          <div class="text-xs font-bold uppercase tracking-widest text-xlCyan mb-2">Modem Router Canggih</div>
+          <h2 class="font-heading font-black text-2xl text-white">Satu Rumah, Semua Terhubung</h2>
+
+          <!-- Simulated 4D Animated Router Display -->
+          <div class="relative my-8 py-6 flex items-center justify-center">
+            <div class="w-48 h-48 rounded-full bg-gradient-to-tr from-xlBlue/30 via-xlCyan/20 to-transparent animate-spin-slow flex items-center justify-center border border-white/10"></div>
+            <div class="absolute inset-0 flex flex-col items-center justify-center z-10">
+              <i class="fa-solid fa-wifi text-6xl text-xlCyan drop-shadow-[0_0_25px_rgba(0,240,255,0.8)] animate-bounce"></i>
+              <div class="mt-3 bg-slate-900/90 border border-xlCyan/40 px-3 py-1 rounded-full text-xs font-mono text-xlCyan shadow-lg">
+                Wi-Fi 6 Dual Band Ready
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-3 gap-2 pt-2 border-t border-white/10 text-center">
+            <div>
+              <div class="font-black text-xl text-white">100%</div>
+              <div class="text-[10px] text-gray-400">Fiber Optic / FWA</div>
+            </div>
+            <div>
+              <div class="font-black text-xl text-xlNeonGreen">FREE</div>
+              <div class="text-[10px] text-gray-400">Biaya Pasang</div>
+            </div>
+            <div>
+              <div class="font-black text-xl text-xlCyan">UNLIMITED</div>
+              <div class="text-[10px] text-gray-400">Tanpa Batas Kuota</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Interactive Sherlock & All-Indonesia Coverage Section -->
+  <section id="coverage-section" class="relative z-10 py-12 px-4 md:px-12 max-w-7xl mx-auto">
+    <div class="text-center max-w-3xl mx-auto mb-10">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-xlBlue/20 text-xlCyan text-xs font-bold mb-3 border border-xlBlue/40">
+        <i class="fa-solid fa-map-location-dot"></i> Peta & Cek Lokasi Sherlock Precision
+      </div>
+      <h2 class="font-heading font-black text-3xl sm:text-4xl text-white">
+        Cek Coverage Area <span class="text-xlCyan">Seluruh Indonesia</span>
+      </h2>
+      <p class="text-gray-300 text-sm sm:text-base mt-2">
+        Kirimkan titik Sherlock GPS valid dari tempat tinggal Anda atau masukkan alamat lengkap untuk verifikasi ketersediaan tiang jaringan/sinyal bersama Fikri.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      
+      <!-- Sherlock GPS Live Detector Card -->
+      <div class="lg:col-span-6 glass-card rounded-3xl p-6 sm:p-8 relative">
+        <div class="flex items-center gap-3 mb-6">
+          <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-xlBlue to-blue-700 flex items-center justify-center text-xlCyan text-xl shadow-lg shadow-xlBlue/40">
+            <i class="fa-solid fa-location-crosshairs"></i>
+          </div>
+          <div>
+            <h3 class="font-heading font-bold text-xl text-white">Deteksi Sherlock GPS Akurat</h3>
+            <p class="text-xs text-gray-400">Ambil koordinat akurat titik rumah untuk hasil survey valid</p>
+          </div>
+        </div>
+
+        <div class="space-y-4">
+          <button id="btnGetGps" onclick="getLocation()" class="w-full bg-gradient-to-r from-xlBlue via-blue-600 to-cyan-500 hover:from-blue-600 hover:to-cyan-400 text-white font-extrabold py-4 px-6 rounded-2xl shadow-xl shadow-xlBlue/30 transition-all flex items-center justify-center gap-3 text-sm sm:text-base">
+            <i class="fa-solid fa-crosshairs text-lg animate-pulse"></i>
+            <span>Gunakan Lokasi Presisi Saat Ini (Sherlock GPS)</span>
+          </button>
+
+          <!-- Display Box Coordinates -->
+          <div id="gpsStatusBox" class="hidden bg-slate-950/80 border border-white/10 rounded-2xl p-4 text-xs font-mono space-y-2">
+            <div class="flex justify-between items-center text-gray-400 border-b border-white/10 pb-2">
+              <span>Status GPS:</span>
+              <span id="gpsStatusText" class="text-xlNeonGreen font-bold">Terdeteksi Valid</span>
+            </div>
+            <div class="text-gray-300"><strong>Latitude:</strong> <span id="latVal" class="text-xlCyan">-</span></div>
+            <div class="text-gray-300"><strong>Longitude:</strong> <span id="lngVal" class="text-xlCyan">-</span></div>
+            <div class="text-gray-300"><strong>Link Maps:</strong> <a id="mapsUrl" href="#" target="_blank" class="text-blue-400 underline truncate block">Google Maps Link</a></div>
+          </div>
+
+          <p class="text-[11px] text-gray-400 text-center">
+            <i class="fa-solid fa-shield-halved text-xlCyan"></i> Koordinat Anda hanya digunakan untuk mengecek tiang ODP / jaringan terdekat.
+          </p>
+        </div>
+      </div>
+
+      <!-- Manual All-Indonesia Address Input Form -->
+      <div class="lg:col-span-6 glass-card rounded-3xl p-6 sm:p-8">
+        <div class="flex items-center gap-3 mb-6">
+          <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-xlMagenta to-pink-700 flex items-center justify-center text-white text-xl shadow-lg shadow-xlMagenta/40">
+            <i class="fa-solid fa-house-signal"></i>
+          </div>
+          <div>
+            <h3 class="font-heading font-bold text-xl text-white">Formulir Alamat Se-Indonesia</h3>
+            <p class="text-xs text-gray-400">Untuk area Serang, Cilegon, Banten, Jawa, Sumatra & seluruh wilayah RI</p>
+          </div>
+        </div>
+
+        <form id="addressForm" class="space-y-4" onsubmit="submitCoverageForm(event)">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-semibold text-gray-300 mb-1">Provinsi</label>
+              <input type="text" id="provinsi" placeholder="Cth: Banten / Jawa Barat" required class="w-full bg-slate-900/90 border border-white/15 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-xlCyan">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-gray-300 mb-1">Kota / Kabupaten</label>
+              <input type="text" id="kota" placeholder="Cth: Kota Serang / Cilegon" required class="w-full bg-slate-900/90 border border-white/15 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-xlCyan">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-semibold text-gray-300 mb-1">Kecamatan</label>
+              <input type="text" id="kecamatan" placeholder="Cth: Cipocok Jaya / Purwakarta" required class="w-full bg-slate-900/90 border border-white/15 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-xlCyan">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-gray-300 mb-1">Kelurahan / Desa</label>
+              <input type="text" id="kelurahan" placeholder="Cth: Banjaragung / Kebondalem" required class="w-full bg-slate-900/90 border border-white/15 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-xlCyan">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-gray-300 mb-1">Nama Perumahan / Cluster / Blok / No. Rumah</label>
+            <input type="text" id="detailAlamat" placeholder="Cth: Signature Garden Cluster B3 No 12" required class="w-full bg-slate-900/90 border border-white/15 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-xlCyan">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-gray-300 mb-1">Pilihan Jenis Paket</label>
+            <select id="pilihanPaketForm" class="w-full bg-slate-900/90 border border-white/15 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-xlCyan">
+              <optgroup label="FTTH (Fiber Optic Murni)">
+                <option value="FTTH 250 Mbps (Rp 229.000/bln)">FTTH 250 Mbps - Rp 229.000 / bln</option>
+                <option value="FTTH 300 Mbps (Rp 239.000/bln)" selected>FTTH 300 Mbps - Rp 239.000 / bln (Terlaris 🔥)</option>
+                <option value="FTTH 400 Mbps (Rp 300.000/bln)">FTTH 400 Mbps - Rp 300.000 / bln</option>
+              </optgroup>
+              <optgroup label="FWA (Wireless Tanpa Kabel)">
+                <option value="FWA 50 Mbps (Rp 650.000/4bln)">FWA 50 Mbps - Rp 650.000 / 4 Bulan</option>
+                <option value="FWA 100 Mbps (Rp 790.000/4bln)">FWA 100 Mbps - Rp 790.000 / 4 Bulan</option>
+                <option value="FWA 100 Mbps (Rp 219.000/bln)">FWA 100 Mbps - Rp 219.000 / Bulan</option>
+              </optgroup>
+            </select>
+          </div>
+
+          <button type="submit" class="w-full bg-xlNeonGreen hover:bg-emerald-600 text-black font-extrabold py-3.5 px-6 rounded-xl shadow-lg shadow-emerald-500/30 transition flex items-center justify-center gap-2">
+            <i class="fa-brands fa-whatsapp text-lg"></i>
+            <span>Kirim Alamat & Cek Coverage ke Fikri</span>
+          </button>
+        </form>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Price List Official Brochure Section -->
+  <section class="relative z-10 py-16 px-4 md:px-12 max-w-7xl mx-auto">
+    <div class="text-center max-w-3xl mx-auto mb-12">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 text-xlCyan text-xs font-bold mb-3 border border-white/10">
+        <i class="fa-solid fa-tags"></i> Price List Resmi XL SATU
+      </div>
+      <h2 class="font-heading font-black text-3xl sm:text-5xl text-white">
+        Pilih Paket Sesuai <span class="text-xlCyan">Kebutuhan Anda</span>
+      </h2>
+      <p class="text-gray-300 text-sm sm:text-base mt-3">
+        Tersedia pilihan koneksi **FWA (Wireless)** untuk kepraktisan instan dan **FTTH (Fiber Optic)** untuk kecepatan maksimal hingga 400 Mbps.
+      </p>
+    </div>
+
+    <!-- Pricing Cards Container -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      
+      <!-- FWA Category (Wireless) -->
+      <div class="glass-card rounded-3xl p-6 sm:p-8 border-t-4 border-t-xlBlue relative overflow-hidden">
+        <div class="flex justify-between items-start mb-6">
+          <div>
+            <div class="inline-block px-3 py-1 rounded-full bg-xlBlue/30 text-xlCyan font-bold text-xs mb-2">
+              <i class="fa-solid fa-wifi"></i> KATEGORI FWA (WIRELESS)
+            </div>
+            <h3 class="font-heading font-black text-2xl text-white">Internet Tanpa Kabel</h3>
+            <p class="text-xs text-gray-400 mt-1">Praktis & fleksibel, cocok untuk area yang belum terjangkau fiber optik.</p>
+          </div>
+        </div>
+
+        <div class="space-y-4">
+          
+          <!-- FWA Option 1 -->
+          <div class="bg-slate-900/80 border border-white/10 rounded-2xl p-4 flex justify-between items-center hover:border-xlBlue transition">
+            <div>
+              <div class="font-heading font-extrabold text-xl text-white">50 Mbps</div>
+              <div class="text-xs text-gray-400">Cocok untuk Streaming & Sosmed</div>
+            </div>
+            <div class="text-right">
+              <div class="font-heading font-black text-lg text-xlCyan">Rp 650.000</div>
+              <div class="text-[10px] text-gray-400">/ 4 Bulan</div>
+            </div>
+          </div>
+
+          <!-- FWA Option 2 -->
+          <div class="bg-slate-900/80 border border-white/10 rounded-2xl p-4 flex justify-between items-center hover:border-xlBlue transition">
+            <div>
+              <div class="font-heading font-extrabold text-xl text-white">100 Mbps</div>
+              <div class="text-xs text-gray-400">Gaming, Video Call & Keluarga</div>
+            </div>
+            <div class="text-right">
+              <div class="font-heading font-black text-lg text-xlCyan">Rp 790.000</div>
+              <div class="text-[10px] text-gray-400">/ 4 Bulan</div>
+            </div>
+          </div>
+
+          <!-- FWA Option 3 -->
+          <div class="bg-slate-900/80 border border-white/10 rounded-2xl p-4 flex justify-between items-center hover:border-xlBlue transition">
+            <div>
+              <div class="font-heading font-extrabold text-xl text-white">100 Mbps</div>
+              <div class="text-xs text-gray-400">Kebutuhan Internet Harian (Bulanan)</div>
+            </div>
+            <div class="text-right">
+              <div class="font-heading font-black text-lg text-xlCyan">Rp 219.000</div>
+              <div class="text-[10px] text-gray-400">/ Bulan</div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="mt-6 pt-4 border-t border-white/10 flex items-center gap-2 text-xs text-xlCyan font-semibold">
+          <i class="fa-solid fa-circle-check"></i> Paket FWA sudah termasuk perangkat modem (CPE)
+        </div>
+      </div>
+
+      <!-- FTTH Category (Fiber Optic) -->
+      <div class="glass-card rounded-3xl p-6 sm:p-8 border-t-4 border-t-xlNeonGreen relative overflow-hidden">
+        <div class="absolute top-4 right-4 bg-gradient-to-r from-xlMagenta to-pink-600 text-white font-extrabold text-[10px] uppercase px-3 py-1 rounded-full shadow-lg">
+          Rekomendasi Utama 🔥
+        </div>
+
+        <div class="flex justify-between items-start mb-6">
+          <div>
+            <div class="inline-block px-3 py-1 rounded-full bg-emerald-500/30 text-xlNeonGreen font-bold text-xs mb-2">
+              <i class="fa-solid fa-bolt"></i> KATEGORI FTTH (FIBER OPTIC)
+            </div>
+            <h3 class="font-heading font-black text-2xl text-white">Fiber Optic Super Cepat</h3>
+            <p class="text-xs text-gray-400 mt-1">Super cepat, stabil 24 jam, dan anti lola untuk kawasan ber-fiber.</p>
+          </div>
+        </div>
+
+        <div class="space-y-4">
+          
+          <!-- FTTH Option 1 -->
+          <div class="bg-slate-900/80 border border-white/10 rounded-2xl p-4 flex justify-between items-center hover:border-xlNeonGreen transition">
+            <div>
+              <div class="font-heading font-extrabold text-xl text-white">250 Mbps</div>
+              <div class="text-xs text-gray-400">Streaming 4K & Keluarga Besar</div>
+            </div>
+            <div class="text-right">
+              <div class="font-heading font-black text-lg text-xlNeonGreen">Rp 229.000</div>
+              <div class="text-[10px] text-gray-400">/ Bulan</div>
+            </div>
+          </div>
+
+          <!-- FTTH Option 2 (Best Seller) -->
+          <div class="bg-gradient-to-r from-slate-900 via-blue-950/40 to-slate-900 border-2 border-xlCyan/80 rounded-2xl p-4 flex justify-between items-center shadow-lg shadow-xlCyan/20">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="font-heading font-black text-2xl text-white">300 Mbps</span>
+                <span class="bg-xlCyan text-black font-extrabold text-[9px] px-2 py-0.5 rounded">TERLARIS</span>
+              </div>
+              <div class="text-xs text-gray-300">Gaming Online & Smart Home Pro</div>
+            </div>
+            <div class="text-right">
+              <div class="font-heading font-black text-xl text-xlCyan">Rp 239.000</div>
+              <div class="text-[10px] text-gray-300">/ Bulan</div>
+            </div>
+          </div>
+
+          <!-- FTTH Option 3 -->
+          <div class="bg-slate-900/80 border border-white/10 rounded-2xl p-4 flex justify-between items-center hover:border-xlNeonGreen transition">
+            <div>
+              <div class="font-heading font-extrabold text-xl text-white">400 Mbps</div>
+              <div class="text-xs text-gray-400">Heavy User & Bisnis Rumah</div>
+            </div>
+            <div class="text-right">
+              <div class="font-heading font-black text-lg text-xlNeonGreen">Rp 300.000</div>
+              <div class="text-[10px] text-gray-400">/ Bulan</div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="mt-6 pt-4 border-t border-white/10 flex items-center gap-2 text-xs text-xlNeonGreen font-semibold">
+          <i class="fa-solid fa-circle-check"></i> Paket FTTH sudah termasuk GRATIS biaya instalasi & perangkat modem
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Service Guarantees Section -->
+  <section class="relative z-10 py-12 px-4 md:px-12 max-w-7xl mx-auto">
+    <div class="glass-card rounded-3xl p-8 border border-white/15">
+      <div class="text-center max-w-2xl mx-auto mb-8">
+        <h3 class="font-heading font-black text-2xl sm:text-3xl text-white">
+          Kenapa Mendaftar Lewat <span class="text-xlCyan">Fikri (Sales Resmi)</span>?
+        </h3>
+        <p class="text-xs sm:text-sm text-gray-400 mt-1">
+          Layanan prioritas dan pengawalan cepat hingga internet terpasang di rumah Anda.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-center">
+        <div class="bg-slate-900/60 p-5 rounded-2xl border border-white/5">
+          <div class="w-12 h-12 rounded-xl bg-xlBlue/20 text-xlCyan flex items-center justify-center text-xl mx-auto mb-3">
+            <i class="fa-solid fa-bolt"></i>
+          </div>
+          <h4 class="font-heading font-bold text-white text-base">Proses Cepat</h4>
+          <p class="text-xs text-gray-400 mt-1">Pengajuan data langsung diinput ke sistem XL tanpa antre lama.</p>
+        </div>
+
+        <div class="bg-slate-900/60 p-5 rounded-2xl border border-white/5">
+          <div class="w-12 h-12 rounded-xl bg-emerald-500/20 text-xlNeonGreen flex items-center justify-center text-xl mx-auto mb-3">
+            <i class="fa-solid fa-map-location"></i>
+          </div>
+          <h4 class="font-heading font-bold text-white text-base">Survey Sherlock Valid</h4>
+          <p class="text-xs text-gray-400 mt-1">Pengecekan koordinat tiang ODP presisi agar koneksi tidak terhambat.</p>
+        </div>
+
+        <div class="bg-slate-900/60 p-5 rounded-2xl border border-white/5">
+          <div class="w-12 h-12 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center text-xl mx-auto mb-3">
+            <i class="fa-solid fa-headset"></i>
+          </div>
+          <h4 class="font-heading font-bold text-white text-base">Bantuan 24/7</h4>
+          <p class="text-xs text-gray-400 mt-1">Konsultasi gratis kapan saja via WhatsApp langsung dengan Fikri.</p>
+        </div>
+
+        <div class="bg-slate-900/60 p-5 rounded-2xl border border-white/5">
+          <div class="w-12 h-12 rounded-xl bg-pink-500/20 text-xlMagenta flex items-center justify-center text-xl mx-auto mb-3">
+            <i class="fa-solid fa-shield-cat"></i>
+          </div>
+          <h4 class="font-heading font-bold text-white text-base">Tanpa Biaya Tersembunyi</h4>
+          <p class="text-xs text-gray-400 mt-1">Sesuai dengan harga resmi di brosur resmi XL SATU.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sticky Floating WhatsApp CTA Button for Mobile -->
+  <div class="fixed bottom-4 right-4 left-4 sm:left-auto sm:right-6 z-50">
+    <a href="https://wa.me/6285124377565?text=Halo%20Mas%20Fikri,%20saya%20mau%20pasang%20XL%20SATU.%20Mohon%20bantu%20cek%20area." target="_blank" class="w-full sm:w-auto bg-xlNeonGreen hover:bg-emerald-600 text-black font-extrabold px-6 py-4 rounded-full shadow-2xl shadow-emerald-500/50 flex items-center justify-center gap-3 text-base border-2 border-slate-900 transition transform hover:scale-105">
+      <i class="fa-brands fa-whatsapp text-2xl"></i>
+      <span>Hubungi Fikri via WhatsApp (085124377565)</span>
+    </a>
+  </div>
+
+  <!-- Footer -->
+  <footer class="relative z-10 border-t border-white/10 bg-slate-950 py-8 text-center text-xs text-gray-400 px-4">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+      <div>
+        <span class="font-heading font-black text-white text-sm">XL SATU</span> &copy; 2026 - Sales Executive Representative: <strong>M. Khoirul Fikri (Fikri)</strong>
+      </div>
+      <div class="text-gray-400">
+        Melayani Serang, Cilegon, Banten & Seluruh Wilayah Indonesia
+      </div>
+    </div>
+  </footer>
+
+  <!-- JavaScript Logics -->
+  <script>
+    const salesPhone = "6285124377565";
+    let detectedLat = null;
+    let detectedLng = null;
+    let detectedMapsUrl = "";
+
+    // HTML5 Sherlock Geolocation API
+    function getLocation() {
+      const btn = document.getElementById('btnGetGps');
+      const box = document.getElementById('gpsStatusBox');
+      
+      btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Detecting GPS Location...`;
+
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition, showError, {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 0
+        });
+      } else {
+        alert("Browser Anda tidak mendukung deteksi lokasi Sherlock GPS.");
+        btn.innerHTML = `<i class="fa-solid fa-crosshairs"></i> Coba Lagi`;
+      }
     }
 
-    function closeModal(modalId) {
-      document.getElementById(modalId).classList.add('hidden');
-    }
+    function showPosition(position) {
+      detectedLat = position.coords.latitude;
+      detectedLng = position.coords.longitude;
+      detectedMapsUrl = `https://maps.google.com/?q=${detectedLat},${detectedLng}`;
 
-    function handleFileUpload(e) {
-      const file = e.target.files[0];
-      if (!file) return;
+      document.getElementById('latVal').innerText = detectedLat;
+      document.getElementById('lngVal').innerText = detectedLng;
+      
+      const mapsAnchor = document.getElementById('mapsUrl');
+      mapsAnchor.href = detectedMapsUrl;
+      mapsAnchor.innerText = detectedMapsUrl;
 
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        const data = new Uint8Array(event.target.result);
-        const workbook = XLSX.read(data, { type: 'array' });
-        
-        // Read first sheet
-        const sheetName = workbook.SheetNames[0];
-        const worksheet = workbook.Sheets[sheetName];
-        const jsonData = XLSX.utils.sheet_to_json(worksheet);
+      document.getElementById('gpsStatusBox').classList.remove('hidden');
 
-        if (jsonData.length > 0) {
-          initApp(jsonData);
-          alert(`Berhasil memuat ${jsonData.length} baris data dari file Excel!`);
-        } else {
-          alert('File Excel kosong atau format tidak sesuai.');
+      const btn = document.getElementById('btnGetGps');
+      btn.innerHTML = `<i class="fa-solid fa-circle-check text-xlNeonGreen"></i> Sherlock GPS Berhasil Terdeteksi!`;
+
+      // Auto Redirect Option to WA with Sherlock
+      const waText = encodeURIComponent(`Halo Mas Fikri, saya mau cek jaringan XL SATU menggunakan lokasi Sherlock GPS saya:\n\n📍 Latitude: ${detectedLat}\n📍 Longitude: ${detectedLng}\n🔗 Google Maps: ${detectedMapsUrl}\n\nMohon dibantu verifikasi tiang/jaringan terdekat ya.`);
+      
+      setTimeout(() => {
+        if (confirm("Titik Sherlock GPS berhasil didapatkan! Apakah Anda ingin langsung mengirim koordinat ini ke WhatsApp Fikri?")) {
+          window.open(`https://wa.me/${salesPhone}?text=${waText}`, '_blank');
         }
-      };
-      reader.readAsArrayBuffer(file);
+      }, 500);
     }
 
-    function exportToCSV() {
-      if (!filteredData.length) {
-        alert('Tidak ada data untuk diekspor.');
-        return;
+    function showError(error) {
+      const btn = document.getElementById('btnGetGps');
+      btn.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Gagal Ambil GPS`;
+      alert("Gagal mendeteksi lokasi otomatis. Silakan pastikan izin GPS di browser Anda sudah diizinkan atau gunakan form alamat manual.");
+    }
+
+    // Submit Manual All-Indonesia Address Form
+    function submitCoverageForm(e) {
+      e.preventDefault();
+
+      const prov = document.getElementById('provinsi').value;
+      const kota = document.getElementById('kota').value;
+      const kec = document.getElementById('kecamatan').value;
+      const kel = document.getElementById('kelurahan').value;
+      const detail = document.getElementById('detailAlamat').value;
+      const paket = document.getElementById('pilihanPaketForm').value;
+
+      let gpsInfo = "Belum di-scan";
+      if (detectedMapsUrl) {
+        gpsInfo = `\n📍 Link Sherlock GPS: ${detectedMapsUrl}`;
       }
 
-      const worksheet = XLSX.utils.json_to_sheet(filteredData);
-      const workbook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(workbook, worksheet, "Data_FTTH");
-      XLSX.writeFile(workbook, "Export_Data_G2A_FTTH.xlsx");
+      const waMsg = encodeURIComponent(
+        `Halo Mas Fikri (Sales XL SATU),\n` +
+        `Saya mau pendaftaran/cek coverage lokasi rumah saya:\n\n` +
+        `🏠 *Provinsi:* ${prov}\n` +
+        `🌆 *Kota/Kab:* ${kota}\n` +
+        `📍 *Kecamatan:* ${kec}\n` +
+        `🏘️ *Kelurahan:* ${kel}\n` +
+        `🏢 *Detail Alamat/Cluster:* ${detail}\n` +
+        `📦 *Pilihan Paket:* ${paket}${gpsInfo}\n\n` +
+        `Mohon dibantu cek ketersediaan jaringan & pengajuannya ya Mas Fikri. Terima kasih!`
+      );
+
+      window.open(`https://wa.me/${salesPhone}?text=${waMsg}`, '_blank');
     }
+
+    // Interactive 4D Canvas Particles Background
+    const canvas = document.getElementById('heroCanvas');
+    const ctx = canvas.getContext('2d');
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    const particles = [];
+    for (let i = 0; i < 40; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        radius: Math.random() * 2 + 1,
+        color: Math.random() > 0.5 ? '#00F0FF' : '#0052FF',
+        speedX: (Math.random() - 0.5) * 0.8,
+        speedY: (Math.random() - 0.5) * 0.8
+      });
+    }
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => {
+        p.x += p.speedX;
+        p.y += p.speedY;
+
+        if (p.x < 0 || p.x > canvas.width) p.speedX *= -1;
+        if (p.y < 0 || p.y > canvas.height) p.speedY *= -1;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = p.color;
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = p.color;
+        ctx.fill();
+      });
+      requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
   </script>
 </body>
 </html>
