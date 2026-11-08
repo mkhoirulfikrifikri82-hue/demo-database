@@ -1,509 +1,734 @@
 <!DOCTYPE html>
-<html lang="id" class="dark">
+<html lang="id" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XL SATU - Registration Portal & Sales Dashboard</title>
-    <!-- Tailwind CSS -->
+    <title>XL SATU Coverage & Promo Resmi  | M. Khoirul Fikri (Sales Representative)</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- Three.js Engine for Ambient 4D Background -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- Leaflet.js Interactive Maps -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
     <script>
         tailwind.config = {
-            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
-                        cyber: {
-                            dark: '#0a0e17',
-                            card: '#121826',
-                            border: '#1f293d',
-                            accent: '#00f0ff',
-                            purple: '#7000ff',
-                            neonGreen: '#00ff66',
-                            neonPink: '#ff0055',
-                            gold: '#ffb700'
-                        }
+                        brandDark: '#070A0F',
+                        brandCard: '#0F172A',
+                        brandBlue: '#00D2FF',
+                        brandGreen: '#10B981',
+                        brandGreenHover: '#059669',
                     },
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
+                        heading: ['Plus Jakarta Sans', 'sans-serif'],
                     }
                 }
             }
         }
     </script>
-    <!-- Google Fonts & FontAwesome -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #0a0e17;
-            color: #e2e8f0;
+            background-color: #070A0F;
+            color: #F8FAFC;
+            overflow-x: hidden;
         }
-        .glow-cyan {
-            box-shadow: 0 0 20px rgba(0, 240, 255, 0.25);
+
+        canvas#bg4dCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.5;
         }
-        .glow-green {
-            box-shadow: 0 0 20px rgba(0, 255, 102, 0.25);
+
+        .glass-card {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
         }
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
+
+        .glass-card-highlight {
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            box-shadow: 0 0 30px rgba(16, 185, 129, 0.15);
         }
-        ::-webkit-scrollbar-track {
-            background: #0a0e17;
+
+        .hover-lift {
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        ::-webkit-scrollbar-thumb {
-            background: #1f293d;
-            border-radius: 4px;
+        .hover-lift:hover {
+            transform: translateY(-6px);
+            border-color: rgba(0, 210, 255, 0.5);
+            box-shadow: 0 15px 30px -10px rgba(0, 210, 255, 0.25);
         }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #00f0ff;
+
+        .btn-gradient-green {
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+            transition: all 0.2s ease;
+        }
+        .btn-gradient-green:hover {
+            filter: brightness(1.15);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-gradient-blue {
+            background: linear-gradient(135deg, #00D2FF 0%, #0284C7 100%);
+            transition: all 0.2s ease;
+        }
+        .btn-gradient-blue:hover {
+            filter: brightness(1.15);
+            box-shadow: 0 8px 25px rgba(0, 210, 255, 0.4);
+        }
+
+        #leafletMap {
+            height: 280px;
+            width: 100%;
+            border-radius: 1rem;
+            z-index: 10;
         }
     </style>
 </head>
-<body class="min-h-screen pb-12">
+<body class="relative min-h-screen flex flex-col font-sans selection:bg-brandGreen selection:text-brandDark">
 
-    <!-- Header Navigation -->
-    <header class="border-b border-cyber-border bg-cyber-card/80 backdrop-blur-md sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-            <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center font-bold text-black text-xl shadow-lg shadow-cyan-500/30">
-                    XL
-                </div>
-                <div>
-                    <h1 class="text-xl font-extrabold tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-teal-300 to-emerald-400">
-                        XL SATU <span class="text-xs px-2 py-0.5 rounded bg-cyan-950 text-cyan-400 border border-cyan-500/30 font-mono">FIK.KYY DEV</span>
-                    </h1>
-                    <p class="text-xs text-gray-400">Portal Pendaftaran Pelanggan & Kalkulator Anti-Boncos</p>
-                </div>
-            </div>
+    <!-- 4D Ambient Background -->
+    <canvas id="bg4dCanvas"></canvas>
+
+    <!-- FLOATING WHATSAPP BUTTON -->
+    <div class="fixed bottom-6 right-6 z-50">
+        <a href="https://wa.me/6285124377565?text=Halo%20Mas%20Fikri,%20saya%20mau%20konsultasi%20pemasangan%20XL%20SATU" target="_blank" onclick="playSfx('click')" class="btn-gradient-green text-white font-heading font-bold p-4 sm:px-6 sm:py-4 rounded-full shadow-2xl flex items-center space-x-3 hover:scale-105 transition-all">
+            <i class="fa-brands fa-whatsapp text-2xl"></i>
+            <span class="hidden sm:inline text-sm">Konsultasi WA Fikri</span>
+        </a>
+    </div>
+
+    <!-- ANNOUNCEMENT BANNER -->
+    <div class="bg-gradient-to-r from-emerald-600 via-teal-600 to-sky-600 text-white font-heading font-semibold text-xs sm:text-sm py-2.5 px-4 text-center shadow-md z-40 relative">
+        <div class="max-w-7xl mx-auto flex items-center justify-center space-x-2">
+            <span class="bg-white/20 px-2 py-0.5 rounded text-[10px] uppercase font-bold tracking-wide">Promo Spesial Banten</span>
+            <span>Gratis Instalasi + Perangkat Modem Optik + Kuota HP Keluarga Unlimited untuk Serang & Cilegon!</span>
+        </div>
+    </div>
+
+    <!-- NAVBAR -->
+    <nav class="sticky top-0 z-40 glass-card border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             
             <div class="flex items-center space-x-3">
-                <span class="hidden sm:inline-flex items-center gap-1.5 text-xs bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 px-3 py-1.5 rounded-lg font-semibold">
-                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                    Target: 7 Unit | Rp 5 Juta Bersih
-                </span>
+                <div class="bg-gradient-to-r from-brandBlue to-brandGreen p-0.5 rounded-2xl shadow-lg">
+                    <div class="bg-brandDark px-3.5 py-1.5 rounded-[14px] flex items-center space-x-1.5">
+                        <span class="font-heading font-extrabold text-xl sm:text-2xl text-white">XL</span>
+                        <span class="font-heading font-extrabold text-xl sm:text-2xl text-brandBlue">SATU</span>
+                    </div>
+                </div>
+                <div class="border-l border-slate-700 pl-3">
+                    <div class="flex items-center space-x-2">
+                        <span class="font-heading font-bold text-xs sm:text-sm text-white">M. KHOIRUL FIKRI</span>
+                        <span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-[10px] font-semibold px-2 py-0.5 rounded-full hidden sm:inline-block">SALES REPRESENTATIVE</span>
+                    </div>
+                    <p class="text-[11px] text-slate-400">Direct Sales Serang & Cilegon</p>
+                </div>
+            </div>
+
+            <!-- SHERLOK QUICK ACTION -->
+            <button onclick="openSherlokModal(); playSfx('click');" class="btn-gradient-blue text-white font-heading font-bold text-xs sm:text-sm px-4 py-2.5 rounded-xl flex items-center space-x-2 shadow-lg">
+                <i class="fa-solid fa-location-crosshairs animate-pulse text-base"></i>
+                <span class="hidden sm:inline">Sherlok Maps Valid</span>
+                <span class="sm:hidden">Sherlok GPS</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <header class="relative z-10 py-12 sm:py-20 px-4 max-w-6xl mx-auto text-center">
+        
+        <div class="inline-flex items-center space-x-2 bg-slate-800/80 border border-slate-700 px-4 py-1.5 rounded-full backdrop-blur-md mb-6">
+            <span class="w-2 h-2 rounded-full bg-brandGreen animate-ping"></span>
+            <span class="text-xs font-semibold text-slate-300">Internet Rumah Super Cepat untuk Semua Aktivitas</span>
+        </div>
+
+        <h1 class="text-3xl sm:text-5xl md:text-6xl font-heading font-extrabold text-white tracking-tight leading-tight">
+            Internet Rumah Super Cepat <br class="hidden sm:inline">
+            <span class="bg-gradient-to-r from-brandBlue via-teal-300 to-brandGreen bg-clip-text text-transparent">
+                Bersama XL SATU Banten
+            </span>
+        </h1>
+        
+        <p class="mt-4 text-slate-300 text-sm sm:text-lg max-w-2xl mx-auto leading-relaxed">
+            Streaming tanpa buffering, gaming lebih lancar, kerja & sekolah lebih produktif! Layanan diproses cepat & resmi oleh Sales Representative Banten: <strong class="text-brandBlue font-semibold">M. KHOIRUL FIKRI (Fikri)</strong>.
+        </p>
+
+        <!-- SHERLOK MAPS FEATURE BANNER CARD -->
+        <div class="mt-8 max-w-2xl mx-auto glass-card-highlight p-6 rounded-3xl border border-emerald-500/30 text-left relative overflow-hidden shadow-2xl">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="flex items-center space-x-4">
+                    <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-brandBlue to-brandGreen flex items-center justify-center text-brandDark text-2xl font-black shrink-0">
+                        <i class="fa-solid fa-map-location-dot"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-heading font-bold text-lg text-white">Sherlok Maps Valid & Akurat</h4>
+                        <p class="text-xs text-slate-300 mt-0.5">Cari nama perumahan di Serang/Cilegon atau deteksi GPS otomatis untuk cek titik ODP.</p>
+                    </div>
+                </div>
+                <button onclick="openSherlokModal(); playSfx('click');" class="w-full sm:w-auto btn-gradient-green text-white font-heading font-bold text-xs px-5 py-3 rounded-xl flex items-center justify-center space-x-2 shrink-0">
+                    <i class="fa-solid fa-crosshairs"></i>
+                    <span>Cek Lokasi Rumah</span>
+                </button>
             </div>
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 space-y-6">
-
-        <!-- Banner Info / Motivation -->
-        <div class="bg-gradient-to-r from-cyan-950/50 via-slate-900 to-slate-900 p-5 rounded-2xl border border-cyan-500/30 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <div>
-                <h2 class="text-base font-bold text-cyan-300 flex items-center gap-2">
-                    <i class="fa-solid fa-shield-halved text-cyan-400"></i> Fokus Harga Mati & Anti Boncos
-                </h2>
-                <p class="text-xs text-gray-300 mt-1">
-                    Gunakan paket <span class="text-cyan-400 font-bold">FTTH 250 Mbps (Rp 174.000 / 5k sehari)</span> untuk *closing* cepat. PPN tercover aman, tanpa nombok pribadi!
-                </p>
-            </div>
-            <div class="flex gap-2">
-                <div class="bg-slate-950 px-4 py-2 rounded-xl border border-slate-800 text-center">
-                    <div class="text-[10px] text-gray-400 uppercase font-mono">Total Leads</div>
-                    <div class="text-lg font-bold text-white" id="statTotalLeads">0</div>
-                </div>
-                <div class="bg-slate-950 px-4 py-2 rounded-xl border border-slate-800 text-center">
-                    <div class="text-[10px] text-gray-400 uppercase font-mono">Status Bayar</div>
-                    <div class="text-xs font-bold text-emerald-400 mt-1">LUNAS / PAID</div>
-                </div>
-            </div>
+    <!-- OFFICIAL PRICING SECTION -->
+    <section class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div class="text-center max-w-2xl mx-auto mb-12">
+            <span class="text-brandGreen font-heading font-bold text-xs uppercase tracking-widest">[ PILIH PAKET SESUAI KEBUTUHAN ANDA! ]</span>
+            <h2 class="text-3xl sm:text-4xl font-heading font-extrabold text-white mt-1">Daftar Harga Paket Resmi XL SATU</h2>
+            <p class="text-xs sm:text-sm text-slate-400 mt-1">Solusi internet hemat untuk area Tanpa Kabel (FWA) & Kabel Fiber Optik (FTTH).</p>
         </div>
 
-        <!-- Main Form & Preview Section -->
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            
+            <!-- FWA (WIRELESS) CARD -->
+            <div class="glass-card p-6 sm:p-8 rounded-3xl relative overflow-hidden flex flex-col justify-between hover-lift border-sky-500/30">
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-12 h-12 rounded-2xl bg-sky-500/20 text-brandBlue border border-sky-500/40 flex items-center justify-center text-2xl font-bold">
+                                <i class="fa-solid fa-wifi"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-2xl font-heading font-extrabold text-white">FWA</h3>
+                                <p class="text-xs text-brandBlue font-medium">Internet Tanpa Kabel, Praktis & Fleksibel!</p>
+                            </div>
+                        </div>
+                        <span class="bg-sky-500/20 text-brandBlue border border-sky-500/40 font-heading font-bold text-[10px] px-3 py-1 rounded-full uppercase">AREA BELUM TERJANGKAU FIBER</span>
+                    </div>
 
-            <!-- Form Pendaftaran Pelanggan (7 Cols) -->
-            <div class="lg:col-span-7 bg-cyber-card p-6 rounded-2xl border border-cyber-border shadow-xl">
-                <div class="flex items-center justify-between pb-4 mb-4 border-b border-cyber-border">
-                    <h2 class="text-lg font-bold text-white flex items-center gap-2">
-                        <i class="fa-solid fa-user-plus text-cyan-400"></i> Form Pendaftaran Pelanggan Baru
-                    </h2>
-                    <span class="text-xs px-2.5 py-1 bg-cyan-500/10 text-cyan-400 rounded-full font-mono border border-cyan-500/20">Input Data KTP</span>
+                    <div class="bg-sky-500/10 border border-sky-500/20 rounded-xl p-3 text-xs text-sky-300 font-medium mb-6 flex items-center space-x-2">
+                        <i class="fa-solid fa-circle-check text-sm"></i>
+                        <span>Paket FWA sudah termasuk perangkat modem (CPE)[cite: 1]!</span>
+                    </div>
+
+                    <!-- FWA ITEMS FROM BROSUR -->
+                    <div class="space-y-4">
+                        <!-- 50 Mbps / 4 Bln -->
+                        <div class="bg-slate-900/90 p-4 rounded-2xl border border-slate-800 hover:border-brandBlue transition flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                            <div>
+                                <span class="bg-sky-500/20 text-brandBlue text-[10px] font-bold px-2 py-0.5 rounded">Rekomendasi 4 - 6 Devices</span>
+                                <div class="text-2xl font-heading font-extrabold text-white mt-1">50 <span class="text-sm font-normal text-slate-400">Mbps</span></div>
+                                <p class="text-xs text-slate-400 mt-0.5"><i class="fa-solid fa-tv mr-1 text-brandBlue"></i>Cocok untuk Streaming, Browsing dan Media Sosial[cite: 1]</p>
+                            </div>
+                            <div class="text-left sm:text-right w-full sm:w-auto">
+                                <span class="text-[10px] text-slate-400">Harga mulai</span>
+                                <div class="text-xl font-heading font-extrabold text-brandBlue">Rp 650.000 <span class="text-xs font-normal text-slate-400">/ 4 bulan[cite: 1]</span></div>
+                                <button onclick="orderPackage('FWA 50 Mbps - Rp 650.000 / 4 bulan'); playSfx('click');" class="mt-2 w-full sm:w-auto btn-gradient-blue text-white font-semibold text-xs px-4 py-2 rounded-xl">
+                                    Pilih Paket
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 100 Mbps / 4 Bln -->
+                        <div class="bg-slate-900/90 p-4 rounded-2xl border border-slate-800 hover:border-brandBlue transition flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                            <div>
+                                <span class="bg-sky-500/20 text-brandBlue text-[10px] font-bold px-2 py-0.5 rounded">Rekomendasi 7 - 10 Devices</span>
+                                <div class="text-2xl font-heading font-extrabold text-white mt-1">100 <span class="text-sm font-normal text-slate-400">Mbps</span></div>
+                                <p class="text-xs text-slate-400 mt-0.5"><i class="fa-solid fa-gamepad mr-1 text-brandBlue"></i>Cocok untuk Gaming, Streaming, Video Call & Keluarga[cite: 1]</p>
+                            </div>
+                            <div class="text-left sm:text-right w-full sm:w-auto">
+                                <span class="text-[10px] text-slate-400">Harga mulai</span>
+                                <div class="text-xl font-heading font-extrabold text-brandBlue">Rp 790.000 <span class="text-xs font-normal text-slate-400">/ 4 bulan[cite: 1]</span></div>
+                                <button onclick="orderPackage('FWA 100 Mbps - Rp 790.000 / 4 bulan'); playSfx('click');" class="mt-2 w-full sm:w-auto btn-gradient-blue text-white font-semibold text-xs px-4 py-2 rounded-xl">
+                                    Pilih Paket
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 100 Mbps / Bln -->
+                        <div class="bg-slate-900/90 p-4 rounded-2xl border border-slate-800 hover:border-brandBlue transition flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                            <div>
+                                <span class="bg-sky-500/20 text-brandBlue text-[10px] font-bold px-2 py-0.5 rounded">Rekomendasi 7 - 10 Devices</span>
+                                <div class="text-2xl font-heading font-extrabold text-white mt-1">100 <span class="text-sm font-normal text-slate-400">Mbps</span></div>
+                                <p class="text-xs text-slate-400 mt-0.5"><i class="fa-solid fa-globe mr-1 text-brandBlue"></i>Cocok untuk Kebutuhan Internet Harian[cite: 1]</p>
+                            </div>
+                            <div class="text-left sm:text-right w-full sm:w-auto">
+                                <span class="text-[10px] text-slate-400">Harga mulai</span>
+                                <div class="text-xl font-heading font-extrabold text-brandBlue">Rp 219.000 <span class="text-xs font-normal text-slate-400">/ bulan[cite: 1]</span></div>
+                                <button onclick="orderPackage('FWA 100 Mbps - Rp 219.000 / bulan'); playSfx('click');" class="mt-2 w-full sm:w-auto btn-gradient-blue text-white font-semibold text-xs px-4 py-2 rounded-xl">
+                                    Pilih Paket
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FTTH (FIBER OPTIK) CARD -->
+            <div class="glass-card-highlight p-6 sm:p-8 rounded-3xl relative overflow-hidden flex flex-col justify-between hover-lift">
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-12 h-12 rounded-2xl bg-emerald-500/20 text-brandGreen border border-emerald-500/40 flex items-center justify-center text-2xl font-bold">
+                                <i class="fa-solid fa-bolt"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-2xl font-heading font-extrabold text-white">FTTH</h3>
+                                <p class="text-xs text-brandGreen font-medium">Internet Fiber Optik, Super Cepat & Stabil!</p>
+                            </div>
+                        </div>
+                        <span class="bg-brandGreen text-brandDark font-heading font-bold text-[10px] px-3 py-1 rounded-full uppercase">AREA TERJANGKAU FIBER</span>
+                    </div>
+
+                    <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-3 text-xs text-emerald-400 font-medium mb-6 flex items-center space-x-2">
+                        <i class="fa-solid fa-circle-check text-sm"></i>
+                        <span>Paket FTTH sudah termasuk biaya instalasi & perangkat modem[cite: 1]!</span>
+                    </div>
+
+                    <!-- FTTH ITEMS FROM BROSUR -->
+                    <div class="space-y-4">
+                        <!-- 250 Mbps -->
+                        <div class="bg-slate-900/90 p-4 rounded-2xl border border-slate-800 hover:border-brandGreen transition flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                            <div>
+                                <span class="bg-emerald-500/20 text-brandGreen text-[10px] font-bold px-2 py-0.5 rounded">FAVORIT: 4 - 7 Devices</span>
+                                <div class="text-2xl font-heading font-extrabold text-white mt-1">250 <span class="text-sm font-normal text-slate-400">Mbps</span></div>
+                                <p class="text-xs text-slate-400 mt-0.5"><i class="fa-solid fa-play mr-1 text-brandGreen"></i>Cocok untuk Streaming 4K & Keluarga Besar[cite: 1]</p>
+                            </div>
+                            <div class="text-left sm:text-right w-full sm:w-auto">
+                                <span class="text-[10px] text-slate-400">Harga mulai</span>
+                                <div class="text-xl font-heading font-extrabold text-brandGreen">Rp 229.000 <span class="text-xs font-normal text-slate-400">/ bulan[cite: 1]</span></div>
+                                <button onclick="orderPackage('FTTH 250 Mbps - Rp 229.000 / bulan'); playSfx('click');" class="mt-2 w-full sm:w-auto btn-gradient-green text-white font-semibold text-xs px-4 py-2 rounded-xl">
+                                    Pilih Paket
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 300 Mbps -->
+                        <div class="bg-slate-900/90 p-4 rounded-2xl border border-slate-800 hover:border-brandGreen transition flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                            <div>
+                                <span class="bg-emerald-500/20 text-brandGreen text-[10px] font-bold px-2 py-0.5 rounded">GAMING: 8 - 12 Devices</span>
+                                <div class="text-2xl font-heading font-extrabold text-white mt-1">300 <span class="text-sm font-normal text-slate-400">Mbps</span></div>
+                                <p class="text-xs text-slate-400 mt-0.5"><i class="fa-solid fa-headset mr-1 text-brandGreen"></i>Cocok untuk Gaming Online & Smart Home[cite: 1]</p>
+                            </div>
+                            <div class="text-left sm:text-right w-full sm:w-auto">
+                                <span class="text-[10px] text-slate-400">Harga mulai</span>
+                                <div class="text-xl font-heading font-extrabold text-brandGreen">Rp 239.000 <span class="text-xs font-normal text-slate-400">/ bulan[cite: 1]</span></div>
+                                <button onclick="orderPackage('FTTH 300 Mbps - Rp 239.000 / bulan'); playSfx('click');" class="mt-2 w-full sm:w-auto btn-gradient-green text-white font-semibold text-xs px-4 py-2 rounded-xl">
+                                    Pilih Paket
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 400 Mbps -->
+                        <div class="bg-slate-900/90 p-4 rounded-2xl border border-slate-800 hover:border-brandGreen transition flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                            <div>
+                                <span class="bg-emerald-500/20 text-brandGreen text-[10px] font-bold px-2 py-0.5 rounded">ULTIMATE: 13+ Devices</span>
+                                <div class="text-2xl font-heading font-extrabold text-white mt-1">400 <span class="text-sm font-normal text-slate-400">Mbps</span></div>
+                                <p class="text-xs text-slate-400 mt-0.5"><i class="fa-solid fa-briefcase mr-1 text-brandGreen"></i>Cocok untuk Heavy User & Bisnis Rumah[cite: 1]</p>
+                            </div>
+                            <div class="text-left sm:text-right w-full sm:w-auto">
+                                <span class="text-[10px] text-slate-400">Harga mulai</span>
+                                <div class="text-xl font-heading font-extrabold text-brandGreen">Rp 300.000 <span class="text-xs font-normal text-slate-400">/ bulan[cite: 1]</span></div>
+                                <button onclick="orderPackage('FTTH 400 Mbps - Rp 300.000 / bulan'); playSfx('click');" class="mt-2 w-full sm:w-auto btn-gradient-green text-white font-semibold text-xs px-4 py-2 rounded-xl">
+                                    Pilih Paket
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- SMART DEVICE CALCULATOR WIZARD -->
+    <section class="relative z-10 max-w-4xl mx-auto px-4 py-8">
+        <div class="glass-card p-6 sm:p-8 rounded-3xl border border-slate-700/80 shadow-2xl">
+            <div class="text-center mb-6">
+                <span class="text-brandBlue font-heading font-bold text-xs uppercase tracking-widest">[ ESTIMASI PERANGKAT INTERAKTIF ]</span>
+                <h3 class="text-xl sm:text-2xl font-heading font-bold text-white mt-1">Bingung Berapa Kecepatan yang Dibutuhkan?</h3>
+                <p class="text-xs text-slate-400 mt-1">Geser slider di bawah untuk menghitung total HP, Laptop, dan Smart TV di rumah Anda.</p>
+            </div>
+
+            <div class="space-y-6">
+                <div>
+                    <div class="flex justify-between text-xs font-semibold text-slate-300 mb-2">
+                        <span>Jumlah Device Terhubung:</span>
+                        <span id="deviceCountDisplay" class="text-brandGreen text-sm font-bold">5 Devices (Keluarga)</span>
+                    </div>
+                    <input type="range" id="deviceRange" min="4" max="16" value="5" oninput="updateCalculator()" class="w-full h-2.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-brandGreen">
+                    <div class="flex justify-between text-[11px] text-slate-400 mt-2 font-medium">
+                        <span>4 Devices (Minimal Rumah)</span>
+                        <span>10 Devices</span>
+                        <span>16+ Devices (Heavy/Usaha)</span>
+                    </div>
                 </div>
 
-                <form id="registrationForm" onsubmit="handleRegistrationSubmit(event)" class="space-y-4">
-                    
-                    <!-- Nama & NIK -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-300 mb-1">Nama Lengkap (Sesuai KTP) *</label>
-                            <input type="text" id="custName" required placeholder="Contoh: Darwati"
-                                class="w-full bg-slate-900 border border-slate-700 focus:border-cyan-400 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none transition-all">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-300 mb-1">Nomor NIK KTP *</label>
-                            <input type="text" id="custNik" required placeholder="367301430395xxxx" maxlength="16"
-                                class="w-full bg-slate-900 border border-slate-700 focus:border-cyan-400 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none transition-all">
-                        </div>
-                    </div>
-
-                    <!-- TTL & Jenis Kelamin -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-300 mb-1">Tempat, Tanggal Lahir *</label>
-                            <input type="text" id="custTtl" required placeholder="Contoh: Serang, 03-03-1995"
-                                class="w-full bg-slate-900 border border-slate-700 focus:border-cyan-400 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none transition-all">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-300 mb-1">Jenis Kelamin *</label>
-                            <select id="custGender" required class="w-full bg-slate-900 border border-slate-700 focus:border-cyan-400 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none transition-all">
-                                <option value="Perempuan">Perempuan</option>
-                                <option value="Laki-laki">Laki-laki</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- Alamat Lengkap -->
+                <div id="calcResult" class="p-5 bg-slate-900/90 rounded-2xl border border-brandGreen/40 flex flex-col sm:flex-row items-center justify-between gap-4">
                     <div>
-                        <label class="block text-xs font-semibold text-gray-300 mb-1">Alamat Lengkap Pemasangan (Kampung/RT/RW/Kel/Kec) *</label>
-                        <textarea id="custAddress" required rows="2" placeholder="Lingk. Panyindangan, RT 002/003, Kel. Unyur, Kec. Serang, Kota Serang"
-                            class="w-full bg-slate-900 border border-slate-700 focus:border-cyan-400 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none transition-all"></textarea>
+                        <span class="text-[10px] text-brandGreen font-bold uppercase tracking-wider">Paket Paling Pas Untuk Anda:</span>
+                        <h4 id="recPkgName" class="text-lg font-heading font-extrabold text-white">FTTH 250 Mbps (Rp 229.000 / bln)</h4>
+                        <p id="recPkgDesc" class="text-xs text-slate-400 mt-0.5">Ideal untuk streaming 4K, Smart TV, dan HP seluruh keluarga tanpa buffering.</p>
                     </div>
-
-                    <!-- No WA & No Telp Cadangan -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-300 mb-1">No. WhatsApp Utama (Aktif) *</label>
-                            <input type="tel" id="custWa" required placeholder="08998698146"
-                                class="w-full bg-slate-900 border border-slate-700 focus:border-cyan-400 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none transition-all">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-300 mb-1">No. Telepon / WA Cadangan</label>
-                            <input type="tel" id="custPhone2" placeholder="087878787554"
-                                class="w-full bg-slate-900 border border-slate-700 focus:border-cyan-400 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none transition-all">
-                        </div>
-                    </div>
-
-                    <!-- Email & Pilihan Paket -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-300 mb-1">Alamat Email *</label>
-                            <input type="email" id="custEmail" required placeholder="pelanggan@gmail.com"
-                                class="w-full bg-slate-900 border border-slate-700 focus:border-cyan-400 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none transition-all">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-300 mb-1">Pilih Paket XL SATU *</label>
-                            <select id="custPackage" required onchange="onPackageSelectChange()"
-                                class="w-full bg-slate-900 border border-slate-700 focus:border-cyan-400 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none transition-all">
-                                <option value="FTTH_250_PROMO" selected>FTTH 250 Mbps - Rp 174.000 (Promo Harga Mati 5k/hari)</option>
-                                <option value="FTTH_300">FTTH 300 Mbps - Rp 239.000 / bln</option>
-                                <option value="FWA_100">FWA 100 Mbps - Rp 219.000 / bln</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- Status Pembayaran & Transaksi Locked -->
-                    <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-800 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                            <span class="text-xs text-gray-400">Status Pembayaran:</span>
-                            <div class="text-emerald-400 font-bold text-sm mt-0.5"><i class="fa-solid fa-circle-check"></i> LUNAS / PAID (Pay First)</div>
-                        </div>
-                        <div>
-                            <span class="text-xs text-gray-400">Nominal Dibayar Customer:</span>
-                            <div class="text-cyan-300 font-extrabold text-base mt-0.5" id="lblDisplayPrice">Rp 174.000</div>
-                        </div>
-                    </div>
-
-                    <!-- Submit Button -->
-                    <div class="pt-2 flex gap-3">
-                        <button type="submit" class="flex-1 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-extrabold py-3 px-4 rounded-xl text-sm shadow-lg shadow-cyan-500/20 transition-all flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-file-lines"></i> Generate Format Resmi & Simpan
-                        </button>
-                        <button type="button" onclick="resetForm()" class="bg-slate-800 hover:bg-slate-700 text-gray-300 font-semibold px-4 py-3 rounded-xl text-sm transition-all">
-                            Reset
-                        </button>
-                    </div>
-                </form>
-            </div>
-
-            <!-- Preview Format Perusahaan & Export Tools (5 Cols) -->
-            <div class="lg:col-span-5 bg-cyber-card p-6 rounded-2xl border border-cyber-border shadow-xl flex flex-col justify-between">
-                <div>
-                    <div class="flex items-center justify-between pb-4 mb-4 border-b border-cyber-border">
-                        <h2 class="text-lg font-bold text-white flex items-center gap-2">
-                            <i class="fa-solid fa-eye text-emerald-400"></i> Preview Format Perusahaan
-                        </h2>
-                        <span class="text-xs px-2.5 py-1 bg-emerald-500/10 text-emerald-400 rounded-full font-mono border border-emerald-500/20">Siap Kirim SPV</span>
-                    </div>
-                    <p class="text-xs text-gray-400 mb-3">Teks di bawah otomatis ter-generate rapi sesuai format standar administrasi kantor XL:</p>
-
-                    <!-- Textarea Preview -->
-                    <div class="relative">
-                        <textarea id="outputFormat" readonly rows="14"
-                            class="w-full bg-slate-950 font-mono text-xs text-cyan-200 border border-slate-800 rounded-xl p-3.5 focus:outline-none resize-none leading-relaxed"></textarea>
-                    </div>
-                </div>
-
-                <!-- Action Buttons for Output -->
-                <div class="mt-4 space-y-2">
-                    <button onclick="copyFormattedText()" class="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-black font-extrabold py-3 px-4 rounded-xl text-sm shadow-lg shadow-emerald-500/20 transition-all flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-copy"></i> Salin Format ke Clipboard
-                    </button>
-                    <button onclick="shareWhatsApp()" class="w-full bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-emerald-500/30 font-semibold py-2.5 px-4 rounded-xl text-xs transition-all flex items-center justify-center gap-2">
-                        <i class="fa-brands fa-whatsapp text-base"></i> Kirim Langsung via WhatsApp Admin
+                    <button id="recPkgBtn" onclick="orderPackage('FTTH 250 Mbps - Rp 229.000 / bulan')" class="w-full sm:w-auto btn-gradient-green text-white font-bold text-xs px-5 py-3 rounded-xl shrink-0">
+                        Pilih Paket Ini
                     </button>
                 </div>
             </div>
+        </div>
+    </section>
 
+    <!-- WHY CHOOSE XL SATU -->
+    <section class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div class="text-center mb-8">
+            <h3 class="text-2xl font-heading font-extrabold text-white">Kenapa Pilih XL SATU?</h3>
         </div>
 
-        <!-- Saved Leads Table Section -->
-        <div class="bg-cyber-card p-6 rounded-2xl border border-cyber-border shadow-xl">
-            <div class="flex justify-between items-center pb-4 mb-4 border-b border-cyber-border">
-                <div>
-                    <h2 class="text-lg font-bold text-white flex items-center gap-2">
-                        <i class="fa-solid fa-table-list text-cyan-400"></i> Riwayat Input Leads Terdaftar
-                    </h2>
-                    <p class="text-xs text-gray-400">Daftar customer yang telah diproses untuk pengajuan pemasangan</p>
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+            <div class="glass-card p-4 rounded-2xl text-center hover-lift">
+                <div class="w-10 h-10 bg-emerald-500/20 text-brandGreen rounded-xl flex items-center justify-center mx-auto mb-2 text-xl font-bold">
+                    <i class="fa-solid fa-bolt"></i>
                 </div>
-                <button onclick="exportAllLeadsCSV()" class="bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 border border-cyan-500/40 px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-2 transition-all">
-                    <i class="fa-solid fa-file-csv"></i> Export CSV
+                <h4 class="font-bold text-white text-xs">Koneksi Cepat</h4>
+            </div>
+
+            <div class="glass-card p-4 rounded-2xl text-center hover-lift">
+                <div class="w-10 h-10 bg-emerald-500/20 text-brandGreen rounded-xl flex items-center justify-center mx-auto mb-2 text-xl font-bold">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <h4 class="font-bold text-white text-xs">Stabil 24 Jam</h4>
+            </div>
+
+            <div class="glass-card p-4 rounded-2xl text-center hover-lift">
+                <div class="w-10 h-10 bg-emerald-500/20 text-brandGreen rounded-xl flex items-center justify-center mx-auto mb-2 text-xl font-bold">
+                    <i class="fa-solid fa-location-dot"></i>
+                </div>
+                <h4 class="font-bold text-white text-xs">Jangkauan Luas</h4>
+            </div>
+
+            <div class="glass-card p-4 rounded-2xl text-center hover-lift">
+                <div class="w-10 h-10 bg-emerald-500/20 text-brandGreen rounded-xl flex items-center justify-center mx-auto mb-2 text-xl font-bold">
+                    <i class="fa-solid fa-headset"></i>
+                </div>
+                <h4 class="font-bold text-white text-xs">Layanan Handal</h4>
+            </div>
+
+            <div class="glass-card p-4 rounded-2xl text-center hover-lift col-span-2 sm:col-span-1">
+                <div class="w-10 h-10 bg-emerald-500/20 text-brandGreen rounded-xl flex items-center justify-center mx-auto mb-2 text-xl font-bold">
+                    <i class="fa-solid fa-wallet"></i>
+                </div>
+                <h4 class="font-bold text-white text-xs">Harga Terjangkau</h4>
+            </div>
+        </div>
+    </section>
+
+    <!-- SHERLOK MAPS MODAL (VALID, PENCARIAN LOKASI & GESER PIN) -->
+    <div id="sherlokModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+        <div class="glass-card max-w-xl w-full rounded-3xl p-6 border border-slate-700 relative text-left space-y-4 shadow-2xl">
+            <button onclick="closeSherlokModal(); playSfx('click');" class="absolute top-4 right-4 text-slate-400 hover:text-white text-xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-brandBlue/20 text-brandBlue flex items-center justify-center text-xl">
+                    <i class="fa-solid fa-location-crosshairs"></i>
+                </div>
+                <div>
+                    <h3 class="text-base font-heading font-bold text-white">Sherlok Maps Valid & Akurat</h3>
+                    <p class="text-xs text-slate-400">Ketik nama perumahan/jalan di Serang/Cilegon atau geser pin merah di peta.</p>
+                </div>
+            </div>
+
+            <!-- SEARCH INPUT FOR VALID MAPS LOCATION -->
+            <div class="relative flex items-center">
+                <input type="text" id="mapSearchInput" placeholder="Cari nama perumahan/jalan (cth: Puri Delta, Ciceri, Cilegon)..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-brandBlue">
+                <button onclick="searchLocation()" class="absolute right-2 bg-brandBlue text-brandDark font-bold text-xs px-3 py-1.5 rounded-lg">Cari</button>
+            </div>
+
+            <!-- LEAFLET MAP CONTAINER -->
+            <div id="leafletMap"></div>
+
+            <div class="bg-slate-900/90 p-3 rounded-xl border border-slate-800 flex items-center justify-between text-xs">
+                <span class="text-slate-400">Koordinat Terpilih:</span>
+                <span id="coordDisplay" class="font-mono text-brandBlue font-bold">Lat: -6.12000, Lng: 106.15000</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                <button onclick="detectGPSLocation()" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white font-bold text-xs py-3 rounded-xl flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-crosshairs text-brandBlue"></i>
+                    <span>Deteksi GPS Otomatis</span>
+                </button>
+
+                <button onclick="sendSherlokToWA()" class="btn-gradient-green text-white font-bold text-xs py-3 rounded-xl flex items-center justify-center space-x-2 shadow-lg">
+                    <i class="fa-brands fa-whatsapp text-base"></i>
+                    <span>Kirim Sherlok ke WA Fikri</span>
                 </button>
             </div>
-
-            <div class="overflow-x-auto">
-                <table class="w-full text-left text-xs text-gray-300">
-                    <thead class="bg-slate-900/80 text-gray-400 uppercase font-semibold border-b border-slate-800">
-                        <tr>
-                            <th class="p-3">Tanggal</th>
-                            <th class="p-3">Nama Pelanggan</th>
-                            <th class="p-3">NIK</th>
-                            <th class="p-3">No. WhatsApp</th>
-                            <th class="p-3">Paket</th>
-                            <th class="p-3">Pembayaran</th>
-                            <th class="p-3 text-center">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody id="leadsTableBody" class="divide-y divide-slate-800">
-                        <!-- Rendered via JS -->
-                    </tbody>
-                </table>
-            </div>
-
-            <div id="emptyLeads" class="hidden py-8 text-center text-gray-500 text-xs">
-                <i class="fa-solid fa-folder-open text-3xl mb-2 text-slate-700"></i>
-                <p>Belum ada data pendaftaran tersimpan.</p>
-            </div>
         </div>
-
-    </main>
-
-    <!-- Notification Toast -->
-    <div id="toast" class="fixed bottom-5 right-5 transform translate-y-20 opacity-0 transition-all duration-300 z-50 bg-slate-900 border border-cyan-500 text-white px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3">
-        <i class="fa-solid fa-circle-check text-emerald-400 text-lg"></i>
-        <span id="toastText" class="text-xs font-semibold">Berhasil disalin ke clipboard!</span>
     </div>
 
-    <!-- Script Application Logic -->
+    <!-- FOOTER WITH FIKRI BRANDING -->
+    <footer class="relative z-10 glass-card border-t border-slate-800 mt-16 text-slate-400 text-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-3">
+                        <span class="font-heading font-black text-xl text-white">XL</span>
+                        <span class="font-heading font-black text-xl text-brandBlue">SATU</span>
+                    </div>
+                    <p class="text-slate-300 leading-relaxed">
+                        Internet Rumah Super Cepat & Hiburan Dalam Satu Solusi. Rumah makin terhubung bersama XL SATU Banten!
+                    </p>
+                    <div class="mt-4 pt-3 border-t border-slate-800">
+                        <p class="font-bold text-white">Official Representative:</p>
+                        <p class="text-brandBlue font-bold font-heading text-sm">M. KHOIRUL FIKRI[cite: 1]</p>
+                        <p>WhatsApp: 0851-2437-7565[cite: 1]</p>
+                        <p>Email: mkhoirulfikrifikri28@gmail.com</p>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="font-heading font-bold text-white text-sm mb-3">NAVIGASI UTAMA</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" onclick="openSherlokModal()" class="hover:text-brandBlue transition flex items-center"><i class="fa-solid fa-chevron-right text-[10px] mr-2 text-brandBlue"></i> Cek Sherlok GPS Valid</a></li>
+                        <li><a href="#" class="hover:text-brandBlue transition flex items-center"><i class="fa-solid fa-chevron-right text-[10px] mr-2 text-brandBlue"></i> Paket FTTH Fiber Optik</a></li>
+                        <li><a href="#" class="hover:text-brandBlue transition flex items-center"><i class="fa-solid fa-chevron-right text-[10px] mr-2 text-brandBlue"></i> Paket FWA Wireless</a></li>
+                        <li><a href="https://wa.me/6285124377565" target="_blank" class="hover:text-brandBlue transition flex items-center"><i class="fa-solid fa-chevron-right text-[10px] mr-2 text-brandBlue"></i> Konsultasi WA Fikri</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-heading font-bold text-white text-sm mb-3">HUBUNGI SALES RESMI</h4>
+                    <p class="mb-3">
+                        Tim kami siap bantu cek area, pilih paket terbaik & proses pemasangan dengan cepat!
+                    </p>
+                    <a href="https://wa.me/6285124377565?text=Halo%20Mas%20Fikri,%20saya%20mau%20daftar%20XL%20SATU" target="_blank" class="btn-gradient-green w-full text-white font-semibold text-xs py-3 rounded-xl flex items-center justify-center space-x-2 shadow-lg mb-2">
+                        <i class="fa-brands fa-whatsapp text-lg"></i>
+                        <span>0851-2437-7565[cite: 1]</span>
+                    </a>
+                    <a href="https://instagram.com/mkf_fikkkk" target="_blank" class="w-full bg-slate-800 hover:bg-slate-700 text-pink-400 border border-pink-500/30 font-semibold text-xs py-2.5 rounded-xl flex items-center justify-center space-x-2 transition">
+                        <i class="fa-brands fa-instagram text-base"></i>
+                        <span>Instagram: @mkf_fikkkk</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="mt-8 pt-6 border-t border-slate-800 text-center text-slate-500 text-[11px]">
+                &copy; 2026 M. Khoirul Fikri - XL SATU Banten Official Sales Representative. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
     <script>
-        let leads = JSON.parse(localStorage.getItem('xl_satu_leads_fic')) || [
-            {
-                id: 'LEAD-01',
-                date: new Date().toISOString().split('T')[0],
-                name: 'Darwati',
-                nik: '3673014303950004',
-                ttl: 'Serang, 03-03-1995',
-                gender: 'Perempuan',
-                address: 'Lingk. Panyindangan, RT 002/003, Kel. Unyur, Kec. Serang, Kota Serang',
-                wa: '08998698146',
-                phone2: '087878787554',
-                email: 'watiserangbanten01@gmail.com',
-                package: 'FTTH 250 Mbps (Promo Harga Mati 5k/hari)',
-                price: 'Rp 174.000',
-                paymentStatus: 'LUNAS / PAID'
-            }
-        ];
+        // --- 1. THREE.JS 4D AMBIENT BACKGROUND ---
+        const canvas = document.getElementById('bg4dCanvas');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
 
-        window.onload = function() {
-            renderLeadsTable();
-            updateStats();
-            generatePreviewText();
-        };
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-        function onPackageSelectChange() {
-            generatePreviewText();
+        const particlesCount = 700;
+        const posArray = new Float32Array(particlesCount * 3);
+        for(let i = 0; i < particlesCount * 3; i++) {
+            posArray[i] = (Math.random() - 0.5) * 30;
         }
 
-        function getSelectedPackageDetails() {
-            const val = document.getElementById('custPackage').value;
-            if (val === 'FTTH_250_PROMO') {
-                return { name: 'FTTH 250 Mbps (Promo Harga Mati 5k/hari)', price: 'Rp 174.000' };
-            } else if (val === 'FTTH_300') {
-                return { name: 'FTTH 300 Mbps', price: 'Rp 239.000' };
-            } else {
-                return { name: 'FWA 100 Mbps', price: 'Rp 219.000' };
-            }
-        }
+        const particlesGeometry = new THREE.BufferGeometry();
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
 
-        function generatePreviewText() {
-            const name = document.getElementById('custName').value || '[Nama Pelanggan]';
-            const nik = document.getElementById('custNik').value || '[Nomor NIK]';
-            const ttl = document.getElementById('custTtl').value || '[Tempat, Tanggal Lahir]';
-            const gender = document.getElementById('custGender').value || 'Perempuan';
-            const address = document.getElementById('custAddress').value || '[Alamat Lengkap Pemasangan]';
-            const wa = document.getElementById('custWa').value || '[No WA Utama]';
-            const phone2 = document.getElementById('custPhone2').value || '-';
-            const email = document.getElementById('custEmail').value || '[Email Aktif]';
-            const pkg = getSelectedPackageDetails();
-
-            const formattedText = 
-`FORMULIR PENDAFTARAN PELANGGAN BARU (NEW SALES)
-LAYANAN XL SATU FIBER - FIK.KYY DEV
-
-A. DATA IDENTITAS PELANGGAN (SESUAI KTP)
-- Nama Lengkap        : ${name}
-- NIK                 : ${nik}
-- Tempat, Tgl Lahir   : ${ttl}
-- Jenis Kelamin       : ${gender}
-
-B. DATA LOKASI PEMASANGAN & KONTAK
-- Alamat Pemasangan   : ${address}
-- No. WhatsApp Utama  : ${wa}
-- No. Telp Cadangan   : ${phone2}
-- Alamat Email        : ${email}
-
-C. DETAIL LAYANAN & ADMINISTRASI
-- Paket Pilihan       : ${pkg.name}
-- Nilai Dibayarkan    : ${pkg.price}
-- Status Pembayaran   : LUNAS / PAID (Pay First, Install Later)
-- Status Lapangan     : Terverifikasi Anti-Boncos, Siap Jadwal Teknisi (SLA 2-3 hari)
-`;
-
-            document.getElementById('outputFormat').value = formattedText;
-            document.getElementById('lblDisplayPrice').innerText = pkg.price;
-        }
-
-        // Event listeners to live update preview
-        ['custName', 'custNik', 'custTtl', 'custGender', 'custAddress', 'custWa', 'custPhone2', 'custEmail'].forEach(id => {
-            document.getElementById(id).addEventListener('input', generatePreviewText);
+        const particlesMaterial = new THREE.PointsMaterial({
+            size: 0.035,
+            color: 0x00D2FF,
+            transparent: true,
+            opacity: 0.5,
+            blending: THREE.AdditiveBlending
         });
-        document.getElementById('custGender').addEventListener('change', generatePreviewText);
-        document.getElementById('custPackage').addEventListener('change', generatePreviewText);
 
-        function handleRegistrationSubmit(e) {
-            e.preventDefault();
+        const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+        scene.add(particlesMesh);
+        camera.position.z = 12;
 
-            const pkg = getSelectedPackageDetails();
-            const newLead = {
-                id: 'LEAD-' + Math.floor(1000 + Math.random() * 9000),
-                date: new Date().toISOString().split('T')[0],
-                name: document.getElementById('custName').value,
-                nik: document.getElementById('custNik').value,
-                ttl: document.getElementById('custTtl').value,
-                gender: document.getElementById('custGender').value,
-                address: document.getElementById('custAddress').value,
-                wa: document.getElementById('custWa').value,
-                phone2: document.getElementById('custPhone2').value,
-                email: document.getElementById('custEmail').value,
-                package: pkg.name,
-                price: pkg.price,
-                paymentStatus: 'LUNAS / PAID'
-            };
+        let mouseX = 0, mouseY = 0;
+        window.addEventListener('mousemove', (e) => {
+            mouseX = (e.clientX / window.innerWidth) - 0.5;
+            mouseY = (e.clientY / window.innerHeight) - 0.5;
+        });
 
-            leads.unshift(newLead);
-            saveLeads();
-            renderLeadsTable();
-            updateStats();
+        const clock = new THREE.Clock();
+        function animate4D() {
+            requestAnimationFrame(animate4D);
+            const elapsedTime = clock.getElapsedTime();
+            particlesMesh.rotation.y = elapsedTime * 0.04 + (mouseX * 0.15);
+            particlesMesh.rotation.x = elapsedTime * 0.02 + (mouseY * 0.15);
+            renderer.render(scene, camera);
+        }
+        animate4D();
 
-            showToast('Data pendaftaran berhasil disimpan dan diformat!');
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // --- 2. AUDIO SFX ---
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playSfx(type) {
+            try {
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                if (type === 'click') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(900, audioCtx.currentTime + 0.08);
+                    gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.08);
+                }
+            } catch (e) {}
         }
 
-        function saveLeads() {
-            localStorage.setItem('xl_satu_leads_fic', JSON.stringify(leads));
-        }
+        // --- 3. VALID LEAFLET MAP & SEARCH LOCATION ---
+        let map, marker;
+        let selectedLat = -6.11524; // Titik valid Kota Serang, Banten
+        let selectedLng = 106.15030;
 
-        function deleteLead(id) {
-            if (confirm('Hapus data pendaftaran ini?')) {
-                leads = leads.filter(l => l.id !== id);
-                saveLeads();
-                renderLeadsTable();
-                updateStats();
-                showToast('Data berhasil dihapus');
-            }
-        }
+        function initMap() {
+            if (map) return;
+            map = L.map('leafletMap').setView([selectedLat, selectedLng], 14);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; OpenStreetMap'
+            }).addTo(map);
 
-        function renderLeadsTable() {
-            const tbody = document.getElementById('leadsTableBody');
-            tbody.innerHTML = '';
+            marker = L.marker([selectedLat, selectedLng], { draggable: true }).addTo(map);
 
-            if (leads.length === 0) {
-                document.getElementById('emptyLeads').classList.remove('hidden');
-                return;
-            } else {
-                document.getElementById('emptyLeads').classList.add('hidden');
-            }
+            marker.on('dragend', function (e) {
+                const position = marker.getLatLng();
+                selectedLat = position.lat;
+                selectedLng = position.lng;
+                updateCoordDisplay();
+            });
 
-            leads.forEach(l => {
-                const tr = document.createElement('tr');
-                tr.className = 'hover:bg-slate-900/40 transition-colors';
-                tr.innerHTML = `
-                    <td class="p-3 text-gray-400">${l.date}</td>
-                    <td class="p-3 font-semibold text-white">${l.name}</td>
-                    <td class="p-3 font-mono text-cyan-300">${l.nik}</td>
-                    <td class="p-3 text-gray-300">${l.wa}</td>
-                    <td class="p-3 text-teal-300">${l.package}</td>
-                    <td class="p-3"><span class="px-2 py-0.5 text-[10px] rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">${l.paymentStatus}</span></td>
-                    <td class="p-3 text-center">
-                        <button onclick="deleteLead('${l.id}')" class="text-gray-500 hover:text-rose-400 p-1" title="Hapus">
-                            <i class="fa-solid fa-trash-can"></i>
-                        </button>
-                    </td>
-                `;
-                tbody.appendChild(tr);
+            map.on('click', function(e) {
+                selectedLat = e.latlng.lat;
+                selectedLng = e.latlng.lng;
+                marker.setLatLng([selectedLat, selectedLng]);
+                updateCoordDisplay();
             });
         }
 
-        function updateStats() {
-            document.getElementById('statTotalLeads').innerText = leads.length;
+        function updateCoordDisplay() {
+            document.getElementById('coordDisplay').innerText = `Lat: ${selectedLat.toFixed(5)}, Lng: ${selectedLng.toFixed(5)}`;
         }
 
-        function copyFormattedText() {
-            const textarea = document.getElementById('outputFormat');
-            textarea.select();
-            document.execCommand('copy');
-            showToast('Format berhasil disalin ke clipboard!');
-        }
-
-        function shareWhatsApp() {
-            const text = encodeURIComponent(document.getElementById('outputFormat').value);
-            window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
-        }
-
-        function resetForm() {
-            document.getElementById('registrationForm').reset();
-            generatePreviewText();
-        }
-
-        function showToast(msg) {
-            const toast = document.getElementById('toast');
-            document.getElementById('toastText').innerText = msg;
-            toast.classList.remove('translate-y-20', 'opacity-0');
-            toast.classList.add('translate-y-0', 'opacity-100');
+        function openSherlokModal() {
+            document.getElementById('sherlokModal').classList.remove('hidden');
             setTimeout(() => {
-                toast.classList.remove('translate-y-0', 'opacity-100');
-                toast.classList.add('translate-y-20', 'opacity-0');
-            }, 3000);
+                initMap();
+                map.invalidateSize();
+            }, 200);
         }
 
-        function exportAllLeadsCSV() {
-            if (leads.length === 0) {
-                showToast('Tidak ada data untuk diexport');
-                return;
+        function closeSherlokModal() {
+            document.getElementById('sherlokModal').classList.add('hidden');
+        }
+
+        // Fitur Pencarian Nama Perumahan/Lokasi (Nominatim OpenStreetMap API)
+        function searchLocation() {
+            const query = document.getElementById('mapSearchInput').value;
+            if (!query) return;
+            
+            fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query + ', Serang Cilegon Banten')}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.length > 0) {
+                        selectedLat = parseFloat(data[0].lat);
+                        selectedLng = parseFloat(data[0].lon);
+                        map.setView([selectedLat, selectedLng], 16);
+                        marker.setLatLng([selectedLat, selectedLng]);
+                        updateCoordDisplay();
+                    } else {
+                        alert("Lokasi tidak ditemukan. Coba ketik nama perumahan atau wilayah lain di Serang/Cilegon.");
+                    }
+                })
+                .catch(() => alert("Terjadi kesalahan saat mencari lokasi."));
+        }
+
+        function detectGPSLocation() {
+            playSfx('click');
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        selectedLat = position.coords.latitude;
+                        selectedLng = position.coords.longitude;
+                        map.setView([selectedLat, selectedLng], 16);
+                        marker.setLatLng([selectedLat, selectedLng]);
+                        updateCoordDisplay();
+                    },
+                    () => alert("Gagal mengambil GPS otomatis. Pastikan izin lokasi aktif atau geser pin di peta secara manual.")
+                );
+            } else {
+                alert("Browser Anda tidak mendukung deteksi GPS.");
             }
-            let csv = "ID,Tanggal,Nama,NIK,TTL,Gender,Alamat,WA,Telp2,Email,Paket,Harga,Status\n";
-            leads.forEach(l => {
-                csv += `"${l.id}","${l.date}","${l.name}","${l.nik}","${l.ttl}","${l.gender}","${l.address}","${l.wa}","${l.phone2}","${l.email}","${l.package}","${l.price}","${l.paymentStatus}"\n`;
-            });
-            const blob = new Blob([csv], { type: 'text/csv' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `Leads_Pendaftaran_XL_Satu_${new Date().toISOString().split('T')[0]}.csv`;
-            a.click();
-            showToast('File CSV berhasil diunduh!');
+        }
+
+        function sendSherlokToWA() {
+            playSfx('click');
+            const mapsUrl = `https://www.google.com/maps?q=${selectedLat},${selectedLng}`;
+            const message = `Halo Mas Fikri (Sales Representative XL SATU), ini titik koordinat GPS lokasi rumah saya di Serang/Cilegon:\n${mapsUrl}\n\nMohon bantu cek ketersediaan jaringan kabel fiber optik/wireless di rumah saya ya. Terima kasih!`;
+            window.open(`https://wa.me/6285124377565?text=${encodeURIComponent(message)}`, '_blank');
+        }
+
+        // --- 4. DEVICE CALCULATOR WIZARD ---
+        function updateCalculator() {
+            const val = parseInt(document.getElementById('deviceRange').value);
+            const display = document.getElementById('deviceCountDisplay');
+            const recName = document.getElementById('recPkgName');
+            const recDesc = document.getElementById('recPkgDesc');
+            const recBtn = document.getElementById('recPkgBtn');
+
+            if (val <= 6) {
+                display.innerText = `${val} Devices (Rumah Tangga Ringan)`;
+                recName.innerText = "FTTH 250 Mbps (Rp 229.000 / bln)[cite: 1]";
+                recDesc.innerText = "Pilihan favorit keluarga! Sangat cepat untuk streaming 4K, Smart TV, dan HP seluruh rumah.";
+                recBtn.setAttribute("onclick", "orderPackage('FTTH 250 Mbps - Rp 229.000 / bulan')");
+            } else if (val <= 10) {
+                display.innerText = `${val} Devices (Keluarga Ideal)`;
+                recName.innerText = "FTTH 300 Mbps (Rp 239.000 / bln)[cite: 1]";
+                recDesc.innerText = "Koneksi ultra cepat & stabil untuk banyak HP, Zoom WFH, serta streaming bersamaan.";
+                recBtn.setAttribute("onclick", "orderPackage('FTTH 300 Mbps - Rp 239.000 / bulan')");
+            } else {
+                display.innerText = `${val}+ Devices (Heavy User & Usaha)`;
+                recName.innerText = "FTTH 400 Mbps (Rp 300.000 / bln)[cite: 1]";
+                recDesc.innerText = "Kecepatan maksimal tanpa batas untuk jualan live online, bisnis rumah, dan kos-kosan.";
+                recBtn.setAttribute("onclick", "orderPackage('FTTH 400 Mbps - Rp 300.000 / bulan')");
+            }
+        }
+
+        function orderPackage(pkgName) {
+            playSfx('click');
+            const message = `Halo Mas Fikri (Sales Representative XL SATU Banten), saya tertarik mendaftar paket: *${pkgName}*. Mohon dibantu proses pendaftarannya ya!`;
+            window.open(`https://wa.me/6285124377565?text=${encodeURIComponent(message)}`, '_blank');
         }
     </script>
 </body>
