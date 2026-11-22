@@ -884,9 +884,9 @@
           ],
           videos: [
             {
-              title: "Persamaan Kontinuitas & Debit Fluida Dinamis",
-              duration: "10 mnt",
-              youtubeId: "9g2b1J9n9xM",
+              title: "Fluida Dinamis: Fluida Ideal, Debit & Persamaan Kontinuitas",
+              duration: "14 mnt",
+              youtubeId: "qPaBoLOvZDA",
               searchQuery: "persamaan kontinuitas fluida dinamis fisika",
               notes: [
                 "Debit \\(Q = A \\cdot v\\) adalah volume fluida yang melewati penampang tiap detik.",
@@ -895,9 +895,9 @@
               ]
             },
             {
-              title: "Hukum Bernoulli & Teorema Torricelli",
-              duration: "12 mnt",
-              youtubeId: "DW4rIt6x6ZQ",
+              title: "Hukum Bernoulli & Teorema Torricelli (Tangki Bocor)",
+              duration: "16 mnt",
+              youtubeId: "Qpsv4A5TTpA",
               searchQuery: "hukum bernoulli dan teorema torricelli fisika",
               notes: [
                 "Bernoulli menghubungkan tekanan statis, energi kinetik per satuan volume, dan energi potensial per satuan volume.",
@@ -1054,9 +1054,9 @@
           ],
           videos: [
             {
-              title: "Tekanan Hidrostatis & Hukum Pascal",
-              duration: "11 mnt",
-              youtubeId: "7p0T7k5f2kM",
+              title: "Hukum Fluida: Hidrostatis, Pascal, dan Archimedes",
+              duration: "7 mnt",
+              youtubeId: "sLX_FHeI0FM",
               searchQuery: "tekanan hidrostatis dan hukum pascal fisika",
               notes: [
                 "Tekanan hidrostatis \\(P_h = \\rho g h\\) bergantung pada massa jenis, gravitasi, dan kedalaman.",
@@ -1064,9 +1064,9 @@
               ]
             },
             {
-              title: "Hukum Archimedes: Terapung, Melayang, Tenggelam",
+              title: "Konsep Terapung, Melayang & Tenggelam (Hukum Archimedes)",
               duration: "9 mnt",
-              youtubeId: "0v9K5b0J9iA",
+              youtubeId: "sd4k8XCJ3JY",
               searchQuery: "hukum archimedes terapung melayang tenggelam fisika",
               notes: [
                 "Gaya apung \\(F_A = \\rho_f g V_{\\text{tercelup}}\\) berarah ke atas.",
@@ -1205,9 +1205,9 @@
           ],
           videos: [
             {
-              title: "Skala Suhu & Pemuaian Zat Padat",
-              duration: "10 mnt",
-              youtubeId: "5q4wW4zR0lA",
+              title: "Konversi Skala Termometer (°C, °R, °F, K) & Pemuaian",
+              duration: "5 mnt",
+              youtubeId: "UmTJ_0BNN9M",
               searchQuery: "konversi skala suhu dan pemuaian panjang fisika",
               notes: [
                 "Rasio interval skala termometer: \\(C : R : (F-32) : (K-273{,}15) = 5 : 4 : 9 : 5\\).",
@@ -1215,9 +1215,9 @@
               ]
             },
             {
-              title: "Kalor Jenis, Asas Black & Perpindahan Kalor",
-              duration: "13 mnt",
-              youtubeId: "3m7q8R4v1nE",
+              title: "Asas Black, Kalor Jenis & Perpindahan Kalor",
+              duration: "20 mnt",
+              youtubeId: "nDsqOjdMH6c",
               searchQuery: "kalor jenis asas black konduksi konveksi radiasi fisika",
               notes: [
                 "Kalor untuk menaikkan suhu: \\(Q = m c \\Delta T\\).",
@@ -1354,8 +1354,8 @@
           videos: [
             {
               title: "Usaha, Energi Kinetik & Teorema Usaha-Energi",
-              duration: "11 mnt",
-              youtubeId: "w4e0q2Z5x9k",
+              duration: "7 mnt",
+              youtubeId: "qYP1u5EzWSM",
               searchQuery: "usaha energi kinetik teorema usaha energi fisika",
               notes: [
                 "Usaha oleh gaya membentuk sudut \\(\\theta\\): \\(W = F s \\cos\\theta\\).",
@@ -1363,9 +1363,9 @@
               ]
             },
             {
-              title: "Kekekalan Energi Mekanik, Daya & Efisiensi",
-              duration: "12 mnt",
-              youtubeId: "7k9p3L2m8wQ",
+              title: "Hukum Kekekalan Energi Mekanik, Daya & Efisiensi",
+              duration: "18 mnt",
+              youtubeId: "bfS0ctFzaPY",
               searchQuery: "kekekalan energi mekanik daya efisiensi fisika",
               notes: [
                 "Pada lintasan licin tanpa gesekan: \\(E_{k,1} + E_{p,1} = E_{k,2} + E_{p,2}\\).",
@@ -1806,31 +1806,41 @@
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
               <div class="lg:col-span-7 space-y-3">
-                <div class="relative w-full aspect-video rounded-2xl overflow-hidden bg-slate-900 border-2 border-white shadow-lg">
+                <div class="relative w-full aspect-video rounded-2xl overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-rose-950 border-2 border-white shadow-lg">
                   <iframe
-                    class="w-full h-full"
-                    src="https://www.youtube.com/embed/${vid.youtubeId}?rel=0"
+                    class="relative z-10 w-full h-full"
+                    src="https://www.youtube.com/embed/${vid.youtubeId}?rel=0&modestbranding=1"
                     title="${vid.title}"
                     frameborder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    referrerpolicy="strict-origin-when-cross-origin"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                     allowfullscreen
                   ></iframe>
+                  <div class="absolute inset-0 flex flex-col items-center justify-center p-5 text-center text-white space-y-2.5">
+                    <div class="w-12 h-12 rounded-2xl bg-rose-600/90 flex items-center justify-center text-xl shadow-lg">
+                      <i class="fa-brands fa-youtube"></i>
+                    </div>
+                    <p class="text-xs sm:text-sm font-extrabold">${vid.title}</p>
+                    <p class="text-[11px] text-slate-300 max-w-sm">
+                      Jika pemutar video tidak muncul karena kebijakan keamanan preview, klik tombol <strong>Tonton di YouTube</strong> di bawah ya.
+                    </p>
+                  </div>
                 </div>
 
                 <div class="bg-white p-4 rounded-2xl border border-slate-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <div>
                     <h4 class="font-extrabold text-slate-800 text-sm">${vid.title}</h4>
-                    <p class="text-xs text-slate-500 mt-0.5">Alternatif bila pemutar dalam halaman diblokir jaringan:</p>
+                    <p class="text-xs text-slate-500 mt-0.5">Akses langsung ke YouTube kapan saja:</p>
                   </div>
                   <div class="flex flex-wrap gap-2 shrink-0">
                     <a
                       href="${ytWatchUrl}"
                       target="_blank"
                       rel="noopener noreferrer"
-                      class="px-3 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold inline-flex items-center gap-1.5"
+                      class="px-3.5 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold inline-flex items-center gap-1.5 shadow-xs"
                     >
                       <i class="fa-brands fa-youtube"></i>
-                      <span>Buka YouTube</span>
+                      <span>Tonton di YouTube</span>
                     </a>
                     <a
                       href="${ytSearchUrl}"
@@ -1839,7 +1849,7 @@
                       class="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold inline-flex items-center gap-1.5"
                     >
                       <i class="fa-solid fa-magnifying-glass"></i>
-                      <span>Cari Video</span>
+                      <span>Cari Topik</span>
                     </a>
                   </div>
                 </div>
